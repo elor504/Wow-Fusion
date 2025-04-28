@@ -5,32 +5,35 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
-public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,IPointerExitHandler
+public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,IPointerExitHandler  
 {
-    [FormerlySerializedAs("targetVisual")]
+
     [Header("References")] 
     [SerializeField] private GameObject hoveringVisual;
     [SerializeField] private GameObject beingTargetedVisual;
-    
+    [SerializeField] private Transform projectileSpawn;
     
     //Hold ref to base stats
     [Header("Temp Base Stats")]
     [SerializeField]private int baseHealth;
+    [SerializeField]private int baseMana;
     
     
     //hold runtime stat variables
     private int _currentHealth;
     
-    public void DealDamage(GameObject caster)
+ 
+    public void DealDamage(ITargetableEntity caster, int damage)
     {
-        _currentHealth -= 0;
+        _currentHealth -= damage;
         if (_currentHealth <= 0)
         {
             ///Death
         }
     }
 
-    public void Heal(GameObject caster)
+
+    public void Heal(ITargetableEntity caster)
     {
         _currentHealth += 0;
         if (_currentHealth > baseHealth)
@@ -38,8 +41,44 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,
             _currentHealth = baseHealth;
         }
     }
-    
-    
+
+    public int GetHealth()
+    {
+        return baseHealth;
+    }
+
+    public int GetMana()
+    {
+        return baseMana;
+    }
+
+    public bool CanCastSpell(int amount)
+    {
+        if (baseMana >= amount)
+        {
+            baseMana -= amount;
+            
+            if(baseMana < 0)
+                baseMana = 0;
+
+            return true;
+        }
+
+
+        return false;
+    }
+
+    public GameObject GetEntityGO()
+    {
+        return gameObject;
+    }
+
+    public Transform GetProjectileSpawnPosition()
+    {
+        return projectileSpawn;
+    }
+
+
     public bool CanBeTargeted()
     {
         return true;
@@ -63,6 +102,8 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,
     {
         return false;
     }
+
+
 
     public void OnHovering()
     {

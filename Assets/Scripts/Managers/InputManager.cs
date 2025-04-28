@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
     public PlayerControls playerControls;
     
     public static event Action OnHoldingRightMouse;
+    public static event Action OnClickLeftMouse;
     public static event Action<float> OnScroll;
     
     private bool _isHoldingRightMouseDown;
@@ -50,6 +51,8 @@ public class InputManager : MonoBehaviour
         
         if (_isHoldingRightMouseDown)
             OnHoldingRightMouse?.Invoke();
+
+        HandleMouseLeftClick();
     }
 
 
@@ -58,8 +61,7 @@ public class InputManager : MonoBehaviour
         ///Check only for targetable for now
         if (Input.GetMouseButtonDown(0))
         {
-            
-
+            OnClickLeftMouse?.Invoke();
         }
         
         ///need to test with ui
@@ -80,7 +82,6 @@ public class InputManager : MonoBehaviour
     private void OnMouseWheelScroll(InputAction.CallbackContext context)
     {
         Vector2 scroll = context.action.ReadValue<Vector2>();
-        Debug.Log($"On scrolling {scroll}");
         OnScroll?.Invoke(scroll.y);
     }
     private void OnDisable()

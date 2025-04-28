@@ -8,8 +8,16 @@ public interface ITargetableEntity : ITargetable
     public bool IsAlly();
 
     ///Will ask for the spell data
-    public void DealDamage(GameObject caster);
-    public void Heal(GameObject caster);
+    public void DealDamage(ITargetableEntity caster,int damage);
+    public void Heal(ITargetableEntity caster);
     
     
+    public int GetHealth();
+    public int GetMana();
+
+
+    public bool CanCastSpell(int amount);
+    
+    public GameObject GetEntityGO();
+    public Transform GetProjectileSpawnPosition();
 }

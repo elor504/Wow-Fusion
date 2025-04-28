@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bb922803c4341d4993d2fd3ec12492f, type: 3}
+  m_Name: SpellData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileSpellData
+  id: PooBolt
+  name: Poo Bolt
+  description: Disgusting projectile YUCK
+  timeToCast: 0
+  manaCost: 5
+  damage: 1
+  speed: 20
+  _projectile: {fileID: 4727345208012558461, guid: f4ca41ea21a5fdf419cba519bbb48413, type: 3}
