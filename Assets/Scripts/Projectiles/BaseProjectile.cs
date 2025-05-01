@@ -3,19 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BaseProjectile : MonoBehaviour
 {
+    [SerializeField] private string projectileID;
+    [SerializeField] private BasicVFX hitVfxPF;
+    
     private Transform _caster;
     private ITargetableEntity _casterEntity;
     private Transform _target;
     private ITargetableEntity _targetEntity;
     
     
+    private bool _isActive;
     private int _damage;
     private float _speed;
-
+    
     private float _distance;
+    
+    public bool IsActive => _isActive;
+    public string ProjectileID => projectileID;
+    
     
     private void Update()
     {
@@ -25,10 +34,13 @@ public class BaseProjectile : MonoBehaviour
         transform.position += dir * (_speed * Time.deltaTime);
         
         _distance = Vector3.Distance(transform.position, _target.position);
-        if (_distance <= 0.01f)
+        if (_distance <= 0.1f)
         {
+            _isActive = false;
+            var vfx = VFXPoolSystem.Instance.GetAvailableObjectFromPool(hitVfxPF, transform.position);
+            vfx.InitVFX(transform.position);
             _targetEntity.DealDamage(_casterEntity,_damage);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -40,13 +52,11 @@ public class BaseProjectile : MonoBehaviour
         _caster = _casterEntity.GetEntityGO().transform;
 
         _targetEntity = target;
-        _target = _targetEntity.GetEntityGO().transform;
+        _target = _targetEntity.GetHitPosition();
         
         _damage = damage;
         _speed = speed;
+        _isActive = true;
+        gameObject.SetActive(true);
     }
-    
-    
-    
-
 }

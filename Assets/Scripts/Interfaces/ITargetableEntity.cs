@@ -20,4 +20,5 @@ public interface ITargetableEntity : ITargetable
     
     public GameObject GetEntityGO();
     public Transform GetProjectileSpawnPosition();
+    public Transform GetHitPosition();
 }

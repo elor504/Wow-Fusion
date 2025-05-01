@@ -20,22 +20,28 @@ public class ProjectileSpell : BaseSpell
     
     public override void CastSkill(ITargetableEntity caster, ITargetableEntity target)
     {
-        if (OnCast(caster))
+        if (CanCast(caster,target))
         {
-            var proj = Object.Instantiate(_projectile);
+            var spawnPos = caster.GetProjectileSpawnPosition().position;
+            var proj = ProjectilePoolSystem.Instance.GetAvailableObjectFromPool(_projectile,spawnPos);
             
-            proj.InitProjectile(caster.GetProjectileSpawnPosition().position,caster, target, _damage, _speed);
+            proj.InitProjectile(spawnPos,caster, target, _damage, _speed);
         }
     }
 
-    public override bool CanCast(ITargetableEntity caster)
+    public override bool CanStartCasting(ITargetableEntity caster)
     {
        return true;
     }
 
-    public override bool OnCast(ITargetableEntity caster)
+    public override bool CanCast(ITargetableEntity caster, ITargetableEntity target)
     {
         return caster.CanCastSpell(_manaCost);
+    }
+
+    public override bool CompareID(string id)
+    {
+        return _spellID == id;
     }
 }
 

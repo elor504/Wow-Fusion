@@ -12,6 +12,7 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,
     [SerializeField] private GameObject hoveringVisual;
     [SerializeField] private GameObject beingTargetedVisual;
     [SerializeField] private Transform projectileSpawn;
+    [SerializeField] private Transform hitPosition;
     
     //Hold ref to base stats
     [Header("Temp Base Stats")]
@@ -76,6 +77,14 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,
     public Transform GetProjectileSpawnPosition()
     {
         return projectileSpawn;
+    }
+
+    public Transform GetHitPosition()
+    {
+        if (hitPosition)
+            return hitPosition;
+
+        return transform;
     }
 
 

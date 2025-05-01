@@ -44,6 +44,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""NumKeys"",
+                    ""type"": ""Button"",
+                    ""id"": ""c3ba0182-3818-4292-9f44-02d35f918476"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -156,6 +165,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Mouse Wheel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0def2236-081a-4463-bf06-98a74aa2eef9"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""NumKeys"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d68658b7-3eba-44c3-957a-57f905f87bd8"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""NumKeys"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86496458-63d0-416f-97cb-a05a0bf89b0e"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""NumKeys"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""551f5db6-5a52-4ee1-bb76-79053cc7813d"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""NumKeys"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,6 +280,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_MouseWheel = m_Player.FindAction("Mouse Wheel", throwIfNotFound: true);
+        m_Player_NumKeys = m_Player.FindAction("NumKeys", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -290,12 +344,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_MouseWheel;
+    private readonly InputAction m_Player_NumKeys;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @MouseWheel => m_Wrapper.m_Player_MouseWheel;
+        public InputAction @NumKeys => m_Wrapper.m_Player_NumKeys;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -311,6 +367,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MouseWheel.started += instance.OnMouseWheel;
             @MouseWheel.performed += instance.OnMouseWheel;
             @MouseWheel.canceled += instance.OnMouseWheel;
+            @NumKeys.started += instance.OnNumKeys;
+            @NumKeys.performed += instance.OnNumKeys;
+            @NumKeys.canceled += instance.OnNumKeys;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -321,6 +380,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MouseWheel.started -= instance.OnMouseWheel;
             @MouseWheel.performed -= instance.OnMouseWheel;
             @MouseWheel.canceled -= instance.OnMouseWheel;
+            @NumKeys.started -= instance.OnNumKeys;
+            @NumKeys.performed -= instance.OnNumKeys;
+            @NumKeys.canceled -= instance.OnNumKeys;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -387,5 +449,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnMouseWheel(InputAction.CallbackContext context);
+        void OnNumKeys(InputAction.CallbackContext context);
     }
 }
