@@ -5,8 +5,9 @@ using UnityEngine.VFX;
 public class PlayerCastState : BaseState
 {
     private PlayerBrain _playerBrain;
-    private int _id;
     private bool _finishedCasting;
+    private bool _pressedMovement;
+    private int _id;
     private float _castTime;
 
 
@@ -43,6 +44,8 @@ public class PlayerCastState : BaseState
     
     public override void EnterState()
     {
+        InputManager.OnStartedMovingInput += ListenToMovementInput;
+        
         _finishedCasting = false;
         Debug.Log("Entering Cast State");
         TryToAddHandVFX();
@@ -53,6 +56,7 @@ public class PlayerCastState : BaseState
 
     public override void ExitState()
     {
+        InputManager.OnStartedMovingInput -= ListenToMovementInput;
         if (_finishedCasting)
         {
             //Cast spell
@@ -72,6 +76,14 @@ public class PlayerCastState : BaseState
 
     public override void UpdateState(float deltaTime)
     {
+        if (_pressedMovement)
+        {
+            _finishedCasting = false;
+            _playerBrain.ChangeState((int) PlayerStates.Idle);
+            return;
+        }
+        
+        
         _castTime -= Time.deltaTime;
         if (_castTime <= 0)
         {
@@ -80,7 +92,9 @@ public class PlayerCastState : BaseState
             return;
         }
     }
-
+    
+    
+    
     public override void FixedUpdateState(float fixedDeltaTime)
     {
     }
@@ -88,6 +102,12 @@ public class PlayerCastState : BaseState
     public override bool CompareID(int id)
     {
         return _id == id;
+    }
+
+    private void ListenToMovementInput(Vector2 input)
+    {
+        if(input != Vector2.zero)
+        _pressedMovement = true;
     }
 
     private void AttemptToAddHandsToVFXList()

@@ -15,8 +15,9 @@ public class InputManager : MonoBehaviour
     public static event Action OnHoldingRightMouse;
     public static event Action OnClickLeftMouse;
     public static event Action<float> OnScroll;
-    public static event Action<Vector2> OnMovementInput;
     
+    public static event Action<Vector2> OnMovementInput;
+    public static event Action<Vector2> OnStartedMovingInput;
     
     private bool _isHoldingRightMouseDown;
     private float _scroll;
@@ -134,7 +135,12 @@ public class InputManager : MonoBehaviour
         Vector2 movementInput = context.ReadValue<Vector2>();
         OnMovementInput.Invoke(movementInput);
     }
-    
+
+    private void DetectMovementInput(InputAction.CallbackContext context)
+    {
+        Vector2 movementInput = context.ReadValue<Vector2>();
+        OnStartedMovingInput?.Invoke(movementInput);
+    }
     private void OnEnable()
     {
         Movement = playerControls.Player.Move;
@@ -145,7 +151,7 @@ public class InputManager : MonoBehaviour
         Movement.Enable();
         MouseWheel.Enable();
 
-       // Movement.performed += MovementInput;
+        Movement.performed += DetectMovementInput;
         MouseWheel.performed += OnMouseWheelScroll;
         HotKeys.performed += OnClickedHotKey;
         
@@ -157,7 +163,7 @@ public class InputManager : MonoBehaviour
         MouseWheel.Disable();
         HotKeys.Disable();
         
-       // Movement.performed -= MovementInput;
+        Movement.performed -= DetectMovementInput;
         MouseWheel.performed -= OnMouseWheelScroll;
         HotKeys.performed -= OnClickedHotKey;
     }
