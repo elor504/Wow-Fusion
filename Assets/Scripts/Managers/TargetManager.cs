@@ -47,6 +47,10 @@ public class TargetManager : MonoBehaviour
         {
             TargetEntity(target);
         }
+        else
+        {
+            TargetEntity(null);
+        }
     }
 
 

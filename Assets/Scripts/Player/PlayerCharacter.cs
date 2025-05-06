@@ -6,7 +6,8 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour, ITargetableEntity
 {
     [Header("References")] 
-    [SerializeField] private Animator animator;
+    [SerializeField] private PlayerAnimator animator;
+    [SerializeField] private PlayerMovement movement;
     [SerializeField] private CharacterVFXVisual characterVFXVisual;
     
     [Header("Transform references")] 
@@ -19,7 +20,8 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     private PlayerBrain _playerBrain;
 
 
-    public Animator GetAnimator => animator;
+    public PlayerAnimator GetAnimator => animator;
+    public PlayerMovement GetMovement => movement;
     public CharacterVFXVisual CharacterVFXVisual => characterVFXVisual;
         
 

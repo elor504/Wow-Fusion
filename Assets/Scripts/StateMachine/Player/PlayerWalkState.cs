@@ -1,60 +1,61 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerIdleState : BaseState
+public class PlayerWalkState : BaseState
 {
     private int _id;
     private PlayerBrain _brain;
+    
     private PlayerAnimator _animator;
     private PlayerMovement _movement;
-    
-    private static readonly int Idle = Animator.StringToHash("Idle");
-    public PlayerIdleState(int id, PlayerBrain brain)
+    private static readonly int Walk = Animator.StringToHash("Walk");
+    public PlayerWalkState(int id, PlayerBrain brain)
     {
         _brain = brain;
         _id = id;
-
+        
         _animator = _brain.PlayerCharacter.GetAnimator;
         _movement = _brain.PlayerCharacter.GetMovement;
     }
-    
+
     public override void EnterState()
     {
-        _animator.SetBool(Idle,true);
+        _brain.PlayerCharacter.GetAnimator.SetBool(Walk,true);
     }
 
     public override void ExitState()
     {
-        _animator.SetBool(Idle,false);
+        _brain.PlayerCharacter.GetAnimator.SetBool(Walk,false);
     }
 
     public override void UpdateState(float deltaTime)
     {
-        if (_movement.IsPressingMovement)
+        if (!_movement.IsPressingMovement)
         {
-            if (TryToChangeToMovementState())
+            if (TryToChangeToIdleState())
             {
-                _brain.ChangeState((int)PlayerStates.Walk);
+                _brain.ChangeState((int)PlayerStates.Idle);
                 return;
             }
         }
+        
+        
+        _brain.PlayerCharacter.GetMovement.Move();
+        _brain.PlayerCharacter.GetAnimator.UpdateMovementOnAnimator();
     }
 
-    private bool TryToChangeToMovementState()
+    private bool TryToChangeToIdleState()
     {
-        //Check if grounded ETC
-
-
         return true;
     }
+
+
     public override void FixedUpdateState(float fixedDeltaTime)
     {
-       
+        
     }
 
     public override bool CompareID(int id)
     {
-        return _id == id;
+       return _id == id;
     }
 }

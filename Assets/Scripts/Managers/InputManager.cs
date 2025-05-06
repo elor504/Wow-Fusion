@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 
 public class InputManager : MonoBehaviour
@@ -14,15 +15,18 @@ public class InputManager : MonoBehaviour
     public static event Action OnHoldingRightMouse;
     public static event Action OnClickLeftMouse;
     public static event Action<float> OnScroll;
+    public static event Action<Vector2> OnMovementInput;
+    
     
     private bool _isHoldingRightMouseDown;
     private float _scroll;
     
     private List<HotKey> _hotKeysList = new List<HotKey>();
-    
-    
-    public InputAction _mouseWheel;
-    public InputAction _hotKeys;
+
+
+    public InputAction Movement;
+    public InputAction MouseWheel;
+    public InputAction HotKeys;
     
     
     private bool _isMouseOverUI;
@@ -69,6 +73,7 @@ public class InputManager : MonoBehaviour
             OnHoldingRightMouse?.Invoke();
 
         HandleMouseLeftClick();
+        OnMovementInput?.Invoke( Movement.ReadValue<Vector2>());
     }
     
     
@@ -123,27 +128,38 @@ public class InputManager : MonoBehaviour
         Vector2 scroll = context.action.ReadValue<Vector2>();
         OnScroll?.Invoke(scroll.y);
     }
+
+    private void MovementInput(InputAction.CallbackContext context)
+    {
+        Vector2 movementInput = context.ReadValue<Vector2>();
+        OnMovementInput.Invoke(movementInput);
+    }
     
     private void OnEnable()
     {
-        _mouseWheel = playerControls.Player.MouseWheel;
-        _hotKeys = playerControls.Player.NumKeys;
-        
-        playerControls.Enable();
-        _mouseWheel.Enable();
+        Movement = playerControls.Player.Move;
+        MouseWheel = playerControls.Player.MouseWheel;
+        HotKeys = playerControls.Player.NumKeys;
 
-        _mouseWheel.performed += OnMouseWheelScroll;
-        _hotKeys.performed += OnClickedHotKey;
+        playerControls.Enable();
+        Movement.Enable();
+        MouseWheel.Enable();
+
+       // Movement.performed += MovementInput;
+        MouseWheel.performed += OnMouseWheelScroll;
+        HotKeys.performed += OnClickedHotKey;
+        
         
     }
     private void OnDisable()
     {
         playerControls.Disable();
-        _mouseWheel.Disable();
-        _hotKeys.Disable();
+        MouseWheel.Disable();
+        HotKeys.Disable();
         
-        _mouseWheel.performed -= OnMouseWheelScroll;
-        _hotKeys.performed -= OnClickedHotKey;
+       // Movement.performed -= MovementInput;
+        MouseWheel.performed -= OnMouseWheelScroll;
+        HotKeys.performed -= OnClickedHotKey;
     }
 }
 

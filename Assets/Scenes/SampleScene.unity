@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -42,8 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -66,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -96,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -132,12 +129,17 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3090110417922915932, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
   m_PrefabInstance: {fileID: 2309146419884831460}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 704173285}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43aefc5b7ec314b4e94d8473793e3b88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &180032986 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5819242086079178730, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+  m_PrefabInstance: {fileID: 2309146419884831460}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &549508715
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,20 +248,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eec44c82623d58458fb75592c95bd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mouseWheel:
-    m_Name: Mouse Wheel
+  Movement:
+    m_Name: Movement
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 49f9c54d-999f-490d-943b-768e6d52e996
+    m_Id: f8e8335c-bbb8-4f74-b452-994201007f74
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  _hotKeys:
+  MouseWheel:
+    m_Name: Mouse Wheel
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f64cb39d-4825-492b-9b20-701bb34f0b74
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  HotKeys:
     m_Name: Hot Keys
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 2e998742-4ad1-447d-8c29-c9749db5476d
+    m_Id: e8fe7173-3fed-4dc2-8f60-eb2399fda0c0
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -311,6 +322,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa10e441fb76d7743ba8bc1a4f231d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &704173285 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1494308358068181615, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+  m_PrefabInstance: {fileID: 2309146419884831460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!143 &704173287
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704173285}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &704173288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704173285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb110de141384054d81aa13473e78844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 704173287}
+  moveSpeed: 1
+--- !u!114 &704173290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704173285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ebcfe74f35c145a1e11ea6bf7bbd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 180032986}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,9 +404,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 1
-  m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -388,8 +455,12 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &705507995
 Transform:
   m_ObjectHideFlags: 0
@@ -1079,6 +1150,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1155,6 +1229,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3090110417922915932, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 704173290}
+    - target: {fileID: 3090110417922915932, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+      propertyPath: movement
+      value: 
+      objectReference: {fileID: 704173288}
     - target: {fileID: 3357482681735623952, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1200,7 +1282,16 @@ PrefabInstance:
     - {fileID: 6945155579780413228, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
     - {fileID: 7389007268083858764, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1494308358068181615, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 704173290}
+    - targetCorrespondingSourceObject: {fileID: 1494308358068181615, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 704173288}
+    - targetCorrespondingSourceObject: {fileID: 1494308358068181615, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 704173287}
   m_SourcePrefab: {fileID: 100100000, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
 --- !u!1001 &7160933238076662007
 PrefabInstance:

@@ -15,8 +15,8 @@ public class PlayerBrain : BaseBrain
     public void InitBrain(PlayerCharacter player)
     {
         _playerCharacter = player;
-        _playerStates.Add(new PlayerIdleState((int) PlayerStates.Idle, this));
-        //_playerStates.Add(new PlayerWalkState((int) PlayerStates.Walk, this));
+        _playerStates.Add(new PlayerIdleState((int) PlayerStates.Idle, this)); 
+        _playerStates.Add(new PlayerWalkState((int) PlayerStates.Walk, this));
         _playerStates.Add(new PlayerCastState((int) PlayerStates.Cast, this));
 
         ChangeState((int) PlayerStates.Idle);
