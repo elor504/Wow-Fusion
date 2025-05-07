@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -25,6 +26,11 @@ public class PlayerCastState : BaseState
 
     private List<Transform> _handVFXParents = new List<Transform>() ;
     private List<BasicVFX> _handVFXs = new List<BasicVFX>();
+
+    public static event Action<float,float> StartCastHandler;
+    public static event Action CastedHandler;
+    public static event Action<float,float> UpdateCastingHandler;
+    
     
     public PlayerCastState(int id, PlayerBrain playerBrain)
     {
@@ -52,6 +58,8 @@ public class PlayerCastState : BaseState
         
         _playerBrain.PlayerCharacter.GetAnimator.SetBool(Cast,true);
         _playerBrain.PlayerCharacter.GetAnimator.SetTrigger(StartCasting);
+        
+        StartCastHandler?.Invoke(_castTime,_castTime);
     }
 
     public override void ExitState()
@@ -71,6 +79,8 @@ public class PlayerCastState : BaseState
         }
         _handVFXs.Clear();
         _playerBrain.PlayerCharacter.GetAnimator.SetBool(Cast,false);
+        
+        CastedHandler?.Invoke();
         Debug.Log("Exiting Cast State");
     }
 
@@ -85,8 +95,11 @@ public class PlayerCastState : BaseState
         
         
         _castTime -= Time.deltaTime;
+        UpdateCastingHandler?.Invoke(_castTime,_castTime);
         if (_castTime <= 0)
         {
+            _castTime = 0;
+            
             _finishedCasting = true;
             _playerBrain.ChangeState((int) PlayerStates.Idle);
             return;
