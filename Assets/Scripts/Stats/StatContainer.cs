@@ -2,36 +2,86 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class StatContainer
-{
-    ///Credit to chatgpt i don't want to take credit :D
-    private Dictionary<PrimaryStatType,Stat> _primaryStats = new Dictionary<PrimaryStatType, Stat>();
-    private Dictionary<SecondaryStatType,Stat> _secondaryStats = new Dictionary<SecondaryStatType, Stat>();
+{   
+    [SerializeField] private List<Stat> stats = new List<Stat>();
 
-    public StatContainer(Dictionary<PrimaryStatType, Stat> primary, Dictionary<SecondaryStatType, Stat> secondary)
+    public StatContainer()
     {
-        LoadStats(primary, secondary);
+        ValidateStatList();
     }
     
-    public void LoadStats(Dictionary<PrimaryStatType,Stat>  primary, Dictionary<SecondaryStatType,Stat> secondary)
+    
+    public void ValidateStatList()
     {
-        _primaryStats = primary;
-        _secondaryStats = secondary;
+        foreach (StatType type in Enum.GetValues(typeof(StatType)))
+        {
+            int statID = (int) type;
+            Stat stat = stats.Find(x => x.StatID == type);
+            if (stat == null)
+            {
+                int indexToInsert = (int) type;
+                if (CheckIfIndexToInsertExitsFromMainStat(indexToInsert))
+                {
+//                    Debug.Log($"[StatContainer] Adding stat to list {NormalizeIndex(indexToInsert)}");
+                    indexToInsert = NormalizeIndex(indexToInsert);
+                }
+
+                if ((stats.Count - 1) >= indexToInsert)
+                {
+                    stats.Add(new Stat(type, 0));
+                }
+                else
+                {
+                    stats.Insert(indexToInsert, new Stat(type, 0));
+                }
+            }
+        }
+    }
+
+    public int GetStatAmount(StatType type)
+    {
+        Stat stat = stats.Find(x => x.StatID == type);
+        if (stat == null)
+        {
+            return 0;
+        }
+
+        return stat.BaseValue;
+    }
+
+    ///Find good math to make it more flexible 
+    private bool CheckIfIndexToInsertExitsFromMainStat(int index)
+    {
+        return index > 3;
     }
     
-    public float GetPrimaryStat(PrimaryStatType type) => _primaryStats[type].Value;
-    public float GetSecondaryStat(SecondaryStatType type) => _secondaryStats[type].Value;
-    
-    public void AddBonus(PrimaryStatType type, float bonus)
+    ///I don't know if this is good, but if i do continue to work on the stats it would be ready for more complicated stuff I think :P
+    private int NormalizeIndex(int indexToInsert)
     {
-        _primaryStats[type].BonusValue += bonus;
+        int index = indexToInsert - StartingIDOfSecondaryStats() + AmountOfMainStats();
+        return index;
     }
-    public void AddBonus(SecondaryStatType type, float bonus)
+    private int AmountOfMainStats()
     {
-        _secondaryStats[type].BonusValue += bonus;
+        return 4;
+    }
+    private int StartingIDOfSecondaryStats()
+    {
+        return 100;
     }
 }
 
-
-public enum PrimaryStatType { Strength, Agility, Intellect, Stamina }
-public enum SecondaryStatType { Crit, Haste, Mastery }
+public enum StatType
+{
+    ///Main stats
+    Strength = 0, 
+    Agility = 1, 
+    Intellect = 2, 
+    Stamina = 3,
+    ///Secondaries stats
+    Crit = 100,
+    Haste = 101, 
+    Speed = 102
+}

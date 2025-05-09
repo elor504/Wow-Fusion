@@ -7,4 +7,8 @@ public class EntityData
 {
     [SerializeField] private string entityName;
     [SerializeField] private string entityDescription;
+    
+    
+    
+    
 }

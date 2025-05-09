@@ -6,6 +6,7 @@ using UnityEngine.VFX;
 public class PlayerCastState : BaseState
 {
     private PlayerBrain _playerBrain;
+    private EntityStat _characterStat;
     private bool _finishedCasting;
     private bool _pressedMovement;
     private int _id;
@@ -36,6 +37,7 @@ public class PlayerCastState : BaseState
     {
         _playerBrain = playerBrain;
         _id = id;
+        _characterStat = _playerBrain.PlayerCharacter.CharacterStat;
         AttemptToAddHandsToVFXList();
     }
 
@@ -69,6 +71,8 @@ public class PlayerCastState : BaseState
         {
             //Cast spell
             _spellToCast.CastSkill(_caster,_target);
+            var manaCost = _spellToCast.ManaCost;
+            _characterStat.UseMana(manaCost);
             _spellToCast = null;
             Debug.Log("Casted Spell!");
         }
@@ -79,6 +83,8 @@ public class PlayerCastState : BaseState
         }
         _handVFXs.Clear();
         _playerBrain.PlayerCharacter.GetAnimator.SetBool(Cast,false);
+
+        _pressedMovement = false;
         
         CastedHandler?.Invoke();
         Debug.Log("Exiting Cast State");
@@ -95,7 +101,7 @@ public class PlayerCastState : BaseState
         
         
         _castTime -= Time.deltaTime;
-        UpdateCastingHandler?.Invoke(_castTime,_castTime);
+        UpdateCastingHandler?.Invoke(_castTime,_spellToCast.TimeToCast);
         if (_castTime <= 0)
         {
             _castTime = 0;

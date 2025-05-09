@@ -12,24 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d963256adfe5edd46b5c39bb83ed1327, type: 3}
   m_Name: Magician_ClassData
   m_EditorClassIdentifier: 
-  classID: Magician
-  className: Mage
-  classDescription: Magic :D
-  classIcon: {fileID: 0}
-  classMainStatType: 2
-  startingClassPrimaryStats:
-  - PrimaryStatType: 0
-    primaryStatStartValue: 2
-  - PrimaryStatType: 1
-    primaryStatStartValue: 2
-  - PrimaryStatType: 2
-    primaryStatStartValue: 5
-  - PrimaryStatType: 3
-    primaryStatStartValue: 2
-  startingClassSecondaryStats:
-  - secondaryStat: 0
-    primaryStatStartValue: 5
-  - secondaryStat: 1
-    primaryStatStartValue: 4
-  - secondaryStat: 2
-    primaryStatStartValue: 10
+  classData:
+    classID: Magician
+    className: Mage
+    classDescription: Some weirdo that knows what card you are thinking of
+    classIcon: {fileID: 0}
+    classMainStatType: 2
+    classBaseStats:
+      stats:
+      - statName: Strength
+        StatID: 0
+        BaseValue: 4
+      - statName: Agility
+        StatID: 1
+        BaseValue: 2
+      - statName: Intellect
+        StatID: 2
+        BaseValue: 20
+      - statName: Stamina
+        StatID: 3
+        BaseValue: 10
+      - statName: Crit
+        StatID: 100
+        BaseValue: 7
+      - statName: Haste
+        StatID: 101
+        BaseValue: 4
+      - statName: Speed
+        StatID: 102
+        BaseValue: 5

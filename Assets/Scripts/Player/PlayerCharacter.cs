@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PlayerCharacter : MonoBehaviour, ITargetableEntity
 {
@@ -9,22 +10,26 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     [SerializeField] private PlayerAnimator animator;
     [SerializeField] private PlayerMovement movement;
     [SerializeField] private CharacterVFXVisual characterVFXVisual;
+    [SerializeField] private CharacterClass characterClass;
+    [SerializeField] private EntityStat characterStat;
     
     [Header("Transform references")] 
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Transform hitPosition;
     
+    [Header("Temp references")]
+    [SerializeField] private BaseClassData baseClassData;
     
-    private int _health = 10000;
-    private int _mana = 50000;
+    
     private PlayerBrain _playerBrain;
 
 
     public PlayerAnimator GetAnimator => animator;
     public PlayerMovement GetMovement => movement;
     public CharacterVFXVisual CharacterVFXVisual => characterVFXVisual;
-        
-
+    public EntityStat CharacterStat => characterStat;
+    
+    
     private void Awake()
     {
         InitPlayer();
@@ -34,6 +39,9 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     {
         _playerBrain = new PlayerBrain();
         _playerBrain.InitBrain(this);
+        
+        characterClass.Init(baseClassData, characterStat);
+        characterStat.Init(baseClassData.ClassBaseStats);
     }
     
     private void Update()
@@ -71,7 +79,7 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     
     public void DealDamage(ITargetableEntity caster, int damage)
     {
-        
+        characterStat.DealDamage(damage);
     }
     public void Heal(ITargetableEntity caster)
     {
@@ -92,20 +100,20 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     }
     public bool CanCastSpell(int amount)
     {
-        if (_mana < amount)
+        if (!characterStat.CanUseMana(amount))
             return false;
-
-        _mana -= amount;
+        
+       // characterStat.UseMana(amount);
         return true;
     }
     
     public int GetHealth()
     {
-        return _health;
+        return 0;
     }
     public int GetMana()
     {
-        return _mana;
+        return 0;
     }
     
     public GameObject GetEntityGO()

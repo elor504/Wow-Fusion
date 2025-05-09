@@ -15,9 +15,9 @@ MonoBehaviour:
   id: PooBolt
   name: Poo Bolt
   description: Disgusting projectile YUCK
-  timeToCast: 2
   manaCost: 5
+  timeToCast: 3
+  _handsSpellVFX: {fileID: 6646758686748709502, guid: 40ba36b570ddb0244b7e052072302a94, type: 3}
   damage: 1
   speed: 20
   _projectile: {fileID: 4727345208012558461, guid: f4ca41ea21a5fdf419cba519bbb48413, type: 3}
-  _handsSpellVFX: {fileID: 6646758686748709502, guid: 40ba36b570ddb0244b7e052072302a94, type: 3}

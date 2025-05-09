@@ -4,14 +4,18 @@ using UnityEngine;
 [Serializable]
 public class Stat
 {
-    public float BaseValue;
-    public float BonusValue;
+    [HideInInspector]
+    [SerializeField] private string statName;
+    public StatType StatID;
+    public int BaseValue;
+    
 
-    public float Value => BaseValue + BonusValue;
-
-    public Stat(float baseValue)
+    public Stat(StatType statID,int baseValue)
     {
+        StatID = statID;
         BaseValue = baseValue;
-        BonusValue = 0f;
+        statName = statID.ToString();
     }
+    
+    
 }

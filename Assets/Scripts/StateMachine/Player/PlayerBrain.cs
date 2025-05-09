@@ -47,7 +47,7 @@ public class PlayerBrain : BaseBrain
     {
         var castStateIndex = (int) PlayerStates.Cast;
         var castState = GetStateByID(castStateIndex);
-        if (castState is PlayerCastState playerCastState && spell.CanCast(caster, target))
+        if (!IsInCastingState() && castState is PlayerCastState playerCastState && spell.CanCast(caster, target))
         {
             playerCastState.SetSpellToCast(spell,caster,target);
             ChangeState(castStateIndex);
@@ -57,7 +57,11 @@ public class PlayerBrain : BaseBrain
         
         return false;
     }
-    
+
+    private bool IsInCastingState()
+    {
+        return _currentState is PlayerCastState;
+    }
     
     private BaseState GetStateByID(int id)
     {
