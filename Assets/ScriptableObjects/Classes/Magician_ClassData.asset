@@ -31,7 +31,7 @@ MonoBehaviour:
         BaseValue: 20
       - statName: Stamina
         StatID: 3
-        BaseValue: 10
+        BaseValue: 5
       - statName: Crit
         StatID: 100
         BaseValue: 7
@@ -41,3 +41,5 @@ MonoBehaviour:
       - statName: Speed
         StatID: 102
         BaseValue: 5
+  classSkills:
+  - {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}

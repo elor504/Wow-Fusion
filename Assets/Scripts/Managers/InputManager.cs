@@ -19,6 +19,8 @@ public class InputManager : MonoBehaviour
     public static event Action<Vector2> OnMovementInput;
     public static event Action<Vector2> OnStartedMovingInput;
     
+    
+    
     private bool _isHoldingRightMouseDown;
     private float _scroll;
     
@@ -31,7 +33,6 @@ public class InputManager : MonoBehaviour
     
     
     private bool _isMouseOverUI;
-
     public bool IsMouseOverUI => _isMouseOverUI;
 
 
@@ -154,8 +155,7 @@ public class InputManager : MonoBehaviour
         Movement.performed += DetectMovementInput;
         MouseWheel.performed += OnMouseWheelScroll;
         HotKeys.performed += OnClickedHotKey;
-        
-        
+
     }
     private void OnDisable()
     {
@@ -166,6 +166,11 @@ public class InputManager : MonoBehaviour
         Movement.performed -= DetectMovementInput;
         MouseWheel.performed -= OnMouseWheelScroll;
         HotKeys.performed -= OnClickedHotKey;
+    }
+
+    public void OnOnMouseOnUI(bool value)
+    {
+        _isMouseOverUI = value;
     }
 }
 

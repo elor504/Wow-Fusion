@@ -8,11 +8,12 @@ public class EntityStat : MonoBehaviour
     [SerializeField] private StatContainer statContainer;
 
     private int _currentLevel = 1;
+    [SerializeField] private int currentHealth;
+    [SerializeField] private int currentMana;
+    
     private int _maxHealth;
     private int _maxMana;
     
-    [SerializeField] private int currentHealth;
-    [SerializeField] private int currentMana;
     
     public int CurrentHealth => currentHealth;
     public int CurrentMana => currentMana;

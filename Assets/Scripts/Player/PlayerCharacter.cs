@@ -30,7 +30,7 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     public EntityStat CharacterStat => characterStat;
     
     
-    private void Awake()
+    private void Start()
     {
         InitPlayer();
     }

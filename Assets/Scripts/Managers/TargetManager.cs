@@ -39,7 +39,11 @@ public class TargetManager : MonoBehaviour
 
     public void ClickOnEntity()
     {
-        ///Check that we don't click on ui
+        if (InputManager.GetInstance != null && InputManager.GetInstance.IsMouseOverUI)
+        {
+            return;
+        }
+        
         RaycastHit hit;
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 100, layerMask) &&

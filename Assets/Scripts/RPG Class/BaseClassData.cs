@@ -13,6 +13,8 @@ using UnityEngine.Serialization;
 public class BaseClassData : ScriptableObject
 {
   [SerializeField] private ClassData classData;
+
+  [SerializeField] private List<SkillDataSO> classSkills;
   
   public string ClassName => classData.ClassName;
   public string ClassDescription => classData.ClassDescription;
@@ -21,6 +23,9 @@ public class BaseClassData : ScriptableObject
   
   public StatType ClassMainStatType => classData.ClassMainStatType;
   public StatContainer ClassBaseStats => classData.ClassBaseStats;
+  
+  public List<SkillDataSO> ClassSkills => classSkills;
+  
   private void OnValidate()
   {
     classData.ClassBaseStats.ValidateStatList();
