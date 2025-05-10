@@ -12,7 +12,6 @@ public class StatContainer
         ValidateStatList();
     }
     
-    
     public void ValidateStatList()
     {
         foreach (StatType type in Enum.GetValues(typeof(StatType)))
@@ -40,6 +39,14 @@ public class StatContainer
         }
     }
 
+    public void AddAmount(StatType type, int amount)
+    {
+        Stat matchedStat = stats.Find(s => s.StatID == type);
+        if (matchedStat != null)
+        {
+            matchedStat.BaseValue += amount;
+        }
+    }
     public int GetStatAmount(StatType type)
     {
         Stat stat = stats.Find(x => x.StatID == type);
@@ -50,12 +57,12 @@ public class StatContainer
 
         return stat.BaseValue;
     }
-
     ///Find good math to make it more flexible 
     private bool CheckIfIndexToInsertExitsFromMainStat(int index)
     {
         return index > 3;
     }
+    
     
     ///I don't know if this is good, but if i do continue to work on the stats it would be ready for more complicated stuff I think :P
     private int NormalizeIndex(int indexToInsert)

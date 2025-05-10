@@ -319,6 +319,7 @@ MonoBehaviour:
   playerCharacter: {fileID: 72967761}
   enemy: {fileID: 1902192732}
   spellToTest: {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}
+  selfBuffDataToTest: {fileID: 11400000, guid: a1fe0993149a7a449982ea86eb828e77, type: 2}
 --- !u!1 &677593842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,6 +1311,10 @@ PrefabInstance:
     - target: {fileID: 1494956011141522820, guid: 1251fba507edbae488ac11a4da66e46b, type: 3}
       propertyPath: m_Name
       value: Player_HUD
+      objectReference: {fileID: 0}
+    - target: {fileID: 1494956011141522820, guid: 1251fba507edbae488ac11a4da66e46b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2257771215093571605, guid: 1251fba507edbae488ac11a4da66e46b, type: 3}
       propertyPath: m_Pivot.x

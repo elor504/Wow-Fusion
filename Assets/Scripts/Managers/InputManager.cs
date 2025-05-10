@@ -42,6 +42,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] private BasicEnemy enemy;
     [SerializeField] private ProjectileSpellData spellToTest;
     private ProjectileSpell projectileToTest;
+    [SerializeField] private StatBuffData selfBuffDataToTest;
+    [SerializeField] private SelfBuffSpell selfBuffToTest;
     
     private void Awake()
     {
@@ -49,9 +51,12 @@ public class InputManager : MonoBehaviour
         Init();
 
         projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
+        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
         
         _hotKeysList.Add(new HotKey("1"));
         _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID,Attack);
+        _hotKeysList.Add(new HotKey("2"));
+        _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID,SelfCast);
     }
     public void Init()
     {
@@ -100,6 +105,7 @@ public class InputManager : MonoBehaviour
                 GetHotKey("1")?.Press();
                 break;
             case "2":
+                GetHotKey("2")?.Press();
                 break;
             case "3":
                 break;
@@ -118,6 +124,11 @@ public class InputManager : MonoBehaviour
         {
             Debug.Log("No target");
         }
+    }
+
+    public void SelfCast()
+    {
+        playerCharacter.CastSpell(selfBuffToTest, null);
     }
     
     private HotKey GetHotKey(string key)

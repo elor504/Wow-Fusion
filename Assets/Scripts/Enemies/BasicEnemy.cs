@@ -5,25 +5,26 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
-public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,IPointerExitHandler  
+public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler, IPointerExitHandler
 {
+    [Header("References")] [SerializeField]
+    private GameObject hoveringVisual;
 
-    [Header("References")] 
-    [SerializeField] private GameObject hoveringVisual;
     [SerializeField] private GameObject beingTargetedVisual;
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private Transform hitPosition;
-    
+
     //Hold ref to base stats
-    [Header("Temp Base Stats")]
-    [SerializeField]private int baseHealth;
-    [SerializeField]private int baseMana;
-    
-    
+    [Header("Temp Base Stats")] [SerializeField]
+    private int baseHealth;
+
+    [SerializeField] private int baseMana;
+
+
     //hold runtime stat variables
     private int _currentHealth;
-    
- 
+
+
     public void DealDamage(ITargetableEntity caster, int damage)
     {
         _currentHealth -= damage;
@@ -58,14 +59,20 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,
         if (baseMana >= amount)
         {
             baseMana -= amount;
-            
-            if(baseMana < 0)
+
+            if (baseMana < 0)
                 baseMana = 0;
 
             return true;
         }
 
 
+        return false;
+    }
+
+    public bool TryGetEntityStat(out EntityStat entityStat)
+    {
+        entityStat = null;
         return false;
     }
 
@@ -107,11 +114,11 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,
     {
         return true;
     }
+
     public bool IsAlly()
     {
         return false;
     }
-
 
 
     public void OnHovering()
@@ -123,13 +130,13 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity,IPointerEnterHandler,
     {
         hoveringVisual.SetActive(false);
     }
-    
-    
-    
+
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         TargetManager.SetCurrentHoveredEntity(this);
     }
+
     public void OnPointerExit(PointerEventData eventData)
     {
         TargetManager.SetCurrentHoveredEntity(null);

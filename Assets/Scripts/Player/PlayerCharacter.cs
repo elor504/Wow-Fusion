@@ -41,7 +41,7 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
         _playerBrain.InitBrain(this);
         
         characterClass.Init(baseClassData, characterStat);
-        characterStat.Init(baseClassData.ClassBaseStats);
+        characterStat.Init(this,baseClassData.ClassBaseStats);
     }
     
     private void Update()
@@ -106,7 +106,19 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
        // characterStat.UseMana(amount);
         return true;
     }
-    
+
+    public bool TryGetEntityStat(out EntityStat entityStat)
+    {
+        entityStat = null;
+        if (characterStat)
+        {
+            entityStat = characterStat;
+            return true;
+        }
+
+        return false;
+    }
+
     public int GetHealth()
     {
         return 0;

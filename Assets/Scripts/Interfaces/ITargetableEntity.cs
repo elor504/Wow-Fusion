@@ -17,6 +17,8 @@ public interface ITargetableEntity : ITargetable
 
 
     public bool CanCastSpell(int amount);
+
+    public bool TryGetEntityStat(out EntityStat entityStat);
     
     public GameObject GetEntityGO();
     public Transform GetProjectileSpawnPosition();
