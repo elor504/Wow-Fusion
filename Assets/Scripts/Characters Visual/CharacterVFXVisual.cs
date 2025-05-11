@@ -8,14 +8,6 @@ public class CharacterVFXVisual : MonoBehaviour
 {
     [SerializeField] private List<VFXVisualPosition> visualPositions;
 
-
-
-
-
-
-
-
-
     public bool TryGetVisualPositionParent(string id, out Transform parent)
     {
         foreach (var position in visualPositions)

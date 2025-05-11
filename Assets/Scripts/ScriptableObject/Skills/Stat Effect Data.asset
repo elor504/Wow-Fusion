@@ -17,5 +17,6 @@ MonoBehaviour:
     statusEffectDescription: 
     statusEffectIcon: {fileID: 0}
     statusEffectDuration: 10
+    statusEffectVFXPF: {fileID: 6011275985347115124, guid: 8848be2561e287445abcc48277b438f5, type: 3}
     statToEffect: 2
     statBonus: 7

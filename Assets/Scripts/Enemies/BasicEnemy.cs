@@ -76,6 +76,12 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
         return false;
     }
 
+    public bool TryGetEntityVisualPosition(out CharacterVFXVisual vfxVisual)
+    {
+        vfxVisual = null;
+        return false;
+    }
+
     public GameObject GetEntityGO()
     {
         return gameObject;

@@ -13,9 +13,10 @@ public abstract class StatusEffectData
    [SerializeField] private string statusEffectDescription;
    [SerializeField] private Sprite statusEffectIcon;
    [SerializeField] private protected float statusEffectDuration;
-   
+   [SerializeField] private BasicVFX statusEffectVFXPF;
    public string StatusEffectName => statusEffectName;
    public string StatusEffectDescription => statusEffectDescription;
    public Sprite StatusEffectIcon => statusEffectIcon;
    public float StatusEffectDuration => statusEffectDuration;
+   public BasicVFX StatusEffectVfxPF => statusEffectVFXPF;
 }

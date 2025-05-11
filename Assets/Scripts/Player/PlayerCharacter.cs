@@ -118,7 +118,18 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
 
         return false;
     }
+    public bool TryGetEntityVisualPosition(out CharacterVFXVisual vfxVisual)
+    {
+        vfxVisual = null;
+        if (characterVFXVisual)
+        {
+            vfxVisual = characterVFXVisual;
+            return true;
+        }
 
+        return false;
+    }
+    
     public int GetHealth()
     {
         return 0;

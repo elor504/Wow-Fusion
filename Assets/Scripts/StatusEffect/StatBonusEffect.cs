@@ -8,6 +8,8 @@ public class StatBonusEffect : IStatusEffect
     private Dictionary<StatType, int> _statsToApply = new Dictionary<StatType, int>();
     private ITargetableEntity _entity;
     private StatEffectData _data;
+    private BasicVFX _effectVFX;
+    private const string StatusEffectID = "StatusEffect";
     
     public StatEffectData Data => _data;
     public StatBonusEffect(StatEffectData data, float time)
@@ -21,6 +23,13 @@ public class StatBonusEffect : IStatusEffect
     
     public void OnEnterStatus(ITargetableEntity entity)
     {
+        if (entity.TryGetEntityVisualPosition(out var characterVFX) && characterVFX.TryGetVisualPositionParent(StatusEffectID,out var parentVFX))
+        {
+            _effectVFX = VFXPoolSystem.Instance.GetAvailableObjectFromPool(_data.StatusEffectVfxPF,parentVFX.position);
+            _effectVFX.SetParent(parentVFX);
+            _effectVFX.InitVFX(parentVFX.position);
+            _effectVFX.gameObject.SetActive(true);
+        }
         _entity = entity;
         if(_entity.TryGetEntityStat(out var stat))
         {
@@ -48,6 +57,9 @@ public class StatBonusEffect : IStatusEffect
                 stat.ApplyStatusEffectStatbonuses(statToApply.Key, -statToApply.Value);
             }
         }
+        
+        _effectVFX.StopParticleSystem();
+        _effectVFX = null;
     }
 
     public StatEffectData GetStatusEffectUIInformation()
