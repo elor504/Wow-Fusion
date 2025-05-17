@@ -1,10 +1,15 @@
+using System;
+using UnityEngine;
+
+[Serializable]
 public class CharacterVisualData
 {
-    public HairColorType HairColor { private set; get; }
+    [SerializeField]private HairColorType hairColor;
+    public HairColorType HairColor => hairColor;
 
     public CharacterVisualData(HairColorType color)
     {
-        HairColor = color;
+        hairColor = color;
     }
 
 

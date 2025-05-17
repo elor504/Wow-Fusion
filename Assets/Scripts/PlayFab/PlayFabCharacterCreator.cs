@@ -9,6 +9,9 @@ public static class PlayFabCharacterCreator
 
     public static event Action<GrantCharacterToUserResult> OnGrantedCharacter;
     public static event Action<UpdateCharacterDataResult> OnUpdatedCharacter;
+    public static event Action<ListUsersCharactersResult> OnGetCharacterList;
+
+    public static event Action<PlayFabError> OnFailedToGrantCharacter;
 
     #region Update Character Data
     public static void UpdateCharacterData(string characterName, CharacterData data)
@@ -36,13 +39,29 @@ public static class PlayFabCharacterCreator
     #endregion
 
     #region Character Creation
-    public static void RequestCharacterCreation(string characterName)
+    public static void RequestCharacterCreation(string characterName,string className)
     {
-        PlayFabClientAPI.GrantCharacterToUser(new GrantCharacterToUserRequest()
+        PlayFabClientAPI.PurchaseItem(new PurchaseItemRequest
         {
-            CharacterName = characterName,
-            CustomTags = null
-        }, SuccessfullyGrantedCharacter, OnPlayFabError);
+            CatalogVersion = "Main",
+            ItemId = className,
+            VirtualCurrency = "PC", // your currency code
+            Price = 0 // or whatever price you set in catalog
+        }, result =>
+        {
+            PlayFabClientAPI.GrantCharacterToUser(new GrantCharacterToUserRequest()
+            {
+                CharacterName = characterName,
+                ItemId = className
+
+            }, SuccessfullyGrantedCharacter, OnPlayFabError);
+
+        }, error =>
+        {
+            Debug.LogError("Purchase failed: " + error.GenerateErrorReport());
+        });
+
+      
     }
 
     private static void SuccessfullyGrantedCharacter(GrantCharacterToUserResult result)
@@ -50,6 +69,31 @@ public static class PlayFabCharacterCreator
         OnGrantedCharacter?.Invoke(result);
     }
     #endregion
+
+    public static bool TryToGetCharacterDatas(string playFabID, out List<CharacterData> characterDatas)
+    {
+        characterDatas = new List<CharacterData>();
+        ListUsersCharactersRequest listUsersCharactersRequest = new ListUsersCharactersRequest()
+        {
+            PlayFabId = playFabID
+        };
+        PlayFabClientAPI.GetAllUsersCharacters(listUsersCharactersRequest, GetCharacterDataList, OnPlayFabError);
+
+
+        if (characterDatas.Count == 0)
+        {
+            return false;
+        }
+
+
+        return true;
+    }
+    private static void GetCharacterDataList(ListUsersCharactersResult result)
+    {
+        OnGetCharacterList?.Invoke(result);
+    }
+
+
     private static void OnPlayFabError(PlayFabError obj)
     {
         Debug.Log(obj.GenerateErrorReport());

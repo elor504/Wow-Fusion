@@ -13,11 +13,14 @@ public static class PlayFabAuthenticator
     private static string _playFabPlayerIdCache;
     private const string _playfabTitleID = "1D28E1";
 
+
     public static event Action<RegisterPlayFabUserResult> OnSuccessfullyRegistered;
+    public static event Action<GetPhotonAuthenticationTokenResult> OnSuccessfullyLoggedIn;
 
     public static event Action<string> OnFailedToLogin;
     public static event Action<string> OnFailedToRegister;
 
+    public static string GetPlayFabPlayerID => _playFabPlayerIdCache;
 
     #region Login
     public static void AuthenticateWithPlayFab(string email, string pass)
@@ -117,6 +120,8 @@ public static class PlayFabAuthenticator
 
         //We finally store to use this authentication parameters throughout the entire application.
         AuthValues = customAuth;
+
+        OnSuccessfullyLoggedIn?.Invoke(authenticationTokenResult);
     }
 
     private static void OnPlayFabError(PlayFabError obj)

@@ -1,12 +1,15 @@
 using NUnit.Framework;
+using PlayFab.ClientModels;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterCreationMenu : MonoBehaviour
 {
     [Header("Reference")]
+    [SerializeField] private MainMenu menu;
     [SerializeField] private GameObject panel;
     [Header("Scriptable objects data")]
     [SerializeField] private List<BaseClassData> classesData;
@@ -37,7 +40,7 @@ public class CharacterCreationMenu : MonoBehaviour
 
     private bool _spamPreventation;
     private string _characterName;
-    private ClassType _characterSelectedClass;
+    private ClassType _currentSelectedClass;
     
 
     [Header("Testing")]
@@ -46,29 +49,37 @@ public class CharacterCreationMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        characterNameInput.onValueChanged.AddListener(UpdateCharacterInput);
+        characterNameInput.onValueChanged.AddListener(UpdateCharacterNameInput);
 
-       // createCharacterButton.onClick.AddListener(OnClickCreateButton);
+        createCharacterButton.onClick.AddListener(OnClickCreateButton);
 
         ///Will be a dream to make it more flexible but its good for now :D
         mageButton.onClick.AddListener(ClickMageButtonHandler);
+
+
+        PlayFabCharacterCreator.OnGrantedCharacter += GrantedCharacterHandler;
+        PlayFabCharacterCreator.OnUpdatedCharacter += CharacterUpdateHandler;
     }
     private void OnDisable()
     {
-        characterNameInput.onValueChanged.RemoveListener(UpdateCharacterInput);
+        characterNameInput.onValueChanged.RemoveListener(UpdateCharacterNameInput);
 
-      //  createCharacterButton.onClick.RemoveListener(OnClickCreateButton);
+        createCharacterButton.onClick.RemoveListener(OnClickCreateButton);
 
         mageButton.onClick.RemoveListener(ClickMageButtonHandler);
+
+        PlayFabCharacterCreator.OnGrantedCharacter -= GrantedCharacterHandler;
+        PlayFabCharacterCreator.OnUpdatedCharacter -= CharacterUpdateHandler;
     }
-    private void Awake()
-    {
-        ShowPanel();
-    }
+
     public void ShowPanel()
     {
-        panel.SetActive(true);
         SelectHairColor(startHairToTest);
+        characterNameInput.text = "";
+        _characterName = "";
+        HandleIfCanClickCreateButton();
+
+        panel.SetActive(true);
     }
     public void HidePanel()
     {
@@ -80,7 +91,7 @@ public class CharacterCreationMenu : MonoBehaviour
     {
         if(TryGetClassDataByClassType(selectedClass,out var data))
         {
-            _characterSelectedClass = selectedClass;
+            _currentSelectedClass = selectedClass;
             className.text = data.ClassName;
             classDescription.text = data.ClassDescription;
         }
@@ -112,18 +123,51 @@ public class CharacterCreationMenu : MonoBehaviour
         return data;
     }
 
+
+    private void HandleIfCanClickCreateButton()
+    {
+        if(string.IsNullOrEmpty( _characterName) || _characterName.Length < 4)
+        {
+            createCharacterButton.interactable = false;
+        }
+        else
+        {
+            createCharacterButton.interactable = true;
+        }
+    }
+
     private void OnClickCreateButton()
     {
-        if (_spamPreventation) return;
+        //if (_spamPreventation) return;
 
-        _spamPreventation = true;
+        //_spamPreventation = true;
+
+        PlayFabCharacterCreator.RequestCharacterCreation(_characterName, _currentSelectedClass.ToString());
+
     }
-    private void UpdateCharacterInput(string input)
+    private void UpdateCharacterNameInput(string input)
     {
         _characterName = input;
+        HandleIfCanClickCreateButton();
     }
 
+    private StatContainer GetClassBasicStat(ClassType type)
+    {
+        return classesData.Find(c => c.GetClassData.GetClassID == type).ClassBaseStats;
+    }
 
+    private void GrantedCharacterHandler(GrantCharacterToUserResult result)
+    {
+        CharacterVisualData visualData = new CharacterVisualData(startHairToTest);
+        StatContainer baseClassStat = GetClassBasicStat(_currentSelectedClass);
+        CharacterData newCharData = new CharacterData(_characterName, 1, _currentSelectedClass, baseClassStat, visualData);
+
+        PlayFabCharacterCreator.UpdateCharacterData(result.CharacterId, newCharData);
+    }
+    private void CharacterUpdateHandler(UpdateCharacterDataResult result)
+    {
+        menu.ChangeState(MainMenuState.CharacterSelection);
+    }
 }
 
 

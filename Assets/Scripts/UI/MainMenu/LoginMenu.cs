@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LoginMenu : MonoBehaviour
 {
     [Header("Reference")]
+    [SerializeField] private MainMenu menu;
     [SerializeField] private GameObject panel;
     [Header("Button References")]
     [SerializeField] private Button loginButton;
@@ -53,11 +54,11 @@ public class LoginMenu : MonoBehaviour
 
     public void ShowLoginMenu()
     {
-        panel.gameObject.SetActive(true);
+        panel.SetActive(true);
     }
     public void HideLoginMenu()
     {
-        panel.gameObject.SetActive(false);
+        panel.SetActive(false);
     }
 
 

@@ -1,22 +1,51 @@
+using PlayFab.ClientModels;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [Header("Menus")]
     [SerializeField] private LoginMenu loginMenu;
+    [SerializeField] private CharacterCreationMenu characterCreationMenu;
+    [SerializeField] private CharacterSelectionMenu characterSelectionMenu;
 
     private MainMenuState _currentState = MainMenuState.Nothing;
 
 
     private void Awake()
     {
+        loginMenu.HideLoginMenu();
+        characterCreationMenu.HidePanel();
+        characterSelectionMenu.HidePanel();
+
         ShowLoginMenu();
     }
+    private void OnEnable()
+    {
+        PlayFabAuthenticator.OnSuccessfullyLoggedIn += OnLogged;
+    }
+    private void OnDisable()
+    {
+        PlayFabAuthenticator.OnSuccessfullyLoggedIn -= OnLogged;
+    }
+
     public void ShowLoginMenu()
     {
         ChangeState(MainMenuState.Login);
     }
 
+    public void OnLogged(GetPhotonAuthenticationTokenResult result)
+    {
+        ShowCharacterSelection();
+    }
+    public void ShowCharacterCreation()
+    {
+        ChangeState(MainMenuState.CharacterCreation);
+    }
+    public void ShowCharacterSelection()
+    {
+        ChangeState(MainMenuState.CharacterSelection);
+    }
 
     public void ChangeState(MainMenuState state)
     {
@@ -34,7 +63,11 @@ public class MainMenu : MonoBehaviour
                 break;
             case MainMenuState.Register:
                 break;
+            case MainMenuState.CharacterCreation:
+                characterCreationMenu.ShowPanel();
+                break;
             case MainMenuState.CharacterSelection:
+                characterSelectionMenu.ShowPanel();
                 break;
         }
     }
@@ -47,7 +80,11 @@ public class MainMenu : MonoBehaviour
                 break;
             case MainMenuState.Register:
                 break;
+            case MainMenuState.CharacterCreation:
+                characterCreationMenu.HidePanel();
+                break;
             case MainMenuState.CharacterSelection:
+                characterSelectionMenu.HidePanel();
                 break;
         }
     }  
@@ -57,5 +94,6 @@ public enum MainMenuState
     Nothing,
     Login,
     Register,
-    CharacterSelection
+    CharacterCreation,
+    CharacterSelection,
 }
