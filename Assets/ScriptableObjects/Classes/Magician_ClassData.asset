@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Magician_ClassData
   m_EditorClassIdentifier: 
   classData:
-    classID: Magician
+    classID: 200
     className: Mage
     classDescription: Some weirdo that knows what card you are thinking of
     classIcon: {fileID: 0}
