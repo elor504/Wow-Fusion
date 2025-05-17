@@ -25,6 +25,7 @@ public class BaseClassData : ScriptableObject
   public StatContainer ClassBaseStats => classData.ClassBaseStats;
   
   public List<SkillDataSO> ClassSkills => classSkills;
+    public ClassData GetClassData => classData;
   
   private void OnValidate()
   {
@@ -36,7 +37,7 @@ public class BaseClassData : ScriptableObject
 public struct ClassData
 {
   [Header("Data")]
-  [SerializeField] private string classID;
+  [SerializeField] private ClassType classID;
   [SerializeField] private string className;
   [SerializeField] private string classDescription;
   
@@ -49,9 +50,16 @@ public struct ClassData
   public string ClassDescription => classDescription;
   
   public Sprite ClassIcon => classIcon;
-  
+    public ClassType GetClassID => classID;
   public StatType ClassMainStatType => classMainStatType;
   public StatContainer ClassBaseStats => classBaseStats;
   
   
+}
+
+public enum ClassType
+{
+    Warrior = 100,
+    Mage = 200,
+    Ranger = 300
 }

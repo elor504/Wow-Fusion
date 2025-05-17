@@ -6,7 +6,7 @@ using UnityEngine;
 public class EntityStat : MonoBehaviour
 {
     private ITargetableEntity _entity;
-    [SerializeField] private StatContainer statContainer;
+    [SerializeField] private StatContainer entityBaseStat;
 
     private int _currentLevel = 1;
     [SerializeField] private int currentHealth;
@@ -26,7 +26,7 @@ public class EntityStat : MonoBehaviour
     
     private void OnValidate()
     {
-        statContainer.ValidateStatList();
+        entityBaseStat.ValidateStatList();
     }
 
     private void Update()
@@ -37,10 +37,10 @@ public class EntityStat : MonoBehaviour
         }
     }
 
-    public void Init(ITargetableEntity entity,StatContainer newStatContainer,int level = 1)
+    public void Init(ITargetableEntity entity,StatContainer baseStats,int level = 1)
     {
         _entity = entity;
-        statContainer = newStatContainer;
+        entityBaseStat = baseStats;
         
         _currentLevel = level;
         
@@ -61,7 +61,30 @@ public class EntityStat : MonoBehaviour
         
     
     }
-    
+    public void Init(ITargetableEntity entity, CharacterData data)
+    {
+        _entity = entity;
+        entityBaseStat = data.CharacterBaseStat;
+
+        _currentLevel = data.CharacterLevel;
+
+        _maxHealth = MaxHealth(_currentLevel);
+        currentHealth = _maxHealth;
+
+        _maxMana = MaxMana(_currentLevel);
+        currentMana = _maxMana;
+
+        statusEffectHolder = new StatusEffectHolder(this, _entity);
+
+        _statEffectBonuses = new();
+        _statEffectBonuses.ValidateStatList();
+
+
+        OnHealthChanged?.Invoke(currentHealth, _maxHealth);
+        OnManaChanged?.Invoke(currentMana, _maxMana);
+
+
+    }
     public void DealDamage(int damage)
     {
         currentHealth -= damage;
@@ -96,22 +119,22 @@ public class EntityStat : MonoBehaviour
     public int MaxHealth(int currentLevel = 1)
     {
       StatType stamina = StatType.Stamina;
-      int levelBonus = ((statContainer.GetStatAmount(stamina) * 10) * currentLevel);
-      int statBonus = Mathf.RoundToInt(statContainer.GetStatAmount(stamina) * 0.6f);
+      int levelBonus = ((entityBaseStat.GetStatAmount(stamina) * 10) * currentLevel);
+      int statBonus = Mathf.RoundToInt(entityBaseStat.GetStatAmount(stamina) * 0.6f);
         
       return levelBonus + statBonus;
     }
     public int MaxMana(int currentLevel = 1)
     {
         StatType intellect = StatType.Intellect;
-        int levelBonus = ((statContainer.GetStatAmount(intellect) * 5) * currentLevel);
-        int statBonus = Mathf.RoundToInt((statContainer.GetStatAmount(intellect) * 0.3f));
+        int levelBonus = ((entityBaseStat.GetStatAmount(intellect) * 5) * currentLevel);
+        int statBonus = Mathf.RoundToInt((entityBaseStat.GetStatAmount(intellect) * 0.3f));
         return levelBonus + statBonus;
     }
 
     public int GetFullStatValue(StatType type)
     {
-        var baseStats = statContainer.GetStatAmount(type);
+        var baseStats = entityBaseStat.GetStatAmount(type);
         var statusEffectVal = _statEffectBonuses.GetStatAmount(type);
         
         return baseStats + statusEffectVal;
@@ -122,6 +145,8 @@ public class EntityStat : MonoBehaviour
     }
     
 }
+
+
 
 [Serializable]
 public class StatusEffectHolder
