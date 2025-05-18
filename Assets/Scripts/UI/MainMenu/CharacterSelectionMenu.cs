@@ -11,7 +11,10 @@ public class CharacterSelectionMenu : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private Button createCharacterButton;
     [SerializeField] private List<CharacterButton> characterButtonsGO;
-
+    [Header("Visual")]
+    [SerializeField] private GameObject characterVisualGO;
+    [SerializeField] private CharacterHairMeshes characterVisual;
+    [SerializeField] private CharacterVisualSO visualSO;
     private List<CharacterData> _charactersData = new List<CharacterData>();
 
 
@@ -33,15 +36,25 @@ public class CharacterSelectionMenu : MonoBehaviour
 
         }
     }
+    public void ShowCharacter(int index)
+    {
+        Color hairColor = visualSO.GetHairColorByType(_charactersData[index].CharacterVisualData.HairColor);
+        characterVisual.ChangeHairMeshesColor(hairColor);
 
+
+        if (!characterVisualGO.activeInHierarchy)
+            characterVisualGO.SetActive(true);
+    }
     public void ShowPanel()
     {
         LoadCharacterDatas();
         panel.SetActive(true);
+        characterVisualGO.SetActive(false);
     }
     public void HidePanel()
     {
         panel.SetActive(false);
+        characterVisualGO.SetActive(false);
     }
 
     private void GetCharacterData(string id)
@@ -77,6 +90,8 @@ public class CharacterSelectionMenu : MonoBehaviour
 
         int index = _charactersData.IndexOf(charData);
         characterButtonsGO[index].ShowButton(charData.CharacterName, charData);
+        characterButtonsGO[index].GetButton.onClick.RemoveAllListeners();
+        characterButtonsGO[index].GetButton.onClick.AddListener(() => ShowCharacter(index));
     }
     private void FailedToLoad(PlayFabError error)
     {

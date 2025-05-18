@@ -2121,6 +2121,9 @@ MonoBehaviour:
   - {fileID: 628063604}
   - {fileID: 1477581183}
   - {fileID: 375543940}
+  characterVisualGO: {fileID: 1092417578}
+  characterVisual: {fileID: 1385158683}
+  visualSO: {fileID: 11400000, guid: 650e77259e6cd3f469fdba919df10e9d, type: 2}
 --- !u!1 &199328833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,6 +2986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc72d15b3717c1c46bb117c2f2fbb676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 375543942}
   charName: {fileID: 1146681122}
   charClassLevel: {fileID: 210381073}
 --- !u!224 &375543941
@@ -4067,6 +4071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc72d15b3717c1c46bb117c2f2fbb676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 628063601}
   charName: {fileID: 1108483914}
   charClassLevel: {fileID: 1185805391}
 --- !u!1 &650942711
@@ -7277,7 +7282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1092417579
 Transform:
   m_ObjectHideFlags: 0
@@ -10327,6 +10332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc72d15b3717c1c46bb117c2f2fbb676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 1477581180}
   charName: {fileID: 836425751}
   charClassLevel: {fileID: 1551566874}
 --- !u!1 &1478863207
