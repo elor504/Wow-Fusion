@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c83f1ffac8cdb4a8db3d082fc455c2, type: 3}
+  m_Name: Equipment_Hat_Test
+  m_EditorClassIdentifier: 
+  equipmentName: Plate Helmet
+  equipmentDescription: 
+  equipmentType: 0
+  levelRequirement: 1
+  statContainer:
+    stats:
+    - statName: Strength
+      StatID: 0
+      BaseValue: 2
+    - statName: Agility
+      StatID: 1
+      BaseValue: 1
+    - statName: Intellect
+      StatID: 2
+      BaseValue: 0
+    - statName: Stamina
+      StatID: 3
+      BaseValue: 0
+    - statName: Crit
+      StatID: 100
+      BaseValue: 0
+    - statName: Haste
+      StatID: 101
+      BaseValue: 0
+    - statName: Speed
+      StatID: 102
+      BaseValue: 0
+  equipmentMeshes:
+  - {fileID: -2854808510063695659, guid: 10399581d9d41a44bb8984ec628263dd, type: 3}
