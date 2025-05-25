@@ -3,28 +3,30 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
-  [Header(("References"))]
-  [SerializeField] private NetworkRunner networkRunner;
-  [Header("Game Settings")]
-  [SerializeField] private GameMode gameMode;
+    [Header(("References"))]
+    [SerializeField] private NetworkRunner networkRunner;
+    [SerializeField] private LobbyManager lobbyManager;
+    [Header("Game Settings")]
+    [SerializeField] private GameMode gameMode;
 
-  [SerializeField] private string sessionName;
-  [ContextMenu("Start Game")]
-  public void StartGame()
-  {
-    networkRunner.StartGame(new StartGameArgs
+    [SerializeField] private string sessionName;
+    [ContextMenu("Start Game")]
+    public void StartGame()
     {
-      GameMode = GameMode.Shared,
-      SessionName = sessionName,
-      OnGameStarted = OnGameStarted
-    });
-    
-    
-  }
+        networkRunner.StartGame(new StartGameArgs
+        {
+            GameMode = GameMode.Shared,
+            SessionName = sessionName,
+            OnGameStarted = OnGameStarted
+        });
 
-  private void OnGameStarted(NetworkRunner obj)
-  {
-    Debug.Log("Game Started!");
-  }
-  
+
+    }
+
+    private void OnGameStarted(NetworkRunner obj)
+    {
+        Debug.Log("Game Started!");
+        lobbyManager.Init(obj);
+    }
+
 }
