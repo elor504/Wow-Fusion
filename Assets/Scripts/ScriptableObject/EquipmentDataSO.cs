@@ -19,6 +19,12 @@ public class EquipmentDataSO : ScriptableObject
     public int LevelRequirement => levelRequirement;
     public StatContainer StatContainer => statContainer;
     public Mesh[] EquipmentMeshes => equipmentMeshes;
+
+
+    public EquipableItemData GetEquipableItem()
+    {
+        return new EquipableItemData(equipmentName, equipmentDescription, levelRequirement,equipmentType, statContainer,levelRequirement);
+    }
 }
 
 public enum EquipmentType

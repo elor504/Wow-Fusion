@@ -17,8 +17,18 @@ public class PlayerEquipment : MonoBehaviour
             }
         }
     }
-    
-    
+
+    public void UpdateVisual(EquipmentType type,Mesh[] meshes)
+    {
+        EquipmentVisual equipment = equipmentVisuals.Find((e => e.EquipmentType == type));
+
+        var i = 0;
+        foreach (var mesh in equipment.MeshRenderer)
+        {
+            mesh.sharedMesh = meshes[i];
+            i++;
+        }
+    }
 }
 
 [Serializable]
@@ -27,7 +37,7 @@ public struct EquipmentVisual
     [HideInInspector] public string EquipmentTypeName;
     public EquipmentType EquipmentType;
     public SkinnedMeshRenderer[] MeshRenderer;
-
+    
     public EquipmentVisual(SkinnedMeshRenderer[] renderer,EquipmentType type)
     {
         EquipmentTypeName = type.ToString();

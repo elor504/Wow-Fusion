@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using PlayFab.ClientModels;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ public class CharacterCreationMenu : MonoBehaviour
 
     [Header("Character visual")]
     [SerializeField] private CharacterHairMeshes characterHairRenderer;
+    [SerializeField] private PlayerEquipment equipmentVisual;
     ///Character visual customization?
 
     private HairColorType hairColorType;
@@ -94,6 +96,14 @@ public class CharacterCreationMenu : MonoBehaviour
             _currentSelectedClass = selectedClass;
             className.text = data.ClassName;
             classDescription.text = data.ClassDescription;
+            
+            var equipments = GetClassStartEquipment(_currentSelectedClass);
+            int enumLength = Enum.GetNames(typeof(EquipmentType)).Length;
+            for (int i = 0; i < enumLength; i++)
+            {
+                var type = (EquipmentType)i;
+                //equipmentVisual.UpdateVisual(type, equipments.GetEquipableDataByType(type));
+            }
         }
         else
         {
@@ -156,11 +166,23 @@ public class CharacterCreationMenu : MonoBehaviour
         return classesData.Find(c => c.GetClassData.GetClassID == type).ClassBaseStats;
     }
 
+    private CharacterEquipmentData GetClassStartEquipment(ClassType type)
+    {
+        var equipments = classesData.Find(c => c.GetClassData.GetClassID == type).StartingEquipment;
+
+        var equipmentData = new CharacterEquipmentData();
+        foreach (var equipment in equipments)
+        {
+            equipmentData.TryToEquip(equipment.GetEquipableItem(),out _);
+        }
+        return equipmentData;
+    }
     private void GrantedCharacterHandler(GrantCharacterToUserResult result)
     {
         CharacterVisualData visualData = new CharacterVisualData(startHairToTest);
         StatContainer baseClassStat = GetClassBasicStat(_currentSelectedClass);
-        CharacterData newCharData = new CharacterData(_characterName, 1, _currentSelectedClass, baseClassStat, visualData);
+        CharacterEquipmentData equipmentData = GetClassStartEquipment(_currentSelectedClass);
+        CharacterData newCharData = new CharacterData(_characterName, 1, _currentSelectedClass, baseClassStat, visualData,equipmentData);
 
         PlayFabCharacterCreator.UpdateCharacterData(result.CharacterId, newCharData);
     }

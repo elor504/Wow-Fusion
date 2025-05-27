@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 937673071}
   - component: {fileID: 937673070}
   m_Layer: 0
-  m_Name: Runner
+  m_Name: RoomManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkRunner: {fileID: 937673071}
+  lobbyManager: {fileID: 0}
   gameMode: 2
   sessionName: GameOne
 --- !u!4 &937673073

@@ -23,10 +23,11 @@ public class BaseClassData : ScriptableObject
   
   public StatType ClassMainStatType => classData.ClassMainStatType;
   public StatContainer ClassBaseStats => classData.ClassBaseStats;
+  [SerializeField] private List<EquipmentDataSO> startingEquipment;
   
   public List<SkillDataSO> ClassSkills => classSkills;
     public ClassData GetClassData => classData;
-  
+    public List<EquipmentDataSO> StartingEquipment => startingEquipment;
   private void OnValidate()
   {
     classData.ClassBaseStats.ValidateStatList();
@@ -45,6 +46,8 @@ public struct ClassData
   [Header("Primary Stats")]
   [SerializeField] private StatType classMainStatType;
   [SerializeField] private StatContainer classBaseStats;
+
+
   
   public string ClassName => className;
   public string ClassDescription => classDescription;
@@ -53,7 +56,7 @@ public struct ClassData
     public ClassType GetClassID => classID;
   public StatType ClassMainStatType => classMainStatType;
   public StatContainer ClassBaseStats => classBaseStats;
-  
+
   
 }
 
