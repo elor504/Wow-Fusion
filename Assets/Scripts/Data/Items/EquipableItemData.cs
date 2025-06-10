@@ -19,4 +19,8 @@ public class EquipableItemData : BaseItemData
         this.equipmentType = equipmentType;
     }
 
+    public bool IsEmpty()
+    {
+        return string.IsNullOrEmpty(ItemName);
+    }
 }

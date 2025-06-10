@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c83f1ffac8cdb4a8db3d082fc455c2, type: 3}
   m_Name: Equipment_Chest_Test
   m_EditorClassIdentifier: 
-  equipmentName: Boot
+  equipmentName: Chest
   equipmentDescription: 
   equipmentType: 1
   levelRequirement: 1
