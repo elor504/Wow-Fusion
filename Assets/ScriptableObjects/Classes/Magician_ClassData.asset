@@ -43,3 +43,7 @@ MonoBehaviour:
         BaseValue: 5
   classSkills:
   - {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}
+  startingEquipment:
+  - {fileID: 11400000, guid: 349abffe85f0fc742a8bf1f787924141, type: 2}
+  - {fileID: 11400000, guid: 670e0f6d02b2c3746b09ffbf7578c104, type: 2}
+  - {fileID: 11400000, guid: 349abffe85f0fc742a8bf1f787924141, type: 2}

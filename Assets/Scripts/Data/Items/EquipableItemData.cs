@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-
+﻿using System;
+using UnityEngine;
+[Serializable]
 public class EquipableItemData : BaseItemData
 {
     [SerializeField] private int levelReq;

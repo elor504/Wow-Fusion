@@ -1,6 +1,7 @@
 
 using PlayFab;
 using PlayFab.ClientModels;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,9 @@ public class CharacterSelectionMenu : MonoBehaviour
     [SerializeField] private CharacterHairMeshes characterVisual;
     [SerializeField] private CharacterVisualSO visualSO;
     private List<CharacterData> _charactersData = new List<CharacterData>();
-
+    [Header("Equipment")]
+    [SerializeField] private PlayerEquipment characterEquipment;
+    [SerializeField] private List<EquipmentDataSO> equipmentsData;
 
     private void OnEnable()
     {
@@ -38,9 +41,22 @@ public class CharacterSelectionMenu : MonoBehaviour
     }
     public void ShowCharacter(int index)
     {
-        Color hairColor = visualSO.GetHairColorByType(_charactersData[index].CharacterVisualData.HairColor);
+        var characterData = _charactersData[index];
+        var characterVisualData = characterData.CharacterVisualData;
+        var characterEquipmentData = characterData.CharacterEquipmentData;
+		Color hairColor = visualSO.GetHairColorByType(characterVisualData.HairColor);
+
         characterVisual.ChangeHairMeshesColor(hairColor);
 
+        int enumLength = Enum.GetNames(typeof(EquipmentType)).Length;
+        for (int i = 0; i < enumLength; i++)
+        {
+            var type = (EquipmentType)i;
+            EquipableItemData equipmentData = characterEquipmentData.GetEquipableDataByType(type);
+            if(equipmentData != null)
+            characterEquipment.UpdateVisual(type, GetEquipmentMeshes(equipmentData.ItemName));
+		}
+       
 
         if (!characterVisualGO.activeInHierarchy)
             characterVisualGO.SetActive(true);
@@ -78,7 +94,18 @@ public class CharacterSelectionMenu : MonoBehaviour
         }
 
     }
+    private Mesh[] GetEquipmentMeshes(string id)
+    {
+        foreach (var equipment in equipmentsData)
+        {
+            if(equipment.EquipmentName == id)
+            {
+                return equipment.EquipmentMeshes;
+            }
+        }
 
+        return null;
+    }
 
 
     private void GetCharacterDataResult(GetCharacterDataResult result)
