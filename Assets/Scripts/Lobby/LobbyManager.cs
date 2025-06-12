@@ -5,12 +5,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Homework01
+namespace Homework
 {
     //https://doc-api.photonengine.com/en/fusion/current/interface_fusion_1_1_i_network_runner_callbacks.html
     //https://doc.photonengine.com/fusion/current/manual/connection-and-matchmaking/matchmaking
-    public class SessionManager : MonoBehaviour, INetworkRunnerCallbacks
+    public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
+        private static LobbyManager _instance;
+        public static LobbyManager Instance => _instance;
+
+        public CharacterSelectionManager characterSelectionManagerPF;
+
         [Header("Reference")]
         [SerializeField] private NetworkRunner networkRunner;
         [SerializeField] private UIManager uiManager;
@@ -19,7 +24,8 @@ namespace Homework01
         [Header("Session settings")]
         [SerializeField] private GameMode gamemode = GameMode.Shared;
 
-
+        private CharacterSelectionManager characterSelectionManager;
+        public CharacterSelectionManager GetCharacterSelectionManager => characterSelectionManagerPF;
 
         private string _lobbyID;
         private bool _isLocalPlayer;
@@ -39,7 +45,20 @@ namespace Homework01
 
         public static Action<string, int> EnterSession;
 
+        private void Awake()
+        {
 
+            if (_instance == null)
+            {
+                _instance = this;
+            }
+            else if (_instance != this)
+            {
+                Destroy(_instance);
+            }
+            networkRunner.AddCallbacks(this);
+            uiManager.ChangeToLobbySelection();
+        }
         private void OnEnable()
         {
             EnterLobby += EnterLobbyHandler;
@@ -51,17 +70,13 @@ namespace Homework01
             EnterSession -= EnterSessionHandler;
         }
 
-        private void Awake()
-        {
-            networkRunner.AddCallbacks(this);
-            uiManager.ChangeToLobbySelection();
-        }
+
 
         public async void EnterLobbyHandler(string lobbyID, string nickname)//DIDN'T KNEW IT POSSIBLE AAAAAAAAAAAAAAAAAAAAAAH
         {
             _lobbyID = lobbyID;
             OnStartLoadingLobby.Invoke();
-            await Task.Run(() => JoinLobby(networkRunner, _lobbyID));
+            await Task.Run(() => JoinLobby(networkRunner, _lobbyID));  
             OnFinishedLoadingLobby?.Invoke(_lobbyID);
         }
         private async Task JoinLobby(NetworkRunner runner, string lobbyID)
@@ -104,6 +119,8 @@ namespace Homework01
         {
             Debug.Log("Game Started!");
             OnGameStarted?.Invoke();
+            if (obj.IsSharedModeMasterClient)
+                characterSelectionManager = obj.Spawn(characterSelectionManagerPF);
         }
         public void OnConnectedToServer(NetworkRunner runner)
         {

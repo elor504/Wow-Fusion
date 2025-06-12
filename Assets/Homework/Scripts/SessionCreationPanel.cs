@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WebSocketSharp;
-namespace Homework01
+namespace Homework
 {
     public class SessionCreationPanel : MonoBehaviour
     {
@@ -62,7 +62,7 @@ namespace Homework01
                 Debug.LogError("session name is too short (needs to be 4 or higher");
                 return;
             }
-            SessionManager.EnterSession(_sessionName,_currentPlayerAmount);
+            LobbyManager.EnterSession(_sessionName,_currentPlayerAmount);
         }
 
         private void MaxPlayerInputHandler(string input)

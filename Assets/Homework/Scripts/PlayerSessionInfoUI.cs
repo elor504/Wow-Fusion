@@ -1,12 +1,10 @@
 using TMPro;
 using UnityEngine;
-namespace Homework01
+namespace Homework
 {
     public class PlayerSessionInfoUI : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI playerNameText;
-
-
 
 
         public void ShowPlayer(string name)

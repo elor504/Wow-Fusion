@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Homework01
+namespace Homework
 {
     public class SessionListUI : MonoBehaviour
     {
@@ -28,7 +28,7 @@ namespace Homework01
         }
         public void Init()
         {
-            SessionManager.OnSessionUpdated += UpdateSessions;
+            LobbyManager.OnSessionUpdated += UpdateSessions;
         }
 
 

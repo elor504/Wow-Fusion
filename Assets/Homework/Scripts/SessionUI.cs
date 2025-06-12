@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Homework01
+namespace Homework
 {
     public class SessionUI : MonoBehaviour
     {
@@ -11,8 +11,8 @@ namespace Homework01
         [SerializeField] private PlayerSessionInfoUI playerInfoPF;
         [SerializeField] private UIManager uiManager;
         [SerializeField] private Button returnButton;
-
-        private List<PlayerSessionInfoUI> _playerSessionInfos;
+        [SerializeField] private List<Button> characterButtons;
+        private List<PlayerSessionInfoUI> _playerSessionInfos = new List<PlayerSessionInfoUI>();
 
 
         private int _currentSelectedChar;
@@ -20,14 +20,16 @@ namespace Homework01
 
         private void OnEnable()
         {
-            SessionManager.OnPlayerConnection += UpdatePlayerList;
+            LobbyManager.OnPlayerConnection += UpdatePlayerList;
             returnButton.onClick.AddListener(ReturnToSessionList);
+            CharacterSelectionManager.OnSelectedCharacter += UpdateButtons;
         }
 
         private void OnDisable()
         {
-            SessionManager.OnPlayerConnection -= UpdatePlayerList;
+            LobbyManager.OnPlayerConnection -= UpdatePlayerList;
             returnButton.onClick.RemoveListener(ReturnToSessionList);
+            CharacterSelectionManager.OnSelectedCharacter -= UpdateButtons;
         }
 
         public void ShowPanel()
@@ -56,6 +58,12 @@ namespace Homework01
                 index++;
             }
         }
+        public void ClickCharacterButtonHandler(int index)
+        {
+            Debug.Log($"On click character: {index}");
+            LobbyManager.Instance.GetCharacterSelectionManager.RPCSetCharacterSelection(index);
+            UpdateButtons();
+        }
 
         private bool CheckIfNeedToAddNameUI(int playerRefCount)
         {
@@ -74,6 +82,18 @@ namespace Homework01
         private void ReturnToSessionList()
         {
             uiManager.ChangeToSessionList();
+        }
+
+
+      
+
+        private void UpdateButtons()
+        {
+            var characters = LobbyManager.Instance.GetCharacterSelectionManager.GetCharacterSelectionList;
+            for (int i = 0; i < characters.Count; i++)
+            {
+                characterButtons[i].interactable = !characters[i].IsSelected;
+            }
         }
     }
 }

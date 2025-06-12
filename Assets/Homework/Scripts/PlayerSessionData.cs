@@ -1,5 +1,5 @@
 using Fusion;
-namespace Homework01
+namespace Homework
 {
     public class PlayerSessionData : NetworkBehaviour
     {

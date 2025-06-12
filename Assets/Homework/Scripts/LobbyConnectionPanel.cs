@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 
-namespace Homework01
+namespace Homework
 {
     public class LobbyConnectionPanel : MonoBehaviour
     {
@@ -50,11 +50,11 @@ namespace Homework01
         }
         private void OnPushEnterLobby()
         {
-            SessionManager.EnterLobby.Invoke(_requestedLobbyId,_nickname);
+            LobbyManager.EnterLobby.Invoke(_requestedLobbyId,_nickname);
         }
         private void PushEnterMainLobbyHandler()
         {
-            SessionManager.EnterLobby.Invoke(SessionManager.MainLobbyID, _nickname);
+            LobbyManager.EnterLobby.Invoke(LobbyManager.MainLobbyID, _nickname);
         }
     }
 }

@@ -1095,7 +1095,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 219887024}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &219887024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1216,7 +1228,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 321085070}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &321085070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2990,7 +3014,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 709137601}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 7
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &709137601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3346,6 +3382,17 @@ MonoBehaviour:
   playerInfoPF: {fileID: 5534003781835377364, guid: f38468c25ac0457488cab8d34ddbc28a, type: 3}
   uiManager: {fileID: 496760466}
   returnButton: {fileID: 1266951889}
+  characterButtons:
+  - {fileID: 1672326550}
+  - {fileID: 321085069}
+  - {fileID: 1656932512}
+  - {fileID: 219887023}
+  - {fileID: 2136414417}
+  - {fileID: 1907470727}
+  - {fileID: 1198571250}
+  - {fileID: 709137600}
+  - {fileID: 1438844115}
+  - {fileID: 1727368722}
 --- !u!1 &777797270
 GameObject:
   m_ObjectHideFlags: 0
@@ -5219,7 +5266,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1198571251}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1198571251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6240,7 +6299,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1438844116}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 8
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1438844116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6289,6 +6360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1471929939}
   - component: {fileID: 1471929940}
+  - component: {fileID: 1471929941}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -6320,13 +6392,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 1471929938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fb0da7330d00f14ba875a192560a78e, type: 3}
+  m_Script: {fileID: 11500000, guid: d43b3611ef6af784583e9c60c41bb1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterSelectionManagerPF: {fileID: 4218726518866978583, guid: 2d0108c41200a794e9f0b76d96c06a3a, type: 3}
   networkRunner: {fileID: 937673071}
   uiManager: {fileID: 496760466}
   sessionLobby: 2
   gamemode: 2
+--- !u!114 &1471929941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471929938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 163143170
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &1488085834
 GameObject:
   m_ObjectHideFlags: 0
@@ -6854,37 +6945,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1561517147
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1561517148}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1561517148
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1561517147}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.388435, y: -7.3068976, z: 18.137474}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1747973235}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1611338657
 GameObject:
   m_ObjectHideFlags: 0
@@ -7103,7 +7163,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1656932513}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1656932513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7224,7 +7296,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1672326551}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1672326551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7481,7 +7565,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1727368723}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 9
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1727368723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7831,7 +7927,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1561517148}
   - {fileID: 1471929939}
   - {fileID: 496760465}
   - {fileID: 937673073}
@@ -8237,7 +8332,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1907470728}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1907470728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9410,7 +9517,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2136414418}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767215001}
+        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+        m_MethodName: ClickCharacterButtonHandler
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2136414418
 MonoBehaviour:
   m_ObjectHideFlags: 0

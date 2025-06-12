@@ -1,5 +1,5 @@
 using Fusion;
-using Homework01;
+using Homework;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -33,7 +33,7 @@ public class SessionButton : MonoBehaviour
 
     private void OnClickButton()
     {
-        SessionManager.EnterSession(_sessionInfo.Name,_sessionInfo.MaxPlayers);
+        LobbyManager.EnterSession(_sessionInfo.Name,_sessionInfo.MaxPlayers);
     }
 
 }

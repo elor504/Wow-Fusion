@@ -1,7 +1,7 @@
 using UnityEngine;
 using WebSocketSharp;
 
-namespace Homework01
+namespace Homework
 {
     public class UIManager : MonoBehaviour
     {
@@ -16,6 +16,10 @@ namespace Homework01
         [Header("Panels")]
         [SerializeField] private GameObject loadingLobbyPanel;
 
+
+
+        public SessionUI GetSessionUI => sessionUI;
+
         private UIState _currentState = UIState.Uninitialized;
 
         private string _lobbyID;
@@ -24,17 +28,17 @@ namespace Homework01
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         private void OnEnable()
         {
-            SessionManager.OnStartLoadingLobby += ChangeToLoadingState;
-            SessionManager.OnFinishedLoadingLobby += ChangeToSessionList;
+            LobbyManager.OnStartLoadingLobby += ChangeToLoadingState;
+            LobbyManager.OnFinishedLoadingLobby += ChangeToSessionList;
 
-            SessionManager.OnGameStarted += ChangeToSessionState;
+            LobbyManager.OnGameStarted += ChangeToSessionState;
         }
         private void OnDisable()
         {
-            SessionManager.OnStartLoadingLobby -= ChangeToLoadingState;
-            SessionManager.OnFinishedLoadingLobby -= ChangeToSessionList;
+            LobbyManager.OnStartLoadingLobby -= ChangeToLoadingState;
+            LobbyManager.OnFinishedLoadingLobby -= ChangeToSessionList;
 
-            SessionManager.OnGameStarted -= ChangeToSessionState;
+            LobbyManager.OnGameStarted -= ChangeToSessionState;
         }
 
         public void Init()
