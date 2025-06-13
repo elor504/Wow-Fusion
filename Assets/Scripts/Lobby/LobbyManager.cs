@@ -1,5 +1,6 @@
 using Fusion;
 using Fusion.Sockets;
+using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,22 +15,23 @@ namespace Homework
         private static LobbyManager _instance;
         public static LobbyManager Instance => _instance;
 
-        public CharacterSelectionManager characterSelectionManagerPF;
 
         [Header("Reference")]
+        [SerializeField] private PlayerMultiplayerData dataPF;
         [SerializeField] private NetworkRunner networkRunner;
         [SerializeField] private UIManager uiManager;
+        [SerializeField] private NicknameSetterTest test;
         [Header("Lobby Settings")]
         [SerializeField] private SessionLobby sessionLobby = SessionLobby.Shared;
         [Header("Session settings")]
         [SerializeField] private GameMode gamemode = GameMode.Shared;
 
-        private CharacterSelectionManager characterSelectionManager;
-        public CharacterSelectionManager GetCharacterSelectionManager => characterSelectionManagerPF;
 
         private string _lobbyID;
         private bool _isLocalPlayer;
-        private List<PlayerRef> playerRefs = new List<PlayerRef>();
+        private List<PlayerRef> _playerRefs = new List<PlayerRef>();
+
+        public static string Nickname;
 
         public string LobbyID => _lobbyID;
 
@@ -44,6 +46,9 @@ namespace Homework
         public static Action<string, string> EnterLobby;
 
         public static Action<string, int> EnterSession;
+
+
+        public List<string> names;
 
         private void Awake()
         {
@@ -74,11 +79,15 @@ namespace Homework
 
         public async void EnterLobbyHandler(string lobbyID, string nickname)//DIDN'T KNEW IT POSSIBLE AAAAAAAAAAAAAAAAAAAAAAH
         {
+            //_myData.playerRef = networkRunner.LocalPlayer;
+            // _myData.playerNickName = _nickName;
             _lobbyID = lobbyID;
             OnStartLoadingLobby.Invoke();
-            await Task.Run(() => JoinLobby(networkRunner, _lobbyID));  
+            await Task.Run(() => JoinLobby(networkRunner, _lobbyID));
             OnFinishedLoadingLobby?.Invoke(_lobbyID);
         }
+
+
         private async Task JoinLobby(NetworkRunner runner, string lobbyID)
         {
             try
@@ -119,8 +128,10 @@ namespace Homework
         {
             Debug.Log("Game Started!");
             OnGameStarted?.Invoke();
-            if (obj.IsSharedModeMasterClient)
-                characterSelectionManager = obj.Spawn(characterSelectionManagerPF);
+            if (networkRunner.IsSharedModeMasterClient)
+            {
+                networkRunner.Spawn(test);
+            }
         }
         public void OnConnectedToServer(NetworkRunner runner)
         {
@@ -140,23 +151,25 @@ namespace Homework
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"Player joined {runner.UserId}");
-            if (networkRunner.LocalPlayer == player)
+            if (runner.LocalPlayer == player)
+            {
                 _isLocalPlayer = true;
-            playerRefs.Add(player);
-            OnPlayerConnection?.Invoke(playerRefs);
+            }
+            _playerRefs.Add(player);
+            OnPlayerConnection?.Invoke(_playerRefs);
         }
 
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
-            playerRefs.Remove(player);
-            OnPlayerConnection?.Invoke(playerRefs);
+            _playerRefs.Remove(player);
+            OnPlayerConnection?.Invoke(_playerRefs);
         }
-
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
             Debug.Log($"Session list updated. current sessions that are active are: {sessionList.Count}");
             OnSessionUpdated?.Invoke(runner, sessionList);
         }
+
         #region Not used
 
 

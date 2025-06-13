@@ -8,9 +8,9 @@ namespace Homework
 {
     public class CharacterSelectionManager : NetworkBehaviour
     {
-        [SerializeField] private List<CharacterSelection> characterSelection;
         [SerializeField] private SessionUI sessionUI;
 
+        [SerializeField] private List<CharacterSelection> characterSelection;
         public List<CharacterSelection> GetCharacterSelectionList => characterSelection;
 
         public static Action OnSelectedCharacter;
@@ -18,7 +18,7 @@ namespace Homework
         public override void Spawned()
         {
             base.Spawned();
-            LobbyManager.Instance.characterSelectionManagerPF = this;
+            GameManagerHW.Instance.CharacterSelectionManager = this;
         }
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPCSetCharacterSelection(int index, RpcInfo rpcInfo = default)

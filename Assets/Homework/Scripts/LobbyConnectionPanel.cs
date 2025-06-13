@@ -1,7 +1,6 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 namespace Homework
 {
@@ -34,6 +33,11 @@ namespace Homework
         public void ShowPanel()
         {
             gameObject.SetActive(true);
+            nicknameInputField.text = string.Empty;
+            _nickname = string.Empty;
+            _requestedLobbyId = string.Empty;
+            enterLobbyButt.interactable = false;
+            enterMainLobbyButt.interactable = false;
         }
         public void HidePanel()
         {
@@ -42,15 +46,21 @@ namespace Homework
         private void InputNicknameHandler(string value)
         {
             _nickname = value;
+            LobbyManager.Nickname = _nickname;
+            bool isNameValid = _nickname.Length >= 4;
+            enterMainLobbyButt.interactable = isNameValid;
+            InputFieldHandler(_requestedLobbyId);
         }
 
         private void InputFieldHandler(string value)
         {
             _requestedLobbyId = value;
+            bool isValid = _nickname.Length >= 4 && _requestedLobbyId.Length >= 4;
+            enterLobbyButt.interactable = isValid;
         }
         private void OnPushEnterLobby()
         {
-            LobbyManager.EnterLobby.Invoke(_requestedLobbyId,_nickname);
+            LobbyManager.EnterLobby.Invoke(_requestedLobbyId, _nickname);
         }
         private void PushEnterMainLobbyHandler()
         {

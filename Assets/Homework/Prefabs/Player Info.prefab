@@ -338,3 +338,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNameText: {fileID: 3674337538620742833}
+  readyImage: {fileID: 1549212233676099706}
+  readySprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  notReadySprite: {fileID: 21300000, guid: 5853bc00e6bfda84ea9030e0486a1c44, type: 3}

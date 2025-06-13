@@ -1,5 +1,6 @@
 using Fusion;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,8 @@ namespace Homework
         [SerializeField] private PlayerSessionInfoUI playerInfoPF;
         [SerializeField] private UIManager uiManager;
         [SerializeField] private Button returnButton;
-        [SerializeField] private List<Button> characterButtons;
+        [SerializeField] private Button readyButton;
+
         private List<PlayerSessionInfoUI> _playerSessionInfos = new List<PlayerSessionInfoUI>();
 
 
@@ -22,14 +24,12 @@ namespace Homework
         {
             LobbyManager.OnPlayerConnection += UpdatePlayerList;
             returnButton.onClick.AddListener(ReturnToSessionList);
-            CharacterSelectionManager.OnSelectedCharacter += UpdateButtons;
         }
 
         private void OnDisable()
         {
             LobbyManager.OnPlayerConnection -= UpdatePlayerList;
             returnButton.onClick.RemoveListener(ReturnToSessionList);
-            CharacterSelectionManager.OnSelectedCharacter -= UpdateButtons;
         }
 
         public void ShowPanel()
@@ -43,6 +43,9 @@ namespace Homework
 
         public void UpdatePlayerList(List<PlayerRef> playerRefs)
         {
+            
+
+
             foreach (var info in _playerSessionInfos)
             {
                 info.HidePlayer();
@@ -54,15 +57,9 @@ namespace Homework
             }
             foreach (var player in playerRefs)
             {
-                _playerSessionInfos[index].ShowPlayer(player.PlayerId.ToString());
+                _playerSessionInfos[index].ShowPlayer(player);
                 index++;
             }
-        }
-        public void ClickCharacterButtonHandler(int index)
-        {
-            Debug.Log($"On click character: {index}");
-            LobbyManager.Instance.GetCharacterSelectionManager.RPCSetCharacterSelection(index);
-            UpdateButtons();
         }
 
         private bool CheckIfNeedToAddNameUI(int playerRefCount)
@@ -84,16 +81,12 @@ namespace Homework
             uiManager.ChangeToSessionList();
         }
 
-
-      
-
-        private void UpdateButtons()
+        [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
+        private void RPCToggleReady(RpcInfo info = default)
         {
-            var characters = LobbyManager.Instance.GetCharacterSelectionManager.GetCharacterSelectionList;
-            for (int i = 0; i < characters.Count; i++)
-            {
-                characterButtons[i].interactable = !characters[i].IsSelected;
-            }
+            
         }
+
+    
     }
 }
