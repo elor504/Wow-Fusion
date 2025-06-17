@@ -13,15 +13,16 @@ namespace Homework
         [SerializeField] private Sprite readySprite;
         [SerializeField] private Sprite notReadySprite;
 
-        private PlayerRef _playerMultiplayerData;
+        private PlayerRef _playerRef;
         private bool _isReady;
 
-        public PlayerRef GetPlayerData => _playerMultiplayerData;
+        public PlayerRef GetPlayerRef => _playerRef;
 
-        public void ShowPlayer(PlayerRef playerData)
+
+        public void ShowPlayer(PlayerRef playerRef,string name)
         {
-            _playerMultiplayerData = playerData;
-            playerNameText.text = _playerMultiplayerData.PlayerId.ToString();
+            _playerRef = playerRef;
+            playerNameText.text = name;
             gameObject.SetActive(true);
         }
         public void HidePlayer()

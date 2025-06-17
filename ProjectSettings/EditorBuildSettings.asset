@@ -4,6 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Homework/Scenes/LobbyScene_HW.unity
+    guid: 6d49e25b61712aa4db5a6c5aaadd1689
+  - enabled: 1
+    path: Assets/Homework/Scenes/GameScene_HW.unity
+    guid: 506da785a297cee44972d9b81fc8af92
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c8b225505b15b884d968d6685ed11542, type: 2}
+  m_UseUCBPForAssetBundles: 0

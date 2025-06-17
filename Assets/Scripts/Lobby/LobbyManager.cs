@@ -1,6 +1,5 @@
 using Fusion;
 using Fusion.Sockets;
-using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,12 +14,12 @@ namespace Homework
         private static LobbyManager _instance;
         public static LobbyManager Instance => _instance;
 
+        public PlayerList PlayerListInstance;
 
         [Header("Reference")]
-        [SerializeField] private PlayerMultiplayerData dataPF;
+        [SerializeField] PlayerList PlayerListPF;
         [SerializeField] private NetworkRunner networkRunner;
         [SerializeField] private UIManager uiManager;
-        [SerializeField] private NicknameSetterTest test;
         [Header("Lobby Settings")]
         [SerializeField] private SessionLobby sessionLobby = SessionLobby.Shared;
         [Header("Session settings")]
@@ -28,17 +27,21 @@ namespace Homework
 
 
         private string _lobbyID;
-        private bool _isLocalPlayer;
         private List<PlayerRef> _playerRefs = new List<PlayerRef>();
 
         public static string Nickname;
+        public static PlayerRef MyPlayerRef;
+
+        public NetworkRunner NetworkRunner => networkRunner;
+        public UIManager GetUIManager => uiManager;
 
         public string LobbyID => _lobbyID;
 
+        public static readonly string GAME_SCENE_NAME = "GameScene_HW";
 
         public static readonly string MainLobbyID = "EasterEgg";
 
-        public static event Action<List<PlayerRef>> OnPlayerConnection;//need to think of a better name because it also handles the disconnection
+        public static event Action<Dictionary<PlayerRef, string>> OnPlayerConnection;//need to think of a better name because it also handles the disconnection
         public static event Action<NetworkRunner, List<SessionInfo>> OnSessionUpdated;//need to think of a better name because it also handles the disconnection
         public static Action OnGameStarted;
         public static Action OnStartLoadingLobby;
@@ -76,11 +79,13 @@ namespace Homework
         }
 
 
+        public void PlayersInSessionChanged(Dictionary<PlayerRef, string> players)
+        {
+            OnPlayerConnection?.Invoke(players);
+        }
 
         public async void EnterLobbyHandler(string lobbyID, string nickname)//DIDN'T KNEW IT POSSIBLE AAAAAAAAAAAAAAAAAAAAAAH
         {
-            //_myData.playerRef = networkRunner.LocalPlayer;
-            // _myData.playerNickName = _nickName;
             _lobbyID = lobbyID;
             OnStartLoadingLobby.Invoke();
             await Task.Run(() => JoinLobby(networkRunner, _lobbyID));
@@ -120,19 +125,24 @@ namespace Homework
                 SessionName = sessionName,
                 PlayerCount = maxPlayers,
                 OnGameStarted = GameStarted
-
             });
         }
-
-        private void GameStarted(NetworkRunner obj)
+        public void StartGame()
+        {
+            if (networkRunner.IsSceneAuthority)
+                networkRunner.LoadScene(GAME_SCENE_NAME);
+        }
+        private void GameStarted(NetworkRunner runner)
         {
             Debug.Log("Game Started!");
             OnGameStarted?.Invoke();
-            if (networkRunner.IsSharedModeMasterClient)
+
+            if (runner.IsSharedModeMasterClient)
             {
-                networkRunner.Spawn(test);
+                networkRunner.Spawn(PlayerListPF);
             }
         }
+
         public void OnConnectedToServer(NetworkRunner runner)
         {
             Debug.Log($"Connected to server {runner.UserId}");
@@ -151,25 +161,32 @@ namespace Homework
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"Player joined {runner.UserId}");
-            if (runner.LocalPlayer == player)
-            {
-                _isLocalPlayer = true;
-            }
             _playerRefs.Add(player);
-            OnPlayerConnection?.Invoke(_playerRefs);
+
+        }
+        public void AddNickname()
+        {
+            PlayerListInstance.RPCRegisterNickname(Nickname);
         }
 
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
             _playerRefs.Remove(player);
-            OnPlayerConnection?.Invoke(_playerRefs);
+            if (networkRunner.LocalPlayer == player)
+            {
+                PlayerListInstance.RPCRemoveNickname();
+            }
+
         }
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
             Debug.Log($"Session list updated. current sessions that are active are: {sessionList.Count}");
             OnSessionUpdated?.Invoke(runner, sessionList);
         }
-
+        public void OnSceneLoadDone(NetworkRunner runner)
+        {
+            networkRunner.RemoveCallbacks(this);
+        }
         #region Not used
 
 
@@ -219,10 +236,7 @@ namespace Homework
 
         }
 
-        public void OnSceneLoadDone(NetworkRunner runner)
-        {
-
-        }
+       
 
         public void OnSceneLoadStart(NetworkRunner runner)
         {
