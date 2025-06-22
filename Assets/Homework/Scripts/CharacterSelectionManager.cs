@@ -15,11 +15,13 @@ namespace Homework
 
         public static Action OnSelectedCharacter;
 
+     
         public override void Spawned()
         {
             base.Spawned();
-            GameManagerHW.Instance.CharacterSelectionManager = this;
+            GameManagerHW.CharacterSelectionManager = this;
         }
+
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPCSetCharacterSelection(int index, RpcInfo rpcInfo = default)
         {
@@ -78,7 +80,6 @@ namespace Homework
             int index = selection != null? characterSelection.FindIndex(c => c.Equals(selection)) : -1;
             return index;
         }
-
         public CharacterSelection GetCharacterByPlayerRef(PlayerRef playerRef) 
         {
             return characterSelection.Find(c => c.playerRef == playerRef);

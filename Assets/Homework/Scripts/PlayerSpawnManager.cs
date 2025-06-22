@@ -47,6 +47,7 @@ namespace Homework
         }
         public bool TryGetSpawnPosition(PlayerRef playerRef, out Vector3 spawnPosition)
         {
+            spawnPosition = Vector3.zero;
             List<Vector3> positions = _spawnPositions;
 
             foreach (var position in positions)
@@ -59,7 +60,6 @@ namespace Homework
 
             if (positions.Count == 0)
             {
-                spawnPosition = Vector3.zero;
                 return false;
             }
             int randomizer = Random.Range(0, positions.Count);

@@ -1,30 +1,27 @@
 using Fusion;
-using System;
 using UnityEngine;
 namespace Homework
 {
-    public class GameManagerHW : NetworkBehaviour
+    public class GameManagerHW : NetworkBehaviour, INetworkRunnerRequired
     {
         private static GameManagerHW instance;
         public static GameManagerHW Instance => instance;
 
         public CharacterSelectionManager characterSelectionManagerPF;
         [HideInInspector]
-        public CharacterSelectionManager CharacterSelectionManager;
+        public static CharacterSelectionManager CharacterSelectionManager;
 
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private NetworkRunner runner;
         [SerializeField] private PlayerSpawnManager spawnManager;
 
-
-
-
-
-
+        private void Awake()
+        {
+          
+        }
         public override void Spawned()
         {
             base.Spawned();
-
             if (instance == null)
             {
                 instance = this;
@@ -34,10 +31,7 @@ namespace Homework
                 Destroy(instance);
                 return;
             }
-
-            if (runner.IsSharedModeMasterClient)
-                CharacterSelectionManager = runner.Spawn(characterSelectionManagerPF);
-            //RPC_RequestSpawn();
+            NetworkRunnerInjector.Instance.AddInjector(this);
         }
 
 
@@ -58,6 +52,15 @@ namespace Homework
         private void RPC_SetSpawn([RpcTarget] PlayerRef playerRef, Vector3 spawnPosition)
         {
             runner.SpawnAsync(playerPrefab, spawnPosition);
+        }
+
+        public void InjectRunner(NetworkRunner runner)
+        {
+            this.runner = runner;
+            if (this.runner.IsSharedModeMasterClient)
+            {
+                CharacterSelectionManager = runner.Spawn(characterSelectionManagerPF);
+            }
         }
     }
 }

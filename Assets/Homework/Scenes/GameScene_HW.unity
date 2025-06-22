@@ -310,6 +310,8 @@ MonoBehaviour:
   - {fileID: 1345231303}
   - {fileID: 2061660886}
   - {fileID: 383450589}
+  selectCharacterButton: {fileID: 1288872697}
+  selectCharacterButtonTest: {fileID: 94429801}
 --- !u!1 &299600384
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,8 +803,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -934,8 +936,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -1067,8 +1069,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -1499,8 +1501,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -1986,8 +1988,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -2400,8 +2402,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -2669,8 +2671,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -2802,8 +2804,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -3207,8 +3209,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
@@ -3683,8 +3685,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Homework.SessionUI, Assembly-CSharp
+      - m_Target: {fileID: 292017397}
+        m_TargetAssemblyTypeName: Homework.GameplayUIManagerHW, Assembly-CSharp
         m_MethodName: ClickCharacterButtonHandler
         m_Mode: 3
         m_Arguments:
