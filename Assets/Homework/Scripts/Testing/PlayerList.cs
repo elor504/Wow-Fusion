@@ -1,5 +1,4 @@
 using Fusion;
-using Homework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +6,10 @@ namespace Homework
 {
     public class PlayerList : NetworkBehaviour
     {
+        private static PlayerList instance;
+        public static PlayerList Instance => instance;
+
+
         public Dictionary<PlayerRef, string> playerNames = new Dictionary<PlayerRef, string>();
         public PlayerLobbyCheck LobbyCheck;
 
@@ -16,6 +19,15 @@ namespace Homework
         public override void Spawned()
         {
             base.Spawned();
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else if (instance != this)
+            {
+                Destroy(gameObject);
+            }
 
             LobbyManager.Instance.PlayerListInstance = this;
             OnPlayerJoined += LobbyCheck.RPC_AddPlayer;
@@ -69,6 +81,21 @@ namespace Homework
         public string GetPlayerName(PlayerRef player)
         {
             return playerNames[player];
+        }
+        public string GetLocalPlayerName()
+        {
+            return playerNames[GameManagerHW.Instance.GetRunner.LocalPlayer];
+        }
+        public PlayerRef GetPlayerRefByName(string name)
+        {
+            foreach (var player in playerNames)
+            {
+                if(player.Value == name)
+                {
+                    return player.Key;
+                }
+            }
+            return default;
         }
     }
 }

@@ -31,7 +31,10 @@ namespace Homework
             LobbyManager.OnSessionUpdated += UpdateSessions;
         }
 
-
+        private void OnDestroy()
+        {
+            LobbyManager.OnSessionUpdated -= UpdateSessions;
+        }
         public void ShowPanel(string lobbyID)
         {
             lobbyNameText.text = "Lobby: " + lobbyID;

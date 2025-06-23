@@ -8,14 +8,14 @@ namespace Homework
         [SerializeField] private int spawnAmount = 10;
         [SerializeField] private float radius;
 
-        private List<Vector3> _spawnPositions;
+        private List<Vector3> _spawnPositions = new List<Vector3>();
 
         //i prefered to use dictionary instead of holding bool inside another monobehaviour script so the manager will have 100% management inside of him
-        private Dictionary<Vector3, PlayerRef> _playerSpawnPosition;
+        private Dictionary<Vector3, PlayerRef> _playerSpawnPosition = new Dictionary<Vector3, PlayerRef>();
 
         private void Awake()
         {
-            GenerateSpawnPositions();
+            _spawnPositions = GenerateSpawnPositions();
         }
         private List<Vector3> GenerateSpawnPositions()//Chatgpt ><
         {
@@ -49,15 +49,18 @@ namespace Homework
         {
             spawnPosition = Vector3.zero;
             List<Vector3> positions = _spawnPositions;
-
+            List<Vector3> filtered = new List<Vector3>();
             foreach (var position in positions)
             {
                 if (_playerSpawnPosition.ContainsKey(position))
                 {
-                    positions.Remove(position);
+                    filtered.Add(position);
                 }
             }
-
+            for (int i = 0; i < filtered.Count; i++)
+            {
+                positions.Remove(filtered[i]);
+            }
             if (positions.Count == 0)
             {
                 return false;

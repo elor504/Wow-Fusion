@@ -1,17 +1,19 @@
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Homework
 {
-    public class CharacterSelectionUIHW : MonoBehaviour
+    public class UIManagerHW : MonoBehaviour
     {
+        [SerializeField] private GameObject characterSelectionMenu;
         [SerializeField] private List<Button> characterButtons;
         [SerializeField] private Button selectCharacterButton;
         [SerializeField] private TextMeshProUGUI selectCharacterButtonTest;
-
+        [SerializeField] private Button closeGameButton;
         private int currentLocalSelectedIndex = -1;
         private int previousIndex = -1;
         private void OnEnable()
@@ -24,6 +26,29 @@ namespace Homework
             CharacterSelectionManager.OnSelectedCharacter -= UpdateCharactersButtons;
             selectCharacterButton.onClick.RemoveListener(ClickOnSelectCharacter);
         }
+
+
+        private async void Start()
+        {
+            SetShowCloseGame(false);
+            while (GameManagerHW.Instance == null)
+            {
+                await Task.Yield();
+            }
+            Init();
+        }
+
+        public void Init()
+        {
+            SetShowCloseGame(false);
+            closeGameButton.onClick.AddListener(OnClickCloseButton);
+        }
+
+        public void SetShowCloseGame(bool isHost)
+        {
+            closeGameButton.gameObject.SetActive(isHost);
+        }
+
 
         public void ClickCharacterButtonHandler(int index)
         {
@@ -41,9 +66,16 @@ namespace Homework
         {
             GameManagerHW.CharacterSelectionManager.RPCSetCharacterSelection(currentLocalSelectedIndex);
             UpdateCharactersButtons();
+            characterSelectionMenu.SetActive(false);
             //spawn
+            GameManagerHW.Instance.RPC_RequestSpawn();
+            SetShowCloseGame(GameManagerHW.Instance.Runner.IsSharedModeMasterClient);
         }
-
+        private void OnClickCloseButton()
+        {
+            GameManagerHW.Instance.CloseGame();
+            closeGameButton.interactable = false;
+        }
         private void UpdateCharactersButtons()
         {
             var characters = GameManagerHW.CharacterSelectionManager.GetCharacterSelectionList;
@@ -55,6 +87,9 @@ namespace Homework
         }
         private void UpdateCharacterSelectButton()
         {
+            if (currentLocalSelectedIndex == -1)
+                return;
+
             var characters = GameManagerHW.CharacterSelectionManager.GetCharacterSelectionList;
             if (characters[currentLocalSelectedIndex].IsSelected)
             {
