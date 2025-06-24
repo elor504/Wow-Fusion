@@ -114,7 +114,7 @@ namespace Homework
         }
         private void ToggleReady()
         {
-            LobbyManager.Instance.PlayerListInstance.LobbyCheck.RPCToggleReady();
+            LobbyManager.Instance.PlayerListInstance.RPCToggleReady();
         }
     }
 }

@@ -132,14 +132,15 @@ namespace Homework
             if (networkRunner.IsSceneAuthority)
                 networkRunner.LoadScene(GAME_SCENE_NAME);
         }
-        private void GameStarted(NetworkRunner runner)
+        private async void GameStarted(NetworkRunner runner)
         {
             Debug.Log("Game Started!");
             OnGameStarted?.Invoke();
 
             if (runner.IsSharedModeMasterClient)
             {
-                networkRunner.Spawn(PlayerListPF);
+                await networkRunner.SpawnAsync(PlayerListPF);
+                //AddNickname();
             }
         }
 
