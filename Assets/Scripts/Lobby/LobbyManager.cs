@@ -27,6 +27,7 @@ namespace Homework
 
 
         private string _lobbyID;
+        private bool _isPrivateLobby;
         private List<PlayerRef> _playerRefs = new List<PlayerRef>();
 
         public static string Nickname;
@@ -47,7 +48,6 @@ namespace Homework
         public static Action OnStartLoadingLobby;
         public static Action<string> OnFinishedLoadingLobby;
         public static Action<string, string> EnterLobby;
-
         public static Action<string, int> EnterSession;
 
 
@@ -55,7 +55,6 @@ namespace Homework
 
         private void Awake()
         {
-
             if (_instance == null)
             {
                 _instance = this;
@@ -83,7 +82,6 @@ namespace Homework
         {
             OnPlayerConnection?.Invoke(players);
         }
-
         public async void EnterLobbyHandler(string lobbyID, string nickname)//DIDN'T KNEW IT POSSIBLE AAAAAAAAAAAAAAAAAAAAAAH
         {
             _lobbyID = lobbyID;
@@ -124,6 +122,7 @@ namespace Homework
                 GameMode = gamemode,
                 SessionName = sessionName,
                 PlayerCount = maxPlayers,
+                IsVisible = !_isPrivateLobby,
                 OnGameStarted = GameStarted
             });
         }
@@ -132,15 +131,14 @@ namespace Homework
             if (networkRunner.IsSceneAuthority)
                 networkRunner.LoadScene(GAME_SCENE_NAME);
         }
-        private async void GameStarted(NetworkRunner runner)
+        private void GameStarted(NetworkRunner runner)
         {
             Debug.Log("Game Started!");
             OnGameStarted?.Invoke();
 
             if (runner.IsSharedModeMasterClient)
             {
-                await networkRunner.SpawnAsync(PlayerListPF);
-                //AddNickname();
+                networkRunner.SpawnAsync(PlayerListPF);
             }
         }
 
@@ -187,6 +185,11 @@ namespace Homework
         public void OnSceneLoadDone(NetworkRunner runner)
         {
             networkRunner.RemoveCallbacks(this);
+        }
+
+        public void SetPrivateLobby(bool value)
+        {
+            _isPrivateLobby = value;
         }
         #region Not used
 
@@ -237,7 +240,7 @@ namespace Homework
 
         }
 
-       
+
 
         public void OnSceneLoadStart(NetworkRunner runner)
         {

@@ -12,6 +12,7 @@ namespace Homework
         [SerializeField] private TMP_InputField maxPlayerInput;
         [SerializeField] private Button openSessionButton;
         [SerializeField] private Button returnButton;
+        [SerializeField] private Toggle privateToggle;
 
         private string _sessionName = string.Empty;
         private int _currentPlayerAmount;
@@ -31,8 +32,8 @@ namespace Homework
 
             openSessionButton.onClick.AddListener(OpenSessionButton);
             returnButton.onClick.AddListener(ReturnToSessionList);
+            privateToggle.onValueChanged.AddListener(TogglePrivateLobby);
         }
-
         private void OnDisable()
         {
             sessionNameInput.onValueChanged.RemoveListener(SessionNameInputHandler);
@@ -40,6 +41,7 @@ namespace Homework
 
             openSessionButton.onClick.RemoveListener(OpenSessionButton);
             returnButton.onClick.RemoveListener(ReturnToSessionList);
+            privateToggle.onValueChanged.RemoveListener(TogglePrivateLobby);
         }
 
         public void ShowPanel()
@@ -54,7 +56,6 @@ namespace Homework
         {
             _sessionName = lobbyName;
         }
-
         private void OpenSessionButton()
         {
             if (_sessionName.Length < minLobbyNameLength)
@@ -64,7 +65,6 @@ namespace Homework
             }
             LobbyManager.EnterSession(_sessionName,_currentPlayerAmount);
         }
-
         private void MaxPlayerInputHandler(string input)
         {
             if (input.IsNullOrEmpty())
@@ -83,7 +83,10 @@ namespace Homework
             maxPlayerInput.text = _currentPlayerAmount.ToString();
         }
 
-
+        private void TogglePrivateLobby(bool value)
+        {
+            LobbyManager.Instance.SetPrivateLobby(value);
+        }
         private void ReturnToSessionList()
         {
             uiManager.ChangeToSessionList();
