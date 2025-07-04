@@ -1285,6 +1285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 2165786560321382219}
   movementSpeed: 10
+  SpawnPos: {x: 0, y: 0, z: 0}
 --- !u!114 &-8558828804596536163
 MonoBehaviour:
   m_ObjectHideFlags: 0

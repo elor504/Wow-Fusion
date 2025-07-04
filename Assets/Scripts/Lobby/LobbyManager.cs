@@ -50,7 +50,6 @@ namespace Homework
         public static Action<string, string> EnterLobby;
         public static Action<string, int> EnterSession;
 
-
         public List<string> names;
 
         private void Awake()
@@ -82,7 +81,7 @@ namespace Homework
         {
             OnPlayerConnection?.Invoke(players);
         }
-        public async void EnterLobbyHandler(string lobbyID, string nickname)//DIDN'T KNEW IT POSSIBLE AAAAAAAAAAAAAAAAAAAAAAH
+        public async void EnterLobbyHandler(string lobbyID, string nickname)
         {
             _lobbyID = lobbyID;
             OnStartLoadingLobby.Invoke();

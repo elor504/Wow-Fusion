@@ -10,26 +10,26 @@ namespace Homework
 {
     public class GameManagerHW : NetworkBehaviour, INetworkRunnerRequired, INetworkRunnerCallbacks
     {
-        public static readonly string LOBBY_SCENE_NAME = "LobbyScene_HW";
+
         private static GameManagerHW instance;
         public static GameManagerHW Instance => instance;
-
-        public CharacterSelectionManager characterSelectionManagerPF;
-        [HideInInspector]
         public static CharacterSelectionManager CharacterSelectionManager;
-
         public static ChatManager ChatManager;
 
-        [SerializeField] private GameObject playerPrefab;
+        public CharacterSelectionManager characterSelectionManagerPF;
+
+        [SerializeField] private NetworkObject playerPrefab;
         [SerializeField] private NetworkRunner runner;
         [SerializeField] private PlayerSpawnManager spawnManager;
+        [SerializeField] private SimpleCameraHandlerHW playerCamera;
 
-
+        private NetworkObject _myCharacter;
+        public NetworkObject MyCharacter => _myCharacter;
         public NetworkRunner GetRunner => runner;
-        private void Awake()
-        {
+        public SimpleCameraHandlerHW PlayerCamera => playerCamera;
 
-        }
+        public static readonly string LOBBY_SCENE_NAME = "LobbyScene_HW";
+
         public override void Spawned()
         {
             base.Spawned();
@@ -73,20 +73,23 @@ namespace Homework
         {
             if (spawnManager.TryGetSpawnPosition(info.Source, out var position))
             {
-				Debug.Log($"[Server] Requesting to spawn player: {info.Source.PlayerId}");
-				RPC_SetSpawn(info.Source, position);
+                Debug.Log($"[Server] Requesting to spawn player: {info.Source.PlayerId} at Position: {position}");
+                RPC_SetSpawn(info.Source, position);
             }
             else
             {
                 Debug.LogError("Attempting to get a spawn position but failed");
             }
         }
-        [Rpc(RpcSources.StateAuthority,RpcTargets.All)]
+        [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
         private void RPC_SetSpawn([RpcTarget] PlayerRef playerRef, Vector3 spawnPosition)
         {
-            Debug.Log($"[Client] Attempting to spawn player: {playerRef.PlayerId}");
-            runner.SpawnAsync(playerPrefab, spawnPosition, Quaternion.identity,playerRef);
+            Debug.Log($"[Client] Attempting to spawn player: {playerRef.PlayerId} at position: {spawnPosition}");
+            _myCharacter = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, playerRef);
+
         }
+    
+
 
         public void InjectRunner(NetworkRunner runner)
         {

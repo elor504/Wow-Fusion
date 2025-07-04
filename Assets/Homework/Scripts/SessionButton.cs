@@ -1,7 +1,6 @@
 using Fusion;
 using Homework;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,18 +21,27 @@ public class SessionButton : MonoBehaviour
         sessionNameText.text = _sessionInfo.Name;
         sessionPlayerCountText.text = _sessionInfo.PlayerCount + "/" + _sessionInfo.MaxPlayers;
         sessionButton.onClick.AddListener(OnClickButton);
+        sessionButton.interactable = CanBeInteracted(sessionInfo);
+
         gameObject.SetActive(true);
     }
-
+   
     public void HideButton()
     {
         sessionButton.onClick.RemoveAllListeners();
         gameObject.SetActive(false);
     }
+    private bool CanBeInteracted(SessionInfo sessionInfo)
+    {
+        if (sessionInfo.PlayerCount == sessionInfo.MaxPlayers)
+        {
+            return false;
+        }
 
+        return true;
+    }
     private void OnClickButton()
     {
-        LobbyManager.EnterSession(_sessionInfo.Name,_sessionInfo.MaxPlayers);
+        LobbyManager.EnterSession(_sessionInfo.Name, _sessionInfo.MaxPlayers);
     }
-
 }
