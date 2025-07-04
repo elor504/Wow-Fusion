@@ -73,16 +73,19 @@ namespace Homework
         {
             if (spawnManager.TryGetSpawnPosition(info.Source, out var position))
             {
-                RPC_SetSpawn(info.Source, position);
+				Debug.Log($"[Server] Requesting to spawn player: {info.Source.PlayerId}");
+				RPC_SetSpawn(info.Source, position);
             }
             else
             {
                 Debug.LogError("Attempting to get a spawn position but failed");
             }
         }
+        [Rpc(RpcSources.StateAuthority,RpcTargets.All)]
         private void RPC_SetSpawn([RpcTarget] PlayerRef playerRef, Vector3 spawnPosition)
         {
-            runner.SpawnAsync(playerPrefab, spawnPosition);
+            Debug.Log($"[Client] Attempting to spawn player: {playerRef.PlayerId}");
+            runner.SpawnAsync(playerPrefab, spawnPosition, Quaternion.identity,playerRef);
         }
 
         public void InjectRunner(NetworkRunner runner)

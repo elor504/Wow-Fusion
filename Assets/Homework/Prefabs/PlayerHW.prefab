@@ -1241,8 +1241,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3357482681735623952}
+  - component: {fileID: 6987006390509916045}
   - component: {fileID: -8558828804596536163}
   - component: {fileID: -6966354967667993943}
+  - component: {fileID: 2165786560321382219}
   m_Layer: 10
   m_Name: PlayerHW
   m_TagString: Untagged
@@ -1269,6 +1271,20 @@ Transform:
   - {fileID: 8379284025784959466}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6987006390509916045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494308358068181615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8007080465021249a46c4e15a5a7d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterController: {fileID: 2165786560321382219}
+  movementSpeed: 10
 --- !u!114 &-8558828804596536163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1283,9 +1299,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 718212299
   ObjectInterest: 1
-  Flags: 1
+  Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 6987006390509916045}
   - {fileID: -6966354967667993943}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &-6966354967667993943
@@ -1305,6 +1322,31 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
+--- !u!143 &2165786560321382219
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494308358068181615}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.89
+  m_Radius: 0.21
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.92, z: 0}
 --- !u!1 &1555740705137505309
 GameObject:
   m_ObjectHideFlags: 0
