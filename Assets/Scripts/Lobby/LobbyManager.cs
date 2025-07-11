@@ -15,16 +15,17 @@ namespace Homework
         public static LobbyManager Instance => _instance;
 
         public PlayerList PlayerListInstance;
-
-        [Header("Reference")]
+        [Header("Prefabs")]
         [SerializeField] PlayerList PlayerListPF;
-        [SerializeField] private NetworkRunner networkRunner;
+        [SerializeField] private NetworkRunner runnerPF;
+        [Header("Reference")]
         [SerializeField] private UIManager uiManager;
         [Header("Lobby Settings")]
         [SerializeField] private SessionLobby sessionLobby = SessionLobby.Shared;
         [Header("Session settings")]
         [SerializeField] private GameMode gamemode = GameMode.Shared;
 
+        private NetworkRunner networkRunnerInstance;
 
         private string _lobbyID;
         private bool _isPrivateLobby;
@@ -33,13 +34,12 @@ namespace Homework
         public static string Nickname;
         public static PlayerRef MyPlayerRef;
 
-        public NetworkRunner NetworkRunner => networkRunner;
+        public string LobbyID => _lobbyID;
+        public NetworkRunner NetworkRunnerInstance => networkRunnerInstance;
         public UIManager GetUIManager => uiManager;
 
-        public string LobbyID => _lobbyID;
 
         public static readonly string GAME_SCENE_NAME = "GameScene_HW";
-
         public static readonly string MainLobbyID = "EasterEgg";
 
         public static event Action<Dictionary<PlayerRef, string>> OnPlayerConnection;//need to think of a better name because it also handles the disconnection
@@ -62,7 +62,7 @@ namespace Homework
             {
                 Destroy(_instance);
             }
-            networkRunner.AddCallbacks(this);
+            CreateNewNetworkRunner();
             uiManager.ChangeToLobbySelection();
         }
         private void OnEnable()
@@ -85,7 +85,7 @@ namespace Homework
         {
             _lobbyID = lobbyID;
             OnStartLoadingLobby.Invoke();
-            await Task.Run(() => JoinLobby(networkRunner, _lobbyID));
+            await Task.Run(() => JoinLobby(networkRunnerInstance, _lobbyID));
             OnFinishedLoadingLobby?.Invoke(_lobbyID);
         }
 
@@ -94,7 +94,7 @@ namespace Homework
         {
             try
             {
-                var result = await networkRunner.JoinSessionLobby(sessionLobby, lobbyID);
+                var result = await networkRunnerInstance.JoinSessionLobby(sessionLobby, lobbyID);
 
                 if (result.Ok)
                 {
@@ -116,7 +116,7 @@ namespace Homework
         [ContextMenu("Start Game")]
         public void EnterSessionHandler(string sessionName, int maxPlayers)
         {
-            networkRunner.StartGame(new StartGameArgs
+            networkRunnerInstance.StartGame(new StartGameArgs
             {
                 GameMode = gamemode,
                 SessionName = sessionName,
@@ -127,8 +127,11 @@ namespace Homework
         }
         public void StartGame()
         {
-            if (networkRunner.IsSceneAuthority)
-                networkRunner.LoadScene(GAME_SCENE_NAME);
+            if (networkRunnerInstance.IsSceneAuthority)
+            {
+                networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
+                networkRunnerInstance.SessionInfo.IsOpen = false;
+            }
         }
         private void GameStarted(NetworkRunner runner)
         {
@@ -137,7 +140,7 @@ namespace Homework
 
             if (runner.IsSharedModeMasterClient)
             {
-                networkRunner.SpawnAsync(PlayerListPF);
+                networkRunnerInstance.SpawnAsync(PlayerListPF);
             }
         }
 
@@ -170,7 +173,7 @@ namespace Homework
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
             _playerRefs.Remove(player);
-            if (networkRunner.LocalPlayer == player)
+            if (networkRunnerInstance.LocalPlayer == player)
             {
                 PlayerListInstance.RPCRemoveNickname();
             }
@@ -183,7 +186,22 @@ namespace Homework
         }
         public void OnSceneLoadDone(NetworkRunner runner)
         {
-            networkRunner.RemoveCallbacks(this);
+            networkRunnerInstance.RemoveCallbacks(this);
+        }
+
+        public void ShutDownHandler()
+        {
+            CreateNewNetworkRunner();
+            uiManager.ChangeToLobbySelection();
+        }
+        public void CreateNewNetworkRunner()
+        {
+            if (networkRunnerInstance != null)
+            {
+                networkRunnerInstance.RemoveCallbacks(this);
+            }
+            networkRunnerInstance = Instantiate(runnerPF);
+            networkRunnerInstance.AddCallbacks(this);
         }
 
         public void SetPrivateLobby(bool value)
@@ -248,7 +266,7 @@ namespace Homework
 
         public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
         {
-
+            ShutDownHandler();
         }
 
         public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)

@@ -25,7 +25,7 @@ namespace Homework
             if (!LobbyManager.Instance)
                 return;
 
-            if (LobbyManager.Instance.NetworkRunner.IsSharedModeMasterClient)
+            if (LobbyManager.Instance.NetworkRunnerInstance.IsSharedModeMasterClient)
             {
                 startButton.gameObject.SetActive(true);
                 readyButton.gameObject.SetActive(false);
@@ -110,7 +110,7 @@ namespace Homework
         }
         private void ReturnToSessionList()
         {
-            uiManager.ChangeToSessionList();
+            LobbyManager.Instance.NetworkRunnerInstance.Shutdown();
         }
         private void ToggleReady()
         {

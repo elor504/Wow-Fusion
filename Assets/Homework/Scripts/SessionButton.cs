@@ -10,7 +10,7 @@ public class SessionButton : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sessionPlayerCountText;
 
     [SerializeField] private Button sessionButton;
-
+    [SerializeField] private Image lockedImage;
 
     private SessionInfo _sessionInfo;
 
@@ -22,7 +22,7 @@ public class SessionButton : MonoBehaviour
         sessionPlayerCountText.text = _sessionInfo.PlayerCount + "/" + _sessionInfo.MaxPlayers;
         sessionButton.onClick.AddListener(OnClickButton);
         sessionButton.interactable = CanBeInteracted(sessionInfo);
-
+        lockedImage.gameObject.SetActive(!sessionInfo.IsOpen);
         gameObject.SetActive(true);
     }
    
@@ -33,11 +33,12 @@ public class SessionButton : MonoBehaviour
     }
     private bool CanBeInteracted(SessionInfo sessionInfo)
     {
-        if (sessionInfo.PlayerCount == sessionInfo.MaxPlayers)
+        if (sessionInfo.PlayerCount == sessionInfo.MaxPlayers 
+        || !sessionInfo.IsOpen)
         {
             return false;
         }
-
+   
         return true;
     }
     private void OnClickButton()

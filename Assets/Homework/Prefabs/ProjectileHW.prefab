@@ -160,8 +160,7 @@ MonoBehaviour:
   obj: {fileID: 8640651345451001258}
   rb: {fileID: 1542386408245477155}
   movementSpeed: 5
-  lifeTime: 2
-  _IsMoving: 0
+  lifeTime: 5
 --- !u!54 &1542386408245477155
 Rigidbody:
   m_ObjectHideFlags: 0

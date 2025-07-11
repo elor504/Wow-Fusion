@@ -5,9 +5,6 @@ namespace Homework
 {
     public class UIManager : MonoBehaviour
     {
-        ///Task for chen:
-        ///Find easter eggs in the homework 01 scripts (could be also in assets :D)
-        ///If you find all of them i will give you a gift that you want
         [Header("References")]
         [SerializeField] private LobbyConnectionPanel lobbySelectionPanel;
         [SerializeField] private SessionListUI sessionListPanel;
@@ -141,7 +138,6 @@ namespace Homework
             SessionList = 3,
             SessionCreation = 4,
             Session = 5,
-            EasterEgg = 69
         }
     }
 }

@@ -4,20 +4,23 @@ namespace Homework
 {
     public class MPProjectileHW : NetworkBehaviour
     {
+        //idea for me not to forget, handle friendlies, enemies and yourself inside a layer ( at the real game not hw)
         [SerializeField] private NetworkObject obj;
         [SerializeField] private Rigidbody rb;
 
         [SerializeField] private float movementSpeed;
         [SerializeField] private float lifeTime;
+
+
+        public bool IsProjectileActive { get; set; }
+
         public GameObject shooterGO { set; get; }
 
-        [Networked]
         public bool IsMoving { set; get; }
         public float LifeCounter { set; get; }
 
         private Vector3 _direction;
         private PlayerRef _shooter;
-
 
         private bool _initialized;
 
@@ -44,43 +47,54 @@ namespace Homework
         {
             base.FixedUpdateNetwork();
 
-            if (!_initialized)
-                return;
             LifeCounter -= Runner.DeltaTime;
-            if(LifeCounter <= 0)
+            if (LifeCounter <= 0)
             {
-                Runner.Despawn(obj);
+                IsProjectileActive = false;
                 return;
             }
+
+            if (!Object.HasStateAuthority)
+                return;
+
             rb.position += _direction * movementSpeed * Runner.DeltaTime;
         }
 
+        public void SetProjectileActive()
+        {
+            gameObject.SetActive(IsProjectileActive);
 
+            if (!IsProjectileActive)
+            {
+                IsMoving = false;
+            }
+        }
 
         private void OnTriggerEnter(Collider other)
         {
             if (!_initialized || !IsMoving)
                 return;
+            if (!other.gameObject.CompareTag("Player"))
+                return;
 
-            var characterInput = other.GetComponent<CharacterInputHW>();
-            if (characterInput)
+
+            var characterHeatlth = other.GetComponent<CharacterHealthHW>();
+            if (characterHeatlth)
             {
-                var hitPlayer = characterInput.Runner.LocalPlayer;
+                if (other.gameObject != shooterGO)
+                {
+                    if (HasStateAuthority)
+                    {
+                        characterHeatlth.RPC_DealDamage(1);
+                        Runner.Despawn(obj);
+                    }
+                }
 
-                if (other.GetComponent<CharacterInputHW>().Runner != Object.Runner)
-                {
-                    Debug.Log($"[Projectile] Hit: {PlayerList.Instance.GetPlayerName(hitPlayer)}");
-                    Runner.Despawn(obj);
-                }
-                else if (other.GetComponent<CharacterInputHW>().Runner.LocalPlayer == _shooter)
-                {
-                    Debug.Log("[Projectile] Trigger When entering its own shooter");
-                }
             }
             else
             {
                 Debug.Log("[Projectile] Hit but not a player");
-                Runner.Despawn(obj);
+                IsProjectileActive = false;
                 //Handle hitting wall, floor ETC
             }
         }

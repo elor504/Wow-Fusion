@@ -1241,6 +1241,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3357482681735623952}
+  - component: {fileID: 1528740362441478126}
   - component: {fileID: 6987006390509916045}
   - component: {fileID: -8558828804596536163}
   - component: {fileID: -6966354967667993943}
@@ -1249,7 +1250,7 @@ GameObject:
   - component: {fileID: 1677871542909297764}
   m_Layer: 10
   m_Name: PlayerHW
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1274,6 +1275,20 @@ Transform:
   - {fileID: 2962399086754679673}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1528740362441478126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494308358068181615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65d885f3821365a4abddc461695d5a59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _HP: 50
+  maxHP: 50
 --- !u!114 &6987006390509916045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1306,6 +1321,7 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 1528740362441478126}
   - {fileID: 6987006390509916045}
   - {fileID: -6966354967667993943}
   - {fileID: -4862934731541656984}
