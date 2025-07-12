@@ -1305,6 +1305,8 @@ MonoBehaviour:
   characterController: {fileID: 2165786560321382219}
   animator: {fileID: 5819242086079178730}
   movementSpeed: 10
+  rotationSpeed: 60
+  jumpHeight: 4
   shootingCD: 5
 --- !u!114 &-8558828804596536163
 MonoBehaviour:
