@@ -6,6 +6,7 @@ using UnityEngine;
 public class CharacterInputHW : NetworkBehaviour
 {
     [SerializeField] private CharacterController characterController;
+    [SerializeField] private Animator animator;
     [Header("Movement Settings")]
     [SerializeField] private float movementSpeed;
     [Header("Shooting Settings")]
@@ -63,6 +64,10 @@ public class CharacterInputHW : NetworkBehaviour
             _shootCounter = shootingCD;
             ShootAction?.Invoke(Object.Runner.LocalPlayer);
         }
+
+        animator.SetFloat("MovementX", _movementInput.x);
+        animator.SetFloat("MovementY", _movementInput.y);
+        animator.SetBool("Walk", _movementInput.magnitude > float.Epsilon);
 
     }
 

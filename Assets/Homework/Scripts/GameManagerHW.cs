@@ -16,7 +16,7 @@ namespace Homework
         public static CharacterSelectionManager CharacterSelectionManager;
         public static ChatManager ChatManager;
 
-        public CharacterSelectionManager characterSelectionManagerPF;
+        //public CharacterSelectionManager characterSelectionManagerPF;
 
         [SerializeField] private NetworkObject playerPrefab;
         [SerializeField] private NetworkRunner runner;
@@ -42,7 +42,8 @@ namespace Homework
                 Destroy(instance);
                 return;
             }
-            NetworkRunnerInjector.Instance.AddInjector(this);
+            
+            runner = GameTest.GetMyRunner();
             runner.AddCallbacks(this);
         }
         public void CloseGame()
@@ -96,7 +97,7 @@ namespace Homework
             this.runner = runner;
             if (this.runner.IsSharedModeMasterClient)
             {
-                CharacterSelectionManager = runner.Spawn(characterSelectionManagerPF);
+               // CharacterSelectionManager = runner.Spawn(characterSelectionManagerPF);
             }
         }
 

@@ -25,7 +25,6 @@ namespace Homework
         [Header("Session settings")]
         [SerializeField] private GameMode gamemode = GameMode.Shared;
 
-        private NetworkRunner networkRunnerInstance;
 
         private string _lobbyID;
         private bool _isPrivateLobby;
@@ -35,7 +34,7 @@ namespace Homework
         public static PlayerRef MyPlayerRef;
 
         public string LobbyID => _lobbyID;
-        public NetworkRunner NetworkRunnerInstance => networkRunnerInstance;
+
         public UIManager GetUIManager => uiManager;
 
 
@@ -62,7 +61,8 @@ namespace Homework
             {
                 Destroy(_instance);
             }
-            CreateNewNetworkRunner();
+            GameTest.RefreshNetworkRunner();
+            GameTest.AddCallBacks(this);
             uiManager.ChangeToLobbySelection();
         }
         private void OnEnable()
@@ -85,7 +85,7 @@ namespace Homework
         {
             _lobbyID = lobbyID;
             OnStartLoadingLobby.Invoke();
-            await Task.Run(() => JoinLobby(networkRunnerInstance, _lobbyID));
+            await Task.Run(() => JoinLobby(GameTest.GetMyRunner(), _lobbyID));
             OnFinishedLoadingLobby?.Invoke(_lobbyID);
         }
 
@@ -94,7 +94,7 @@ namespace Homework
         {
             try
             {
-                var result = await networkRunnerInstance.JoinSessionLobby(sessionLobby, lobbyID);
+                var result = await GameTest.GetMyRunner().JoinSessionLobby(sessionLobby, lobbyID);
 
                 if (result.Ok)
                 {
@@ -116,7 +116,7 @@ namespace Homework
         [ContextMenu("Start Game")]
         public void EnterSessionHandler(string sessionName, int maxPlayers)
         {
-            networkRunnerInstance.StartGame(new StartGameArgs
+            GameTest.GetMyRunner().StartGame(new StartGameArgs
             {
                 GameMode = gamemode,
                 SessionName = sessionName,
@@ -127,10 +127,10 @@ namespace Homework
         }
         public void StartGame()
         {
-            if (networkRunnerInstance.IsSceneAuthority)
+            if (GameTest.GetMyRunner().IsSceneAuthority)
             {
-                networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
-                networkRunnerInstance.SessionInfo.IsOpen = false;
+                GameTest.GetMyRunner().LoadScene(GAME_SCENE_NAME);
+                GameTest.GetMyRunner().SessionInfo.IsOpen = false;
             }
         }
         private void GameStarted(NetworkRunner runner)
@@ -140,7 +140,7 @@ namespace Homework
 
             if (runner.IsSharedModeMasterClient)
             {
-                networkRunnerInstance.SpawnAsync(PlayerListPF);
+                GameTest.GetMyRunner().SpawnAsync(PlayerListPF);
             }
         }
 
@@ -173,7 +173,7 @@ namespace Homework
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
             _playerRefs.Remove(player);
-            if (networkRunnerInstance.LocalPlayer == player)
+            if (GameTest.GetMyRunner().LocalPlayer == player)
             {
                 PlayerListInstance.RPCRemoveNickname();
             }
@@ -186,23 +186,15 @@ namespace Homework
         }
         public void OnSceneLoadDone(NetworkRunner runner)
         {
-            networkRunnerInstance.RemoveCallbacks(this);
+            GameTest.GetMyRunner().RemoveCallbacks(this);
         }
 
         public void ShutDownHandler()
         {
-            CreateNewNetworkRunner();
+            GameTest.RefreshNetworkRunner();
             uiManager.ChangeToLobbySelection();
         }
-        public void CreateNewNetworkRunner()
-        {
-            if (networkRunnerInstance != null)
-            {
-                networkRunnerInstance.RemoveCallbacks(this);
-            }
-            networkRunnerInstance = Instantiate(runnerPF);
-            networkRunnerInstance.AddCallbacks(this);
-        }
+     
 
         public void SetPrivateLobby(bool value)
         {
