@@ -17,13 +17,14 @@ namespace Homework
         public static ChatManager ChatManager;
 
         //public CharacterSelectionManager characterSelectionManagerPF;
-
+        [SerializeField] private UIManagerHW uiManager;
         [SerializeField] private NetworkObject playerPrefab;
         [SerializeField] private NetworkRunner runner;
         [SerializeField] private PlayerSpawnManager spawnManager;
         [SerializeField] private SimpleCameraHandlerHW playerCamera;
 
         private NetworkObject _myCharacter;
+        public UIManagerHW UIManager => uiManager;
         public NetworkObject MyCharacter => _myCharacter;
         public NetworkRunner GetRunner => runner;
         public SimpleCameraHandlerHW PlayerCamera => playerCamera;

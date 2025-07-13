@@ -159,6 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obj: {fileID: 8640651345451001258}
   rb: {fileID: 1542386408245477155}
+  projectileVisual: {fileID: 3374281290267624899}
   movementSpeed: 5
   lifeTime: 5
   hitVFX: {fileID: 2287508466132285056, guid: e731316e6545fdb41a70e1a34c8bd923, type: 3}

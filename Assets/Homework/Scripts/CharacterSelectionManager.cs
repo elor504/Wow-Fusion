@@ -15,6 +15,7 @@ namespace Homework
 
         public static Action OnSelectedCharacter;
 
+        public static int SelectedCharacterIndex = -1;
      
         public override void Spawned()
         {
@@ -78,7 +79,7 @@ namespace Homework
         {
             return GetCharacterByPlayerRef(playerRef).color;
         }
-        private int GetCharacterSelectionIndexByPlayerRef(PlayerRef playerRef)
+        public int GetCharacterSelectionIndexByPlayerRef(PlayerRef playerRef)
         {
             CharacterSelection selection = GetCharacterByPlayerRef(playerRef);
             int index = selection != null? characterSelection.FindIndex(c => c.Equals(selection)) : -1;

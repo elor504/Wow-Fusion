@@ -14,7 +14,7 @@ namespace Homework
         public PlayerLobbyCheck LobbyCheck;
 
         public static event Action<PlayerRef> OnPlayerJoined;
-        public static event Action<RpcInfo> OnPlayerLeave;
+        public static event Action<PlayerRef> OnPlayerLeave;
 
         private Dictionary<PlayerRef, bool> playerLobbyReady = new Dictionary<PlayerRef, bool>();
 
@@ -39,15 +39,19 @@ namespace Homework
 
             LobbyManager.Instance.PlayerListInstance = this;
             OnPlayerJoined += RPC_AddPlayer;
+            OnPlayerLeave += RemovePlayer;
             LobbyManager.Instance.AddNickname();
         }
+
+
 
         public override void Despawned(NetworkRunner runner, bool hasState)
         {
             base.Despawned(runner, hasState);
             OnPlayerJoined -= RPC_AddPlayer;
+            OnPlayerLeave -= RemovePlayer;
         }
-
+      
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPCRegisterNickname(string nickName, RpcInfo info = default)
         {
@@ -76,21 +80,6 @@ namespace Homework
             }
             playerNames = playersUpdatedInfo;
             LobbyManager.Instance.PlayersInSessionChanged(playerNames);
-        }
-
-        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPCRemoveNickname(RpcInfo info = default)
-        {
-            Debug.Log($"[Server] removed nickname: {info.Source}");
-            RPCUpdateRemovedNicknames(info.Source);
-        }
-        [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-        public void RPCUpdateRemovedNicknames(PlayerRef player, RpcInfo info = default)
-        {
-            Debug.Log($"[Client] removed nickname: {player}");
-            playerNames.Remove(player);
-            LobbyManager.Instance.PlayersInSessionChanged(playerNames);
-
         }
 
         public string GetPlayerName(PlayerRef player)
@@ -122,10 +111,26 @@ namespace Homework
             Debug.Log($"[Server] lobby check player joined: {info.PlayerId} {LobbyManager.Instance.PlayerListInstance.GetPlayerName(info)}");
             playerLobbyReady[info] = false;
             var checkArrays = ChangeDictionaryToArrays();
-            RPC_UpdatePlayer(checkArrays.playersReferences, checkArrays.lobbyCondition);
+            RPC_UpdatePlayers(checkArrays.playersReferences, checkArrays.lobbyCondition);
+        }
+
+        public void PlayerLeft(PlayerRef playerRef)
+        {
+            OnPlayerLeave?.Invoke(playerRef);
+        }
+
+        
+        public void RemovePlayer(PlayerRef playerWhoLeft)
+        {
+            Debug.Log($"[Server] lobby check player removed: {playerWhoLeft.PlayerId} {LobbyManager.Instance.PlayerListInstance.GetPlayerName(playerWhoLeft)}");
+            playerLobbyReady.Remove(playerWhoLeft);
+            playerNames.Remove(playerWhoLeft);
+            SessionUI.UpdateSessionInfo.Invoke(playerLobbyReady);
+            LobbyManager.Instance.PlayersInSessionChanged(playerNames);
+
         }
         [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-        public void RPC_UpdatePlayer(PlayerRef[] playersRef, bool[] conditions, RpcInfo info = default)
+        public void RPC_UpdatePlayers(PlayerRef[] playersRef, bool[] conditions, RpcInfo info = default)
         {
             Dictionary<PlayerRef, bool> newDict = new Dictionary<PlayerRef, bool>();
             for (int i = 0; i < playersRef.Length; i++)
@@ -145,7 +150,7 @@ namespace Homework
         {
             playerLobbyReady[info.Source] = !playerLobbyReady[info.Source];
             var checkArrays = ChangeDictionaryToArrays();
-            RPC_UpdatePlayer(checkArrays.playersReferences, checkArrays.lobbyCondition);
+            RPC_UpdatePlayers(checkArrays.playersReferences, checkArrays.lobbyCondition);
         }
 
         private (PlayerRef[] playersReferences, bool[] lobbyCondition) ChangeDictionaryToArrays()

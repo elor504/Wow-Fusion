@@ -173,11 +173,7 @@ namespace Homework
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
             _playerRefs.Remove(player);
-            if (GameTest.GetMyRunner().LocalPlayer == player)
-            {
-                PlayerListInstance.RPCRemoveNickname();
-            }
-
+            PlayerListInstance.PlayerLeft(player);
         }
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
@@ -194,7 +190,7 @@ namespace Homework
             GameTest.RefreshNetworkRunner();
             uiManager.ChangeToLobbySelection();
         }
-     
+
 
         public void SetPrivateLobby(bool value)
         {

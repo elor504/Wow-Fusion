@@ -60,9 +60,11 @@ namespace Homework
             gameObject.SetActive(false);
         }
 
-
+       
         public void UpdatePlayerList(Dictionary<PlayerRef, string> playerRefs)
         {
+            Debug.Log($"Update player List UI: {playerRefs.Count}");
+            
             foreach (var info in _playerSessionInfos)
             {
                 info.HidePlayer();

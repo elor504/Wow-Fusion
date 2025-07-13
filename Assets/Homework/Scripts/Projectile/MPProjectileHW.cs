@@ -1,4 +1,5 @@
 using Fusion;
+using System.Collections;
 using UnityEngine;
 namespace Homework
 {
@@ -7,6 +8,7 @@ namespace Homework
         //idea for me not to forget, handle friendlies, enemies and yourself inside a layer ( at the real game not hw)
         [SerializeField] private NetworkObject obj;
         [SerializeField] private Rigidbody rb;
+        [SerializeField] private GameObject projectileVisual;
 
         [SerializeField] private float movementSpeed;
         [SerializeField] private float lifeTime;
@@ -42,6 +44,7 @@ namespace Homework
             if (Object.HasStateAuthority)
             {
                 _initialized = true;
+                IsProjectileActive = true;
             }
         }
 
@@ -50,31 +53,31 @@ namespace Homework
             base.FixedUpdateNetwork();
 
             LifeCounter -= Runner.DeltaTime;
-            if (LifeCounter <= 0)
+            if (IsProjectileActive && LifeCounter <= 0)
             {
                 IsProjectileActive = false;
+                RPC_SpawnHitVFX();
+                projectileVisual.SetActive(false);
                 return;
             }
 
             if (!Object.HasStateAuthority)
                 return;
-
-            rb.position += _direction * movementSpeed * Runner.DeltaTime;
-        }
-
-        public void SetProjectileActive()
-        {
-            gameObject.SetActive(IsProjectileActive);
-
             if (!IsProjectileActive)
-            {
-                IsMoving = false;
-            }
+                return;
+            rb.position += _direction * movementSpeed * Runner.DeltaTime;
         }
 
         private void SpawnHitVFX()
         {
             Instantiate(hitVFX, transform.position, Quaternion.identity);
+        }
+        [Rpc(RpcSources.StateAuthority,RpcTargets.All)]
+        private void RPC_SpawnHitVFX()
+        {
+            SpawnHitVFX();
+            projectileVisual.SetActive(false);
+            IsProjectileActive = false;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -89,12 +92,21 @@ namespace Homework
             {
                 Debug.Log("[Projectile] Hit but not a player");
                 IsProjectileActive = false;
-                if (HasStateAuthority)
+                if (!HasStateAuthority)
                 {
-                    Runner.Despawn(obj);
+                    return;
                 }
-                SpawnHitVFX();
-                //Handle hitting wall, floor ETC
+                StartCoroutine(HandleHitDelay());
+            }
+        }
+        private IEnumerator HandleHitDelay()
+        {
+            RPC_SpawnHitVFX();
+            yield return new WaitForSeconds(3f);
+
+            if (HasStateAuthority)
+            {
+                Runner.Despawn(obj);
             }
         }
 
@@ -105,11 +117,12 @@ namespace Homework
             {
                 if (other.gameObject != shooterGO)
                 {
-                    SpawnHitVFX();
+                    //RPC_SpawnHitVFX();
                     if (HasStateAuthority)
                     {
-                        characterHeatlth.RPC_DealDamage(1);
-                        Runner.Despawn(obj);
+                        characterHeatlth.RPC_DealDamage(1, GameManagerHW.CharacterSelectionManager.GetCharacterSelectionIndexByPlayerRef(GameTest.GetMyRunner().LocalPlayer));
+                        StartCoroutine(HandleHitDelay());
+                       // Runner.Despawn(obj);
                     }
                 }
 

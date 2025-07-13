@@ -9,13 +9,20 @@ namespace Homework
 {
     public class UIManagerHW : MonoBehaviour
     {
+        [SerializeField] private CharacterHPBar hpBar;
         [SerializeField] private GameObject characterSelectionMenu;
         [SerializeField] private List<Button> characterButtons;
         [SerializeField] private Button selectCharacterButton;
         [SerializeField] private TextMeshProUGUI selectCharacterButtonTest;
         [SerializeField] private Button closeGameButton;
+
+        public CharacterHPBar HPBar => hpBar;
+
         private int currentLocalSelectedIndex = -1;
         private int previousIndex = -1;
+
+        public int CurrentLocalSelectedIndex => currentLocalSelectedIndex;
+
         private void OnEnable()
         {
             CharacterSelectionManager.OnSelectedCharacter += UpdateCharactersButtons;
