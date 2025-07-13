@@ -188,6 +188,7 @@ namespace Homework
         public void ShutDownHandler()
         {
             GameTest.RefreshNetworkRunner();
+            GameTest.AddCallBacks(this);
             uiManager.ChangeToLobbySelection();
         }
 
