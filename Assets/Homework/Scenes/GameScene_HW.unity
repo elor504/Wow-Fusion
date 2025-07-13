@@ -4269,7 +4269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraOffset: {x: 0, y: 2.2, z: -2}
-  CameraRotation: {x: 15, y: 0, z: 0}
+  CameraRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &1828705710
 GameObject:
   m_ObjectHideFlags: 0

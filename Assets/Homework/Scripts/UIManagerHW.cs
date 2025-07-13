@@ -42,6 +42,7 @@ namespace Homework
         {
             SetShowCloseGame(false);
             closeGameButton.onClick.AddListener(OnClickCloseButton);
+            UpdateCharacterSelectButton();
         }
 
         public void SetShowCloseGame(bool isHost)
@@ -88,7 +89,11 @@ namespace Homework
         private void UpdateCharacterSelectButton()
         {
             if (currentLocalSelectedIndex == -1)
+            {
+                selectCharacterButton.interactable = false;
+                selectCharacterButtonTest.text = "Select a character";
                 return;
+            }
 
             var characters = GameManagerHW.CharacterSelectionManager.GetCharacterSelectionList;
             if (characters[currentLocalSelectedIndex].IsSelected)

@@ -161,6 +161,7 @@ MonoBehaviour:
   rb: {fileID: 1542386408245477155}
   movementSpeed: 5
   lifeTime: 5
+  hitVFX: {fileID: 2287508466132285056, guid: e731316e6545fdb41a70e1a34c8bd923, type: 3}
 --- !u!54 &1542386408245477155
 Rigidbody:
   m_ObjectHideFlags: 0

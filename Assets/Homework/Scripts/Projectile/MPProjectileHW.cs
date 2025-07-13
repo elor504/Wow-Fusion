@@ -11,6 +11,8 @@ namespace Homework
         [SerializeField] private float movementSpeed;
         [SerializeField] private float lifeTime;
 
+        [Header("Hit PF")]
+        [SerializeField] private HitVFXHW hitVFX;
 
         public bool IsProjectileActive { get; set; }
 
@@ -70,19 +72,40 @@ namespace Homework
             }
         }
 
+        private void SpawnHitVFX()
+        {
+            Instantiate(hitVFX, transform.position, Quaternion.identity);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (!_initialized || !IsMoving)
                 return;
-            if (!other.gameObject.CompareTag("Player"))
-                return;
+            if (other.gameObject.CompareTag("Player"))
+            {
+                HandleHitPlayer(other);
+            }
+            else
+            {
+                Debug.Log("[Projectile] Hit but not a player");
+                IsProjectileActive = false;
+                if (HasStateAuthority)
+                {
+                    Runner.Despawn(obj);
+                }
+                SpawnHitVFX();
+                //Handle hitting wall, floor ETC
+            }
+        }
 
-
+        private void HandleHitPlayer(Collider other)
+        {
             var characterHeatlth = other.GetComponent<CharacterHealthHW>();
             if (characterHeatlth)
             {
                 if (other.gameObject != shooterGO)
                 {
+                    SpawnHitVFX();
                     if (HasStateAuthority)
                     {
                         characterHeatlth.RPC_DealDamage(1);
@@ -90,12 +113,6 @@ namespace Homework
                     }
                 }
 
-            }
-            else
-            {
-                Debug.Log("[Projectile] Hit but not a player");
-                IsProjectileActive = false;
-                //Handle hitting wall, floor ETC
             }
         }
     }

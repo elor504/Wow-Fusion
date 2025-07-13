@@ -1248,7 +1248,7 @@ GameObject:
   - component: {fileID: 2165786560321382219}
   - component: {fileID: -4862934731541656984}
   - component: {fileID: 1677871542909297764}
-  - component: {fileID: 152700136188758547}
+  - component: {fileID: 3528058659044245522}
   m_Layer: 10
   m_Name: PlayerHW
   m_TagString: Player
@@ -1329,7 +1329,7 @@ MonoBehaviour:
   - {fileID: 6987006390509916045}
   - {fileID: -6966354967667993943}
   - {fileID: -4862934731541656984}
-  - {fileID: 152700136188758547}
+  - {fileID: 3528058659044245522}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &-6966354967667993943
 MonoBehaviour:
@@ -1411,7 +1411,7 @@ CapsuleCollider:
   m_Height: 1.89
   m_Direction: 1
   m_Center: {x: 0, y: 0.92, z: 0}
---- !u!114 &152700136188758547
+--- !u!114 &3528058659044245522
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1426,9 +1426,9 @@ MonoBehaviour:
   Animator: {fileID: 5819242086079178730}
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 000000002b1a167c794069554c617d567fd25861d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
+  StateHashes: 000000002b1a167c794069554c617d567fd25861fbcb4cdc7fe89a33249a8c8fcf590472d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
   TriggerHashes: 0000000027286b35
-  TotalWords: 3
+  TotalWords: 4
 --- !u!1 &1555740705137505309
 GameObject:
   m_ObjectHideFlags: 0

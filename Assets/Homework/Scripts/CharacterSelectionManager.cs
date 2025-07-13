@@ -52,6 +52,10 @@ namespace Homework
             {
                 characterSelection[previousIndex].IsSelected = false;
             }
+            else
+            {
+
+            }
             OnSelectedCharacter?.Invoke();
         }
         public bool CheckIfCharacterIsAvailable(int index)
