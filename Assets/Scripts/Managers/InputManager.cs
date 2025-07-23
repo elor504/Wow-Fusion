@@ -7,9 +7,6 @@ using UnityEngine.Serialization;
 
 public class InputManager : MonoBehaviour
 {
-    private static InputManager instance;
-    public static InputManager GetInstance => instance;
-
     public PlayerControls playerControls;
     
     public static event Action OnHoldingRightMouse;
@@ -45,35 +42,24 @@ public class InputManager : MonoBehaviour
     [SerializeField] private StatBuffData selfBuffDataToTest;
     [SerializeField] private SelfBuffSpell selfBuffToTest;
     
-    private void Awake()
-    {
-        playerControls = new PlayerControls();
-        Init();
-
-        projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
-        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
-        
-        _hotKeysList.Add(new HotKey("1"));
-        _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID,Attack);
-        _hotKeysList.Add(new HotKey("2"));
-        _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID,SelfCast);
-    }
     public void Init()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(this);
-            return;
-        }
+        playerControls = new PlayerControls();
+        projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
+        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
+
+        _hotKeysList.Add(new HotKey("1"));
+        _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID, Attack);
+        _hotKeysList.Add(new HotKey("2"));
+        _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID, SelfCast);
     }
     
     ///Try to place it on the new unity input system
     private void Update()
     {
+        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority)
+            return;
+
         _isHoldingRightMouseDown = Input.GetMouseButton(1);
         
         if (_isHoldingRightMouseDown)

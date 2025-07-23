@@ -12,13 +12,13 @@ public class PlayerEquipment : MonoBehaviour
             int enumLength = Enum.GetNames(typeof(EquipmentType)).Length;
             for (int i = 0; i < enumLength; i++)
             {
-                EquipmentVisual visual = new EquipmentVisual(null,(EquipmentType)i);
+                EquipmentVisual visual = new EquipmentVisual(null, (EquipmentType)i);
                 equipmentVisuals.Add(visual);
             }
         }
     }
 
-    public void UpdateVisual(EquipmentType type,Mesh[] meshes)
+    public void UpdateVisual(EquipmentType type, Mesh[] meshes)
     {
         EquipmentVisual equipment = equipmentVisuals.Find((e => e.EquipmentType == type));
 
@@ -29,7 +29,21 @@ public class PlayerEquipment : MonoBehaviour
             i++;
         }
     }
+
+    public void Init(CharacterData data)
+    {
+        Mesh[] meshes = null;
+        EquipmentType type = EquipmentType.Helmet;
+        for (int i = 0; i < equipmentVisuals.Count; i++)
+        {
+            type = (EquipmentType)i;
+            meshes = DataBankSO.Instance.GetEquipmentDataByID(data.CharacterEquipmentData.GetEquipableDataByType(type).ItemName).EquipmentMeshes;
+            UpdateVisual(type, meshes);
+        }
+    }
+
 }
+
 
 [Serializable]
 public struct EquipmentVisual
@@ -37,8 +51,8 @@ public struct EquipmentVisual
     [HideInInspector] public string EquipmentTypeName;
     public EquipmentType EquipmentType;
     public SkinnedMeshRenderer[] MeshRenderer;
-    
-    public EquipmentVisual(SkinnedMeshRenderer[] renderer,EquipmentType type)
+
+    public EquipmentVisual(SkinnedMeshRenderer[] renderer, EquipmentType type)
     {
         EquipmentTypeName = type.ToString();
         MeshRenderer = renderer;

@@ -5,32 +5,12 @@ using UnityEngine;
 public class GameTest
 {
     private static NetworkRunner _myRunner;
-
     private static List<INetworkRunnerCallbacks[]> addedCallBacks = new();
 
-    public static NetworkRunner GetMyRunner()
-    {
-        if (_myRunner == null)
-        {
-            _myRunner = CreateNewRunner();
-        }
-        return _myRunner;
-    }
-    public static NetworkRunner CreateNewRunner(params INetworkRunnerCallbacks[] callbacks)
-    {
-        if (_myRunner != null)
-        {
-            foreach (var callback in addedCallBacks)
-            {
-                RemoveCallBacks(callback);
-            }
-        }
-        GameObject runnerObj = Object.Instantiate(new GameObject());
-        var runner = runnerObj.AddComponent<NetworkRunner>();
-        runner.gameObject.name = "NetworkRunner";
-        Debug.Log("Created new gameobject");
-        return runner;
-    }
+    public static PlayerCharacter LocalCharacter;
+
+    
+
     public static void RefreshNetworkRunner(bool destory = false)
     {
         if (_myRunner != null)
@@ -57,7 +37,6 @@ public class GameTest
         Debug.Log("Refreshed new gameobject");
         _myRunner = runner;
     }
-
     public static void AddCallBacks(params INetworkRunnerCallbacks[] callbacks)
     {
         addedCallBacks.Add(callbacks);
@@ -67,6 +46,29 @@ public class GameTest
     {
         addedCallBacks.Remove(callbacks);
         GetMyRunner().RemoveCallbacks(callbacks);
+    }
+    public static NetworkRunner CreateNewRunner(params INetworkRunnerCallbacks[] callbacks)
+    {
+        if (_myRunner != null)
+        {
+            foreach (var callback in addedCallBacks)
+            {
+                RemoveCallBacks(callback);
+            }
+        }
+        GameObject runnerObj = Object.Instantiate(new GameObject());
+        var runner = runnerObj.AddComponent<NetworkRunner>();
+        runner.gameObject.name = "NetworkRunner";
+        Debug.Log("Created new gameobject");
+        return runner;
+    }
+    public static NetworkRunner GetMyRunner()
+    {
+        if (_myRunner == null)
+        {
+            _myRunner = CreateNewRunner();
+        }
+        return _myRunner;
     }
 
 }

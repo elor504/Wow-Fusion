@@ -1,9 +1,10 @@
+using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCharacter : MonoBehaviour, ITargetableEntity
+public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 {
     [Header("References")] 
     [SerializeField] private PlayerAnimator animator;
@@ -11,7 +12,7 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     [SerializeField] private CharacterVFXVisual characterVFXVisual;
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private EntityStat characterStat;
-    
+    [SerializeField] private PlayerEquipment equipment;
     [Header("Transform references")] 
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Transform hitPosition;
@@ -50,6 +51,12 @@ public class PlayerCharacter : MonoBehaviour, ITargetableEntity
     private void FixedUpdate()
     {
         _playerBrain?.FixedUpdateState();
+    }
+
+    public void LoadCharacterData(CharacterData data)
+    {
+        characterStat.Init(this,data);
+        equipment.Init(data);
     }
 
     public void CastSpell(BaseSpell spell, ITargetableEntity target)

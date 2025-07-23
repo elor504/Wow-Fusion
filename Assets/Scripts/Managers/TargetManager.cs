@@ -7,12 +7,15 @@ public class TargetManager : MonoBehaviour
     public LayerMask layerMask;
     private static TargetManager _instance;
     private ITargetableEntity _currentTarget;
-    
+    private InputManager _inputManager;
+
     public static TargetManager Instance => _instance;
     public ITargetableEntity CurrentTarget => _currentTarget;
     public static bool IsHoveredOnEntity => _currentHoveredEntity != null;
 
     private static ITargetableEntity _currentHoveredEntity;
+
+
 
     private void OnEnable()
     {
@@ -24,22 +27,14 @@ public class TargetManager : MonoBehaviour
         InputManager.OnClickLeftMouse -= ClickOnEntity;
     }
 
-    private void Awake()
+   
+    public void Init()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else if (_instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        _inputManager = GameManager.Instance.InputManager;
     }
-
     public void ClickOnEntity()
     {
-        if (InputManager.GetInstance != null && InputManager.GetInstance.IsMouseOverUI)
+        if (_inputManager.IsMouseOverUI)
         {
             return;
         }

@@ -1,29 +1,162 @@
+using Fusion;
+using Fusion.Sockets;
+using PlayFab.ClientModels;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-   private static GameManager _instance;
-   public static GameManager Instance => _instance;
-   
-   [SerializeField] private PlayerCharacter clientPlayer;
+    private static GameManager _instance;
+    public static GameManager Instance => _instance;
 
-   [Header("UI")] [SerializeField] private GameObject playerHUD;
-   
-   
-   public PlayerCharacter ClientPlayer => clientPlayer;
+    [Header("Managers")]
+    [SerializeField] private InputManager inputManager;
+    [SerializeField] private TargetManager targetManager;
+    [SerializeField] private ClassSkillManager skillManager;
 
-   private void Awake()
-   {
-      if (_instance == null)
-      {
-         _instance = this;
-      }
-      else if (_instance != this)
-      {
-         Destroy(this);
-      }
+    [Header("Client player ref")]
+    [SerializeField] private PlayerCharacter clientPlayer;
+
+    [Header("UI")]
+    [SerializeField] private GameObject playerHUD;
+
+    [Header("Data")]
+    [SerializeField] private CharacterVisualSO equipmentVisualData;
+
+    public InputManager InputManager => inputManager;
+    public TargetManager TargetManager => targetManager;
+    public ClassSkillManager ClassSkillManager => skillManager;
+    public PlayerCharacter ClientPlayer => clientPlayer;
+
+
+    public CharacterVisualSO EquipmentVisualData => equipmentVisualData;
+
+    private void Awake()
+    {
+        Init();
+
+
+        playerHUD.SetActive(true);
+    }
+
+    public void Init()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Destroy(this);
+        }
+
+        InputManager.Init();
+        targetManager.Init();
+        skillManager.Init();
+        GameTest.AddCallBacks(this);
+    }
+
+
+
+
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    {
+
+    }
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+    {
+
+    }
+
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+    {
+
+    }
+
+
+
+    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+
+    }
+
+    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+
+    }
+
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+    {
+
+    }
+
+   
+
+  
+
+    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
+    {
+
+    }
+
+    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
+    {
+
+    }
+
+    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
+    {
+
+    }
+
+    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
+    {
+
+    }
+
+    public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
+    {
+
+    }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+
+    }
+
+    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
+    {
+
+    }
+
+    public void OnConnectedToServer(NetworkRunner runner)
+    {
+
+    }
+
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+    {
+
+    }
+
+    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
+    {
+
+    }
+
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+    {
+
+    }
+
+    public void OnSceneLoadDone(NetworkRunner runner)
+    {
       
-      playerHUD.SetActive(true);
-   }
+    }
+
+    public void OnSceneLoadStart(NetworkRunner runner)
+    {
+       
+    }
 }

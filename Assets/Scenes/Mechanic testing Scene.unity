@@ -179,6 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f552e9fed3506af4884c02b06a34ba57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputManager: {fileID: 633000030}
+  targetManager: {fileID: 1683405676}
+  skillManager: {fileID: 677593844}
   clientPlayer: {fileID: 72967761}
   playerHUD: {fileID: 1275881867}
 --- !u!1 &549508715
@@ -1251,6 +1254,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1375669553972253304, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+      propertyPath: SortKey
+      value: 974936576
+      objectReference: {fileID: 0}
     - target: {fileID: 1494308358068181615, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
       propertyPath: m_Name
       value: Player
