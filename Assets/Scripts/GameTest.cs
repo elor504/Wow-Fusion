@@ -7,10 +7,12 @@ public class GameTest
     private static NetworkRunner _myRunner;
     private static List<INetworkRunnerCallbacks[]> addedCallBacks = new();
 
+
     public static PlayerCharacter LocalCharacter;
+    public static FusionManager FusionManager;
 
-    
 
+    #region network runner
     public static void RefreshNetworkRunner(bool destory = false)
     {
         if (_myRunner != null)
@@ -70,5 +72,6 @@ public class GameTest
         }
         return _myRunner;
     }
+    #endregion
 
 }

@@ -20,12 +20,12 @@ public class LoadingScreen : NetworkBehaviour
 
     private void Awake()
     {
-        if(_instance == null)
+        if (_instance == null)
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else if(_instance != this)
+        else if (_instance != this)
         {
             Destroy(gameObject);
         }
@@ -46,13 +46,19 @@ public class LoadingScreen : NetworkBehaviour
         //wait untill the scene loads
 
         //Spawn player
-        var spawnTask = GameTest.GetMyRunner().SpawnAsync(playerPF);
-
-        while (spawnTask.IsQueued)
+        if (GameTest.LocalCharacter == null)
         {
-            yield return null;
+            var spawnTask = GameTest.GetMyRunner().SpawnAsync(playerPF);
+
+            //while (spawnTask.IsQueued)
+            //{
+           yield return null;
+            //}
+            GameTest.LocalCharacter = spawnTask.Object.GetComponent<PlayerCharacter>();
         }
-        GameTest.LocalCharacter = spawnTask.Object.GetComponent<PlayerCharacter>();
+        //check spawn positions
+        GameTest.LocalCharacter.transform.position = Vector3.zero;
+
         //GameTest.LocalCharacter.LoadCharacterData(null);
         //place player at spawn position, or get last position and place it near the nearest spawn position
         //SpawnManager
@@ -63,7 +69,7 @@ public class LoadingScreen : NetworkBehaviour
         loadingCouru = null;
     }
 
-    
+
 
 
 }
