@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
+    private static PlayerCamera _instance;
+    public static PlayerCamera Instance => _instance;
+
+
     [Header("References")] 
     [SerializeField] private Transform playerTrans;
-    [SerializeField] private Transform camera;
+    [SerializeField] private Camera camera;
+    [SerializeField] private Transform cameraTransform;
 
 
     [Header("Camera offset")] 
@@ -27,6 +32,8 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float smoothTime;
 
+    public Camera GetCamera => camera;
+
     private Coroutine zoomCoroutine;
     
     private Vector3 _cameraRotation;
@@ -40,16 +47,29 @@ public class PlayerCamera : MonoBehaviour
 
     private void Awake()
     {
-        _cameraOffset = camera.localPosition;
-        _cameraRotation = camera.localEulerAngles;
-        _cameraLocalPosition = camera.localPosition;
-        _cameraLocalPosition.z = Mathf.Clamp(_cameraLocalPosition.z, zoomRange.x, zoomRange.y);
+        if(_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if(_instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
+
 
     private void OnEnable()
     {
+        _cameraOffset = cameraTransform.localPosition;
+        _cameraRotation = cameraTransform.localEulerAngles;
+        _cameraLocalPosition = cameraTransform.localPosition;
+        _cameraLocalPosition.z = Mathf.Clamp(_cameraLocalPosition.z, zoomRange.x, zoomRange.y);
+
         InputManager.OnScroll += HandleMouseWheel;
         InputManager.OnHoldingRightMouse += HandleCameraRotation;
+
+
     }
 
     private void OnDisable()
@@ -109,7 +129,7 @@ public class PlayerCamera : MonoBehaviour
     {
         float duration = smoothTime; // e.g. 0.1f
         float elapsed = 0f;
-        float startZ = camera.localPosition.z;
+        float startZ = cameraTransform.localPosition.z;
 
         while (elapsed < duration)
         {
@@ -120,14 +140,14 @@ public class PlayerCamera : MonoBehaviour
         
             float newZ = Mathf.Lerp(startZ, targetZ, t);
             _cameraLocalPosition.z = newZ;
-            camera.localPosition = _cameraLocalPosition;
+            cameraTransform.localPosition = _cameraLocalPosition;
 
             yield return null;
         }
 
         // Snap to target just in case
         _cameraLocalPosition.z = targetZ;
-        camera.localPosition = _cameraLocalPosition;
+        cameraTransform.localPosition = _cameraLocalPosition;
     }
     
 }

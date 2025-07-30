@@ -62,7 +62,7 @@ public class LoginMenu : MonoBehaviour
 		}
 		if(PlayerPrefs.HasKey(PlayerPasswordPref)) 
 		{
-			passwordInputField.text = PlayerPrefs.GetString(_passwordInput);
+			passwordInputField.text = PlayerPrefs.GetString(PlayerPasswordPref);
 			_passwordInput = PlayerPrefs.GetString(PlayerPasswordPref);
 		}
 

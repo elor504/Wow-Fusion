@@ -35,7 +35,7 @@ public class InputManager : MonoBehaviour
 
 
     [Header("Testing")] 
-    [SerializeField] private PlayerCharacter playerCharacter;
+    //[SerializeField] private PlayerCharacter playerCharacter;
     [SerializeField] private BasicEnemy enemy;
     [SerializeField] private ProjectileSpellData spellToTest;
     private ProjectileSpell projectileToTest;
@@ -57,7 +57,7 @@ public class InputManager : MonoBehaviour
     ///Try to place it on the new unity input system
     private void Update()
     {
-        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority)
+        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasStateAuthority)
             return;
 
         _isHoldingRightMouseDown = Input.GetMouseButton(1);
@@ -102,9 +102,9 @@ public class InputManager : MonoBehaviour
 
     public void Attack()
     {
-        if (TargetManager.Instance.CurrentTarget != null)
+        if (GameManager.Instance.TargetManager.CurrentTarget != null)
         {
-            playerCharacter.CastSpell(projectileToTest, TargetManager.Instance.CurrentTarget);
+            GameTest.LocalCharacter.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
         }
         else
         {
@@ -114,7 +114,7 @@ public class InputManager : MonoBehaviour
 
     public void SelfCast()
     {
-        playerCharacter.CastSpell(selfBuffToTest, null);
+        GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
     }
     
     private HotKey GetHotKey(string key)

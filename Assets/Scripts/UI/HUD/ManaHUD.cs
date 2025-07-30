@@ -17,10 +17,10 @@ public class ManaHUD : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.ClientPlayer.CharacterStat.OnManaChanged += UpdateMana;
+        GameTest.LocalCharacter.CharacterStat.OnManaChanged += UpdateMana;
     }
     private void OnDisable()
     {
-        GameManager.Instance.ClientPlayer.CharacterStat.OnManaChanged -= UpdateMana;
+        GameTest.LocalCharacter.CharacterStat.OnManaChanged -= UpdateMana;
     }
 }

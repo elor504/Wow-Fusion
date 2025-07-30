@@ -1295,6 +1295,7 @@ MonoBehaviour:
   characterClass: {fileID: 4659427904211304433}
   characterStat: {fileID: 1858899842764595908}
   equipment: {fileID: 1014140497616985380}
+  characterCamera: {fileID: 0}
   projectileSpawnPoint: {fileID: 4218192414086152221}
   hitPosition: {fileID: 6670549599876932771}
   baseClassData: {fileID: 11400000, guid: 6d3aed36eca6f2046b8cbe7067102c0b, type: 2}
@@ -1484,12 +1485,12 @@ MonoBehaviour:
   m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 0}
+  Animator: {fileID: 5819242086079178730}
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 
-  TriggerHashes: 
-  TotalWords: 0
+  StateHashes: 000000002b1a167c794069554c617d567fd25861fbcb4cdc7fe89a33249a8c8fcf590472d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
+  TriggerHashes: 0000000027286b35
+  TotalWords: 4
 --- !u!1 &1555740705137505309
 GameObject:
   m_ObjectHideFlags: 0

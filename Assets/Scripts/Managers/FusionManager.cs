@@ -11,7 +11,10 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     private const string MainCityID = "MainCity";
 
+    [SerializeField] private CharacterSpawnManager characterSpawnManager;
 
+
+    public CharacterSpawnManager CharacterSpawnManager => characterSpawnManager;
     private void Start()
     {
         Init();

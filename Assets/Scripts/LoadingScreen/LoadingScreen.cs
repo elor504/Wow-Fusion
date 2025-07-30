@@ -65,20 +65,29 @@ public class LoadingScreen : NetworkBehaviour
 		//Spawn player
 		if (GameTest.LocalCharacter == null)
         {
-            var spawnTask = GameTest.GetMyRunner().SpawnAsync(playerPF);
+            //var spawnTask = GameTest.GetMyRunner().SpawnAsync(playerPF);
 
-            while (spawnTask.IsQueued)
+            GameTest.FusionManager.CharacterSpawnManager.RPC_RequestSpawnCharacter(Vector3.zero);
+            while (GameTest.LocalCharacter == null)
             {
                 yield return null;
             }
-            GameTest.LocalCharacter = spawnTask.Object.GetComponent<PlayerCharacter>();
         }
+        //place player at spawn position, or get last position and place it near the nearest spawn position
         //check spawn positions
         GameTest.LocalCharacter.transform.position = Vector3.zero;
 
+        //camera
+        if(PlayerCamera.Instance)
+        {
+            PlayerCamera.Instance.InitCamera(GameTest.LocalCharacter.transform);
+        }
+        else{
+            Debug.LogError("Player camera does not exists in this scene");
+        }
+
         //GameTest.LocalCharacter.LoadCharacterData(null);
-        //place player at spawn position, or get last position and place it near the nearest spawn position
-        //SpawnManager
+
         //wait untill the multiplayer stuff loads
 
         //hide loading ui

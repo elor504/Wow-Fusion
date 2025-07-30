@@ -14,9 +14,7 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private InputManager inputManager;
     [SerializeField] private TargetManager targetManager;
     [SerializeField] private ClassSkillManager skillManager;
-
-    [Header("Client player ref")]
-    [SerializeField] private PlayerCharacter clientPlayer;
+   
 
     [Header("UI")]
     [SerializeField] private GameObject playerHUD;
@@ -27,7 +25,6 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
     public InputManager InputManager => inputManager;
     public TargetManager TargetManager => targetManager;
     public ClassSkillManager ClassSkillManager => skillManager;
-    public PlayerCharacter ClientPlayer => clientPlayer;
 
 
     public CharacterVisualSO EquipmentVisualData => equipmentVisualData;

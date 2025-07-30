@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class TargetManager : MonoBehaviour
 {
-    public Camera camera;
+    private static ITargetableEntity _currentHoveredEntity;
+
     public LayerMask layerMask;
-    private static TargetManager _instance;
+
     private ITargetableEntity _currentTarget;
     private InputManager _inputManager;
 
-    public static TargetManager Instance => _instance;
     public ITargetableEntity CurrentTarget => _currentTarget;
     public static bool IsHoveredOnEntity => _currentHoveredEntity != null;
 
-    private static ITargetableEntity _currentHoveredEntity;
+    public static string FRIENDLY_TAG = "Friendly";
+    public static string MY_PLAYER_TAG = "Player";
+    public static string ENEMY_TAG = "Enemy";
 
 
 
@@ -40,7 +42,7 @@ public class TargetManager : MonoBehaviour
         }
         
         RaycastHit hit;
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray =  Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 100, layerMask) &&
             hit.transform.gameObject.TryGetComponent<ITargetableEntity>(out var target))
         {

@@ -17,10 +17,10 @@ public class HealthHUD : MonoBehaviour
 
    private void OnEnable()
    {
-      GameManager.Instance.ClientPlayer.CharacterStat.OnHealthChanged += UpdateHealth;
+      GameTest.LocalCharacter.CharacterStat.OnHealthChanged += UpdateHealth;
    }
    private void OnDisable()
    {
-      GameManager.Instance.ClientPlayer.CharacterStat.OnHealthChanged -= UpdateHealth;
+      GameTest.LocalCharacter.CharacterStat.OnHealthChanged -= UpdateHealth;
    }
 }

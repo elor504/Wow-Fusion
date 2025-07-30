@@ -13,6 +13,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [SerializeField] private CharacterClass characterClass;
     [SerializeField] private EntityStat characterStat;
     [SerializeField] private PlayerEquipment equipment;
+    [SerializeField] private PlayerCamera characterCamera;
     [Header("Transform references")] 
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Transform hitPosition;
@@ -28,11 +29,20 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public PlayerMovement GetMovement => movement;
     public CharacterVFXVisual CharacterVFXVisual => characterVFXVisual;
     public EntityStat CharacterStat => characterStat;
-    
-    
-    private void Start()
+    public PlayerCamera CharacterCamera => characterCamera;
+
+    public override void Spawned()
     {
+        base.Spawned();
         InitPlayer();
+        if(Object.HasStateAuthority)
+        {
+            gameObject.tag = TargetManager.MY_PLAYER_TAG;
+        }
+        else
+        {
+            gameObject.tag = TargetManager.FRIENDLY_TAG;
+        }
     }
 
     public void InitPlayer()
@@ -42,6 +52,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         
         characterClass.Init(baseClassData, characterStat);
         characterStat.Init(this,baseClassData.ClassBaseStats);
+
+
     }
     
     private void Update()
