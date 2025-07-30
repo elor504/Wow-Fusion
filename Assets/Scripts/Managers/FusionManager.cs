@@ -1,9 +1,11 @@
 using Fusion;
 using Fusion.Sockets;
+using PlayFab.MultiplayerModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Unity.Collections.Unicode;
 
 public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -28,26 +30,44 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
         DontDestroyOnLoad(this);
         GameTest.AddCallBacks(this);
     }
+	public async void ConnectToMainCity()
+	{
+		//loading screen
+		var result = await GameTest.GetMyRunner().StartGame(new StartGameArgs
+		{
+			SessionName = MainCityID,
+			GameMode = GameMode.Shared,
+			PlayerCount = 20
+		});
 
-    public async void ConnectToMainCity()
-    {
-        //loading screen
+		if (result.Ok)
+		{
+			Debug.Log($"Joined lobby: {GameTest.GetMyRunner().UserId}");
+		}
+		else
+		{
+			Debug.LogError($"Failed to join session lobby{result.ShutdownReason}");
+		}
+		//await Task.Run(() => JoinLobby(GameTest.GetMyRunner(), MainCityID));
+		LoadingScreen.Instance.LoadIntoOpenWorld();
 
-        await JoinLobby(GameTest.GetMyRunner(), MainCityID);
-     
-
-        //remove screens
-    }
+		//remove screens
+	}
     public async Task JoinLobby(NetworkRunner runner, string lobbyID)
     {
         try
         {
-            var result = await runner.JoinSessionLobby(SessionLobby.Shared, MainCityID);
+            // var result = await runner.JoinSessionLobby(SessionLobby.Shared, MainCityID);
+            var result = await runner.StartGame(new StartGameArgs
+            {
+                SessionName = lobbyID,
+                GameMode = GameMode.Shared,
+                PlayerCount = 20
+            });
 
             if (result.Ok)
             {
                 Debug.Log($"Joined lobby: {runner.UserId}");
-                LoadingScreen.Instance.LoadIntoOpenWorld();
             }
             else
             {
@@ -65,7 +85,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        throw new NotImplementedException();
+        
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
@@ -124,7 +144,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        throw new NotImplementedException();
+       
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
