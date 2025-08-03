@@ -29,14 +29,14 @@ public class PlayerBrain : BaseBrain
         _currentState?.EnterState();
     }
 
-    public override void UpdateState()
+    public override void UpdateState(float time)
     {
         _currentState?.UpdateState(Time.deltaTime);
     }
 
-    public override void FixedUpdateState()
+    public override void FixedUpdateState(float fixedDeltaTime)
     {
-        _currentState?.FixedUpdateState(Time.fixedDeltaTime);
+        _currentState?.FixedUpdateState(fixedDeltaTime);
     }
 
     public override void OnAnimationCallFunction(int eventID)

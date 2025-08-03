@@ -1,12 +1,10 @@
 using Fusion;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 {
-    [Header("References")] 
+    [Header("References")]
     [SerializeField] private PlayerAnimator animator;
     [SerializeField] private PlayerMovement movement;
     [SerializeField] private CharacterVFXVisual characterVFXVisual;
@@ -14,14 +12,15 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [SerializeField] private EntityStat characterStat;
     [SerializeField] private PlayerEquipment equipment;
     [SerializeField] private PlayerCamera characterCamera;
-    [Header("Transform references")] 
+    [SerializeField] private NetworkObject networkObject;
+    [Header("Transform references")]
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Transform hitPosition;
-    
+
     [Header("Temp references")]
     [SerializeField] private BaseClassData baseClassData;
-    
-    
+
+    private NetworkRunner _myRunner;
     private PlayerBrain _playerBrain;
 
 
@@ -30,18 +29,22 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public CharacterVFXVisual CharacterVFXVisual => characterVFXVisual;
     public EntityStat CharacterStat => characterStat;
     public PlayerCamera CharacterCamera => characterCamera;
+    public NetworkObject NetworkObject => networkObject;
 
     public override void Spawned()
     {
         base.Spawned();
-        InitPlayer();
-        if(Object.HasStateAuthority)
+
+        if (Object.HasInputAuthority)
         {
+            InitPlayer();
+            GameTest.LocalCharacter = this;
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
+            _myRunner = GameTest.GetMyRunner();
         }
         else
         {
-            gameObject.tag = TargetManager.FRIENDLY_TAG;
+            //gameObject.tag = TargetManager.FRIENDLY_TAG;
         }
     }
 
@@ -49,25 +52,30 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         _playerBrain = new PlayerBrain();
         _playerBrain.InitBrain(this);
-        
+
         characterClass.Init(baseClassData, characterStat);
-        characterStat.Init(this,baseClassData.ClassBaseStats);
-
-
+        characterStat.Init(this, baseClassData.ClassBaseStats);
     }
-    
+    public override void FixedUpdateNetwork()
+    {
+        base.FixedUpdateNetwork();
+        if (!Object.HasInputAuthority)
+            return;
+
+        _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
+    }
     private void Update()
     {
-        _playerBrain?.UpdateState();
+        if (!Object.HasInputAuthority)
+            return;
+
+        _playerBrain?.UpdateState(Time.deltaTime);
     }
-    private void FixedUpdate()
-    {
-        _playerBrain?.FixedUpdateState();
-    }
+
 
     public void LoadCharacterData(CharacterData data)
     {
-        characterStat.Init(this,data);
+        characterStat.Init(this, data);
         equipment.Init(data);
     }
 
@@ -79,7 +87,6 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             Debug.Log("Cannot cast spell");
         }
     }
-    
 
 
     public void OnTargeted()
@@ -94,16 +101,16 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public void OnStoppedHovering()
     {
     }
-    
+
     public void DealDamage(ITargetableEntity caster, int damage)
     {
         characterStat.DealDamage(damage);
     }
     public void Heal(ITargetableEntity caster)
     {
-        
+
     }
-    
+
     public bool CanBeTargeted()
     {
         return true;
@@ -120,8 +127,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         if (!characterStat.CanUseMana(amount))
             return false;
-        
-       // characterStat.UseMana(amount);
+
+        // characterStat.UseMana(amount);
         return true;
     }
 
@@ -147,7 +154,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
         return false;
     }
-    
+
     public int GetHealth()
     {
         return 0;
@@ -156,12 +163,11 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         return 0;
     }
-    
+
     public GameObject GetEntityGO()
     {
         return gameObject;
     }
-
     public Transform GetProjectileSpawnPosition()
     {
         return projectileSpawnPoint;

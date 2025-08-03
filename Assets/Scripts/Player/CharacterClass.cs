@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using UnityEditor.TextCore.Text;
 using UnityEngine;
 
 public class CharacterClass : MonoBehaviour

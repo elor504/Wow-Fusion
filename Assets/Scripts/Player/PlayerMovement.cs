@@ -9,10 +9,10 @@ public class PlayerMovement : MonoBehaviour
    private Vector2 _movementInput;
    public bool IsPressingMovement => _movementInput != Vector2.zero;
    
-   public void Move()
+   public void Move(float networkedTime)
    {
       Vector3 direction = new Vector3(_movementInput.x, 0f, _movementInput.y);
-      var velocity = direction * (moveSpeed * Time.deltaTime);
+      var velocity = direction * (moveSpeed * networkedTime);
 
       controller.Move(velocity);
    }

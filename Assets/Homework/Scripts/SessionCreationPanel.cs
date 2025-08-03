@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using WebSocketSharp;
 namespace Homework
 {
     public class SessionCreationPanel : MonoBehaviour
@@ -67,7 +66,7 @@ namespace Homework
         }
         private void MaxPlayerInputHandler(string input)
         {
-            if (input.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(input))
                 return;
 
             int amount = int.Parse(input);

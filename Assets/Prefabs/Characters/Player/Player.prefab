@@ -1251,6 +1251,7 @@ GameObject:
   - component: {fileID: 515138575013606575}
   - component: {fileID: 1375669553972253304}
   - component: {fileID: 1772457234645839868}
+  - component: {fileID: 7539860381683319314}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -1296,6 +1297,7 @@ MonoBehaviour:
   characterStat: {fileID: 1858899842764595908}
   equipment: {fileID: 1014140497616985380}
   characterCamera: {fileID: 0}
+  networkObject: {fileID: 1375669553972253304}
   projectileSpawnPoint: {fileID: 4218192414086152221}
   hitPosition: {fileID: 6670549599876932771}
   baseClassData: {fileID: 11400000, guid: 6d3aed36eca6f2046b8cbe7067102c0b, type: 2}
@@ -1472,6 +1474,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 3090110417922915932}
   - {fileID: 1772457234645839868}
+  - {fileID: 7539860381683319314}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &1772457234645839868
 MonoBehaviour:
@@ -1491,6 +1494,23 @@ MonoBehaviour:
   StateHashes: 000000002b1a167c794069554c617d567fd25861fbcb4cdc7fe89a33249a8c8fcf590472d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
   TriggerHashes: 0000000027286b35
   TotalWords: 4
+--- !u!114 &7539860381683319314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494308358068181615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &1555740705137505309
 GameObject:
   m_ObjectHideFlags: 0

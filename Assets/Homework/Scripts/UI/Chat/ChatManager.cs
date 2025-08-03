@@ -1,10 +1,8 @@
 using Homework;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using WebSocketSharp;
 
 public class ChatManager : MonoBehaviour
 {
@@ -35,7 +33,7 @@ public class ChatManager : MonoBehaviour
 
     public void SendMessageAll()
     {
-        if(_message.IsNullOrEmpty())
+        if(string.IsNullOrEmpty(_message))
         {
             return;
         }

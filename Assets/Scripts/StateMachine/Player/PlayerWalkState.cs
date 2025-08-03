@@ -39,7 +39,7 @@ public class PlayerWalkState : BaseState
         }
         
         
-        _brain.PlayerCharacter.GetMovement.Move();
+      
         _brain.PlayerCharacter.GetAnimator.UpdateMovementOnAnimator();
     }
 
@@ -51,7 +51,7 @@ public class PlayerWalkState : BaseState
 
     public override void FixedUpdateState(float fixedDeltaTime)
     {
-        
+        _brain.PlayerCharacter.GetMovement.Move(fixedDeltaTime);
     }
 
     public override bool CompareID(int id)

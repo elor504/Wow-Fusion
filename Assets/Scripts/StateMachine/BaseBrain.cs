@@ -5,8 +5,8 @@ using UnityEngine;
 public abstract class BaseBrain
 {
     public abstract void ChangeState(int state);
-    public abstract void UpdateState();
-    public abstract void FixedUpdateState();
+    public abstract void UpdateState(float time);
+    public abstract void FixedUpdateState(float fixedDeltaTime);
 
     public abstract void OnAnimationCallFunction(int eventID);
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using WebSocketSharp;
 
 namespace Homework
 {
@@ -115,7 +114,7 @@ namespace Homework
         }
         public void ChangeToSessionList(string lobbyID = "")
         {
-            if (!lobbyID.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(lobbyID))
                 _lobbyID = lobbyID;
             ChangeState(UIState.SessionList);
         }

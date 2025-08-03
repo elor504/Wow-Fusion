@@ -1,5 +1,6 @@
 using Fusion;
 using Fusion.Sockets;
+using Homework;
 using PlayFab.MultiplayerModels;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using static Unity.Collections.Unicode;
 
 public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-    private const string MainCityID = "MainCity";
+    private const string MainCityID = "Lobby_0";
 
     [SerializeField] private CharacterSpawnManager characterSpawnManager;
 
@@ -33,26 +34,36 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
         DontDestroyOnLoad(this);
         GameTest.AddCallBacks(this);
     }
+
+    public void ConnectToServer()
+    {
+        ConnectToMainCity();
+    }
+
+
 	public async void ConnectToMainCity()
 	{
-		//loading screen
-		var result = await GameTest.GetMyRunner().StartGame(new StartGameArgs
-		{
-			SessionName = MainCityID,
-			GameMode = GameMode.Shared,
-			PlayerCount = 20
-		});
+        Debug.Log("[Client] start connection to main city async");
+        //loading screen
+        var result = await GameTest.GetMyRunner().StartGame(new StartGameArgs
+        {
+            CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
+            SessionName = MainCityID,
+            GameMode = GameMode.Client,
+            PlayerCount = 20
+        }) ;
 
 		if (result.Ok)
 		{
-			Debug.Log($"Joined lobby: {GameTest.GetMyRunner().UserId}");
-		}
+			//Debug.Log($"Joined lobby: {GameTest.GetMyRunner().UserId}");
+            LoadingScreen.Instance.LoadIntoOpenWorld();
+        }
 		else
 		{
 			Debug.LogError($"Failed to join session lobby{result.ShutdownReason}");
 		}
 		//await Task.Run(() => JoinLobby(GameTest.GetMyRunner(), MainCityID));
-		LoadingScreen.Instance.LoadIntoOpenWorld();
+
 
 		//remove screens
 	}
@@ -88,7 +99,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        
+
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
@@ -121,7 +132,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
     }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
-        throw new NotImplementedException();
+        Debug.LogError($"[Fusion Manager] failed to connect : {reason}");
     }
 
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)

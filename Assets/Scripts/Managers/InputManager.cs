@@ -15,23 +15,20 @@ public class InputManager : MonoBehaviour
     
     public static event Action<Vector2> OnMovementInput;
     public static event Action<Vector2> OnStartedMovingInput;
-    
-    
-    
+        
     private bool _isHoldingRightMouseDown;
     private float _scroll;
     
     private List<HotKey> _hotKeysList = new List<HotKey>();
 
-
     public InputAction Movement;
     public InputAction MouseWheel;
     public InputAction HotKeys;
-    
-    
+     
     private bool _isMouseOverUI;
     public bool IsMouseOverUI => _isMouseOverUI;
 
+    private bool _denyInput;
 
 
     [Header("Testing")] 
@@ -57,8 +54,9 @@ public class InputManager : MonoBehaviour
     ///Try to place it on the new unity input system
     private void Update()
     {
-        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasStateAuthority)
+        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasStateAuthority || _denyInput)
             return;
+
 
         _isHoldingRightMouseDown = Input.GetMouseButton(1);
         
@@ -168,6 +166,17 @@ public class InputManager : MonoBehaviour
     public void OnOnMouseOnUI(bool value)
     {
         _isMouseOverUI = value;
+    }
+    /// <summary>
+    /// Incase we want to disable the player moving in the map and doing stuff example for loading scenes and ETC
+    /// </summary>
+    public void EnableDenyInput()
+    {
+        _denyInput = true;
+    }
+    public void DisableDenyInput()
+    {
+        _denyInput = false;
     }
 }
 

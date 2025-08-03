@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mechanic testing Scene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Server/Server_Scene.unity
+    guid: f071a15ad9c8e9243a6cbedb54fcc1ce
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c8b225505b15b884d968d6685ed11542, type: 2}
   m_UseUCBPForAssetBundles: 0

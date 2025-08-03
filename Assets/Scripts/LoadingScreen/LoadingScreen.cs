@@ -47,6 +47,7 @@ public class LoadingScreen : NetworkBehaviour
     {
         //show loading ui
         //wait untill the scene loads
+        Debug.Log("[LoadingScreen,Client] starting to load open world");
         loadingScreenUI.ShowLoadingScreenUI();
 		loadingScreenUI.UpdateLoadingProgressText("Scene loading", 0);
 		loadingScreenUI.UpdateLoadingBar(0,0,1);
@@ -62,12 +63,17 @@ public class LoadingScreen : NetworkBehaviour
         }
 
         yield return null;
-		//Spawn player
-		if (GameTest.LocalCharacter == null)
-        {
-            //var spawnTask = GameTest.GetMyRunner().SpawnAsync(playerPF);
 
-            GameTest.FusionManager.CharacterSpawnManager.RPC_RequestSpawnCharacter(Vector3.zero);
+
+        while(GameManager.Instance == null)
+        {
+            yield return null;
+        }
+        GameManager.Instance.InputManager.EnableDenyInput();
+        //Spawn player
+        if (GameTest.LocalCharacter == null)
+        {
+            //var spawnTask = serverRunner.SpawnAsync(playerPF);
             while (GameTest.LocalCharacter == null)
             {
                 yield return null;
@@ -76,9 +82,9 @@ public class LoadingScreen : NetworkBehaviour
         //place player at spawn position, or get last position and place it near the nearest spawn position
         //check spawn positions
         GameTest.LocalCharacter.transform.position = Vector3.zero;
-
+        GameTest.LocalCharacter.gameObject.SetActive(true);
         //camera
-        if(PlayerCamera.Instance)
+        if (PlayerCamera.Instance)
         {
             PlayerCamera.Instance.InitCamera(GameTest.LocalCharacter.transform);
         }
@@ -93,7 +99,10 @@ public class LoadingScreen : NetworkBehaviour
         //hide loading ui
         yield return new WaitForSeconds(1f);
         loadingScreenUI.HideLoadingScreenUI();
-		loadingCouru = null;
+        yield return null;
+        GameManager.Instance.InputManager.DisableDenyInput();
+
+        loadingCouru = null;
     }
 
 
