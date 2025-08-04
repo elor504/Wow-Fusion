@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 633000028}
   - component: {fileID: 633000030}
   - component: {fileID: 633000029}
+  - component: {fileID: 633000031}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -360,9 +361,27 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  enemy: {fileID: 1902192732}
   spellToTest: {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}
   selfBuffDataToTest: {fileID: 11400000, guid: a1fe0993149a7a449982ea86eb828e77, type: 2}
+--- !u!114 &633000031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633000027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3731107045
+  ObjectInterest: 1
+  Flags: 1
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 633000030}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &677593842
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,6 +611,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1406015857}
+  - component: {fileID: 1406015858}
   m_Layer: 0
   m_Name: =======Managers=======
   m_TagString: Untagged
@@ -619,6 +639,25 @@ Transform:
   - {fileID: 549508716}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1406015858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406015856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3778911125
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects:
+  - {fileID: 633000031}
+  NetworkedBehaviours: []
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &1597335578
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +823,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f12968639a28cee4990e47502926f0d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -1111,17 +1149,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1889313067}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1902192732 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5855447027307831159, guid: 254405a9efc28e94d8806964e09cc08a, type: 3}
-  m_PrefabInstance: {fileID: 7160933238076662007}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7bd638ecd3fec14f8366e598fb6e49f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4034313353472892335
 PrefabInstance:
   m_ObjectHideFlags: 0

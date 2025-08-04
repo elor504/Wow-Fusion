@@ -1,11 +1,14 @@
+using Fusion;
+using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 
-public class InputManager : MonoBehaviour
+public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 {
     public PlayerControls playerControls;
     
@@ -29,11 +32,9 @@ public class InputManager : MonoBehaviour
     public bool IsMouseOverUI => _isMouseOverUI;
 
     private bool _denyInput;
-
+    
 
     [Header("Testing")] 
-    //[SerializeField] private PlayerCharacter playerCharacter;
-    [SerializeField] private BasicEnemy enemy;
     [SerializeField] private ProjectileSpellData spellToTest;
     private ProjectileSpell projectileToTest;
     [SerializeField] private StatBuffData selfBuffDataToTest;
@@ -51,10 +52,11 @@ public class InputManager : MonoBehaviour
         _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID, SelfCast);
     }
     
+
     ///Try to place it on the new unity input system
     private void Update()
     {
-        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasStateAuthority || _denyInput)
+        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
             return;
 
 
@@ -64,10 +66,14 @@ public class InputManager : MonoBehaviour
             OnHoldingRightMouse?.Invoke();
 
         HandleMouseLeftClick();
-        OnMovementInput?.Invoke( Movement.ReadValue<Vector2>());
+      
     }
-    
-    
+    public override void FixedUpdateNetwork()
+    {
+        if (!GetInput<PlayerInput>(out var input)) return;
+        OnMovementInput?.Invoke(input.MovementInput);
+    }
+
     private void HandleMouseLeftClick()
     {
         ///Check only for targetable for now
@@ -178,6 +184,116 @@ public class InputManager : MonoBehaviour
     {
         _denyInput = false;
     }
+
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        var clientInput = new PlayerInput();
+
+        clientInput.MovementInput = Movement.ReadValue<Vector2>();
+
+        input.Set(clientInput);
+    }
+
+    private struct PlayerInput : INetworkInput
+    {
+        public Vector2 MovementInput;
+        public float RotationInput;
+        public Vector3 CharacterFoward;
+    }
+
+    #region unused
+    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+     
+    }
+
+    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+     
+    }
+
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+    {
+       
+    }
+
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    {
+       
+    }
+
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+    {
+      
+    }
+
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+    {
+       
+    }
+
+    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
+    {
+       
+    }
+
+    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
+    {
+        
+    }
+
+    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
+    {
+       
+    }
+
+    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
+    {
+      
+    }
+
+    public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
+    {
+       
+    }
+
+    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
+    {
+       
+    }
+
+    public void OnConnectedToServer(NetworkRunner runner)
+    {
+       
+    }
+
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+    {
+       
+    }
+
+    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
+    {
+      
+    }
+
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+    {
+      
+    }
+
+    public void OnSceneLoadDone(NetworkRunner runner)
+    {
+      
+    }
+
+    public void OnSceneLoadStart(NetworkRunner runner)
+    {
+       
+    }
+    #endregion
+
 }
 
 

@@ -79,6 +79,8 @@ public class LoadingScreen : NetworkBehaviour
                 yield return null;
             }
         }
+
+        GameTest.AddCallBacks(GameManager.Instance.InputManager);
         //place player at spawn position, or get last position and place it near the nearest spawn position
         //check spawn positions
         GameTest.LocalCharacter.transform.position = Vector3.zero;

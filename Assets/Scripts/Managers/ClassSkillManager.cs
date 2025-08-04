@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class ClassSkillManager : MonoBehaviour
 {
-    internal void Init()
+    public void Init()
     {
-        throw new NotImplementedException();
+        
     }
 }
