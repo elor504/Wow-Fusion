@@ -33,7 +33,7 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float smoothTime;
 
     public Camera GetCamera => camera;
-
+    public Vector3 Foward => transform.forward;
     private Coroutine zoomCoroutine;
     
     private Vector3 _cameraRotation;
@@ -81,12 +81,15 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
+        
+    }
+    private void LateUpdate()
+    {
         if (!playerTrans)
             return;
 
         UpdateCamera();
     }
-
     public void InitCamera(Transform playerToFollow)
     {
         playerTrans = playerToFollow;

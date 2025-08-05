@@ -55,12 +55,25 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     public override void FixedUpdateNetwork()
     {
-       if(GetInput(out PlayerInputStruct input))
-       {
-            OnMovementInput?.Invoke(input.MovementInput);
-            if(input.MovementInput != Vector2.zero)
-            Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
-       }
+        if (GetInput(out PlayerInputStruct input))
+        {
+            if (_isHoldingRightMouseDown)
+            {
+                Vector3 Foward = PlayerCamera.Instance.Foward;
+                Vector3 Right = PlayerCamera.Instance.transform.right;
+                Vector3 fowardRelativeVerticalInput = input.MovementInput.y * Foward;
+                Vector3 rightRelativeVerticalInput = input.MovementInput.x * Right;
+                Vector3 cameraRelativeMovement = fowardRelativeVerticalInput + rightRelativeVerticalInput;
+                OnMovementInput?.Invoke(cameraRelativeMovement);
+            }
+            else
+            {
+                OnMovementInput?.Invoke(input.MovementInput);
+            }
+
+            if (input.MovementInput != Vector2.zero)
+                Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
+        }
 
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
@@ -199,9 +212,9 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
 
 
-  
 
- 
+
+
 
     #region unused
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
