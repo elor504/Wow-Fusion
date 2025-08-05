@@ -59,6 +59,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         if (GetInput(out PlayerInputStruct input))
         {
+            _isHoldingRightMouseDown = input.MouseRightClick;
+
             if (_isHoldingRightMouseDown)
             {
                 Vector3 Foward = PlayerCamera.Instance.Foward;
