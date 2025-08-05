@@ -60,20 +60,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (GetInput(out PlayerInputStruct input))
         {
             _isHoldingRightMouseDown = input.MouseRightClick;
+            OnMovementInput?.Invoke(input.MovementInput);
 
-            if (_isHoldingRightMouseDown)
-            {
-                Vector3 Foward = PlayerCamera.Instance.Foward;
-                Vector3 Right = PlayerCamera.Instance.transform.right;
-                Vector3 fowardRelativeVerticalInput = input.MovementInput.y * Foward;
-                Vector3 rightRelativeVerticalInput = input.MovementInput.x * Right;
-                Vector3 cameraRelativeMovement = fowardRelativeVerticalInput + rightRelativeVerticalInput;
-                OnMovementInput?.Invoke(cameraRelativeMovement);
-            }
-            else
-            {
-                OnMovementInput?.Invoke(input.MovementInput);
-            }
 
             if (input.MovementInput != Vector2.zero)
                 Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
@@ -83,7 +71,18 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var clientInput = new PlayerInputStruct();
-        clientInput.MovementInput = Movement.ReadValue<Vector2>();
+
+        Vector2 movementInput = Movement.ReadValue<Vector2>();
+        if (_isHoldingRightMouseDown)
+        {
+            Vector3 Foward = PlayerCamera.Instance.Foward;
+            Vector3 Right = PlayerCamera.Instance.transform.right;
+            Vector3 fowardRelativeVerticalInput = movementInput.y * Foward;
+            Vector3 rightRelativeVerticalInput = movementInput.x * Right;
+            Vector3 cameraRelativeMovement = fowardRelativeVerticalInput + rightRelativeVerticalInput;
+            movementInput = cameraRelativeMovement;
+        }
+        clientInput.MovementInput = movementInput;
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
         input.Set(clientInput);
 
