@@ -72,7 +72,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var clientInput = new PlayerInputStruct();
 
-        Vector2 movementInput = _isHoldingRightMouseDown? Movement.ReadValue<Vector2>(): GetMovementRelativeToCamera(clientInput.MovementInput);
+        Vector2 movementInput = _isHoldingRightMouseDown? GetMovementRelativeToCamera(Movement.ReadValue<Vector2>()) : Movement.ReadValue<Vector2>();
 
         clientInput.MovementInput = movementInput;
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
