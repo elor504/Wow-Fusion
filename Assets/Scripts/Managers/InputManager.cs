@@ -49,7 +49,9 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         _isHoldingRightMouseDown = Input.GetMouseButton(1);
 
         if (_isHoldingRightMouseDown)
+        {
             OnHoldingRightMouse?.Invoke();
+        }
 
         HandleMouseLeftClick();
     }
@@ -80,7 +82,10 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var clientInput = new PlayerInputStruct();
         clientInput.MovementInput = Movement.ReadValue<Vector2>();
+        clientInput.MouseRightClick = _isHoldingRightMouseDown;
         input.Set(clientInput);
+
+        _isHoldingRightMouseDown = false;
 
         Debug.Log("[Client] Input sent");
     }
@@ -313,6 +318,7 @@ public struct PlayerInputStruct : INetworkInput
 {
     public Vector2 MovementInput;
     public float RotationInput;
+    public bool MouseRightClick;
     public Vector3 CharacterFoward;
 }
 
