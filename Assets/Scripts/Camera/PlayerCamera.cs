@@ -33,7 +33,7 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float smoothTime;
 
     public Camera GetCamera => camera;
-    public Vector3 Foward => transform.forward;
+    public Vector3 Foward => camera.transform.forward;
     private Coroutine zoomCoroutine;
     
     private Vector3 _cameraRotation;
