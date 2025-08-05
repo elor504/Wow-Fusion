@@ -88,7 +88,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         Vector3 Foward = PlayerCamera.Instance.Foward;
         Foward.y = 0;
         Foward.Normalize();
-        Vector3 Right = PlayerCamera.Instance.transform.right;
+        Vector3 Right = PlayerCamera.Instance.Right;
         Right.y = 0;
         Right.Normalize();
 

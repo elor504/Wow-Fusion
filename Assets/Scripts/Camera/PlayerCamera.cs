@@ -34,6 +34,7 @@ public class PlayerCamera : MonoBehaviour
 
     public Camera GetCamera => camera;
     public Vector3 Foward => camera.transform.forward;
+    public Vector3 Right => camera.transform.right;
     private Coroutine zoomCoroutine;
     
     private Vector3 _cameraRotation;
