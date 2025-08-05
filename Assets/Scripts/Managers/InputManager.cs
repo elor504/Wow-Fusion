@@ -85,10 +85,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     private Vector2 GetMovementRelativeToCamera(Vector2 movementInput)
     {
-        Vector3 Foward = PlayerCamera.Instance.Foward;
-        Foward.y = 0;
-      
-        return Foward.normalized;
+        Vector3 Foward = PlayerCamera.Instance.transform.forward;
+        Vector3 Right = PlayerCamera.Instance.transform.right;
+        Vector3 fowardRelativeVerticalInput = movementInput.y * Foward;
+        Vector3 rightRelativeVerticalInput = movementInput.x * Right;
+        Vector3 cameraRelativeMovement = fowardRelativeVerticalInput + rightRelativeVerticalInput;
+        return cameraRelativeMovement;
     }
 
     public override void Spawned()
