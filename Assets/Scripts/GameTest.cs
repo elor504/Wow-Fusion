@@ -60,6 +60,7 @@ public class GameTest
         }
         GameObject runnerObj = Object.Instantiate(new GameObject());
         var runner = runnerObj.AddComponent<NetworkRunner>();
+        runner.ProvideInput = true;
         runner.gameObject.name = "NetworkRunner";
         Debug.Log("Created new gameobject");
         return runner;

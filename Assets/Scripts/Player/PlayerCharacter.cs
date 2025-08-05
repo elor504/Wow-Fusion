@@ -13,6 +13,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [SerializeField] private PlayerEquipment equipment;
     [SerializeField] private PlayerCamera characterCamera;
     [SerializeField] private NetworkObject networkObject;
+    [SerializeField] private InputManager inputManager;
     [Header("Transform references")]
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Transform hitPosition;
@@ -30,6 +31,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public EntityStat CharacterStat => characterStat;
     public PlayerCamera CharacterCamera => characterCamera;
     public NetworkObject NetworkObject => networkObject;
+    public InputManager InputManager => inputManager;
 
     public override void Spawned()
     {
@@ -41,6 +43,10 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             GameTest.LocalCharacter = this;
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
+        }
+        else if(Object.HasStateAuthority)
+        {
+            _myRunner = NetworkRunner.GetRunnerForGameObject(gameObject);
         }
         else
         {
@@ -59,16 +65,11 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
-        if (!Object.HasInputAuthority)
-            return;
 
         _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
     }
     private void Update()
     {
-        if (!Object.HasInputAuthority)
-            return;
-
         _playerBrain?.UpdateState(Time.deltaTime);
     }
 

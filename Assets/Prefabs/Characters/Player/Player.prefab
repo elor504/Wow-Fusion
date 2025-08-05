@@ -1248,10 +1248,12 @@ GameObject:
   - component: {fileID: 1858899842764595908}
   - component: {fileID: 1014140497616985380}
   - component: {fileID: 4659427904211304433}
-  - component: {fileID: 515138575013606575}
   - component: {fileID: 1375669553972253304}
   - component: {fileID: 1772457234645839868}
-  - component: {fileID: 7539860381683319314}
+  - component: {fileID: 7347465352698932254}
+  - component: {fileID: 1369398142500631968}
+  - component: {fileID: 7533706926005682185}
+  - component: {fileID: 2010637626868590251}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -1298,6 +1300,7 @@ MonoBehaviour:
   equipment: {fileID: 1014140497616985380}
   characterCamera: {fileID: 0}
   networkObject: {fileID: 1375669553972253304}
+  inputManager: {fileID: 7347465352698932254}
   projectileSpawnPoint: {fileID: 4218192414086152221}
   hitPosition: {fileID: 6670549599876932771}
   baseClassData: {fileID: 11400000, guid: 6d3aed36eca6f2046b8cbe7067102c0b, type: 2}
@@ -1345,8 +1348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb110de141384054d81aa13473e78844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 515138575013606575}
-  moveSpeed: 1
+  controller: {fileID: 2010637626868590251}
+  moveSpeed: 20
 --- !u!114 &1858899842764595908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1430,31 +1433,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f87ae35dc200d40a5f73395b352acb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!143 &515138575013606575
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1494308358068181615}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1375669553972253304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1474,7 +1452,8 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 3090110417922915932}
   - {fileID: 1772457234645839868}
-  - {fileID: 7539860381683319314}
+  - {fileID: 7347465352698932254}
+  - {fileID: 2010637626868590251}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &1772457234645839868
 MonoBehaviour:
@@ -1494,7 +1473,7 @@ MonoBehaviour:
   StateHashes: 000000002b1a167c794069554c617d567fd25861fbcb4cdc7fe89a33249a8c8fcf590472d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
   TriggerHashes: 0000000027286b35
   TotalWords: 4
---- !u!114 &7539860381683319314
+--- !u!114 &7347465352698932254
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1503,14 +1482,113 @@ MonoBehaviour:
   m_GameObject: {fileID: 1494308358068181615}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: 4eec44c82623d58458fb75592c95bd93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMovement: {fileID: 0}
+  Movement:
+    m_Name: Movement
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f8e8335c-bbb8-4f74-b452-994201007f74
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  MouseWheel:
+    m_Name: Mouse Wheel
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f64cb39d-4825-492b-9b20-701bb34f0b74
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  HotKeys:
+    m_Name: Hot Keys
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e8fe7173-3fed-4dc2-8f60-eb2399fda0c0
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  spellToTest: {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}
+  selfBuffDataToTest: {fileID: 11400000, guid: a1fe0993149a7a449982ea86eb828e77, type: 2}
+--- !u!114 &1369398142500631968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494308358068181615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 9189c94e3d1081145959ecc0e7d0c658, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!143 &7533706926005682185
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494308358068181615}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.4
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &2010637626868590251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494308358068181615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 378411a89480da345945c2f888327a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _stateAuthorityChangeErrorCorrectionDelta: 0
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
+  gravity: -20
+  jumpImpulse: 8
+  acceleration: 10
+  braking: 10
+  maxSpeed: 2
+  rotationSpeed: 15
 --- !u!1 &1555740705137505309
 GameObject:
   m_ObjectHideFlags: 0

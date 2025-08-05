@@ -1,32 +1,34 @@
-using System;
+using Fusion;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-   [SerializeField] private CharacterController controller;
-   [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private NetworkCharacterController controller;
+    [SerializeField] private float moveSpeed = 10f;
 
-   private Vector2 _movementInput;
-   public bool IsPressingMovement => _movementInput != Vector2.zero;
-   
-   public void Move(float networkedTime)
-   {
-      Vector3 direction = new Vector3(_movementInput.x, 0f, _movementInput.y);
-      var velocity = direction * (moveSpeed * networkedTime);
+    private Vector2 _movementInput;
+    public bool IsPressingMovement => _movementInput != Vector2.zero;
 
-      controller.Move(velocity);
-   }
-   public void ListenToMovementInput(Vector2 movement)
-   {
-      _movementInput = movement;
-   }
-   private void OnEnable()
-   {
-      InputManager.OnMovementInput += ListenToMovementInput;
-   }
-   private void OnDisable()
-   {
-      InputManager.OnMovementInput -= ListenToMovementInput;
-   }
-   
+    public void Move(float networkedTime)
+    {
+        Vector3 direction = new Vector3(_movementInput.x, 0f, _movementInput.y);
+        var velocity = direction * (moveSpeed * networkedTime);
+        Debug.Log($"[PlayerMovement, Move Function] Move character: {velocity}");
+        controller.Move(velocity);
+    }
+    public void ListenToMovementInput(Vector2 movement)
+    {
+        _movementInput = movement;
+        if (_movementInput != Vector2.zero)
+            Debug.Log($"[PlayerMovement, ListenToMovementInput]Movement Input: {_movementInput}");
+    }
+    private void OnEnable()
+    {
+        InputManager.OnMovementInput += ListenToMovementInput;
+    }
+    private void OnDisable()
+    {
+        InputManager.OnMovementInput -= ListenToMovementInput;
+    }
+
 }

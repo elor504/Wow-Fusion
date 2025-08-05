@@ -220,7 +220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f552e9fed3506af4884c02b06a34ba57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputManager: {fileID: 633000030}
   targetManager: {fileID: 1683405676}
   skillManager: {fileID: 677593844}
   playerHUD: {fileID: 1275881867}
@@ -267,9 +266,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 633000028}
-  - component: {fileID: 633000030}
-  - component: {fileID: 633000029}
-  - component: {fileID: 633000031}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -292,96 +288,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1406015857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &633000029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633000027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 9189c94e3d1081145959ecc0e7d0c658, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
---- !u!114 &633000030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633000027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eec44c82623d58458fb75592c95bd93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Movement:
-    m_Name: Movement
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: f8e8335c-bbb8-4f74-b452-994201007f74
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  MouseWheel:
-    m_Name: Mouse Wheel
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: f64cb39d-4825-492b-9b20-701bb34f0b74
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  HotKeys:
-    m_Name: Hot Keys
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: e8fe7173-3fed-4dc2-8f60-eb2399fda0c0
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  spellToTest: {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}
-  selfBuffDataToTest: {fileID: 11400000, guid: a1fe0993149a7a449982ea86eb828e77, type: 2}
---- !u!114 &633000031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633000027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 3731107045
-  ObjectInterest: 1
-  Flags: 1
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 633000030}
-  ForceRemoteRenderTimeframe: 0
 --- !u!1 &677593842
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +517,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1406015857}
-  - component: {fileID: 1406015858}
   m_Layer: 0
   m_Name: =======Managers=======
   m_TagString: Untagged
@@ -639,25 +544,6 @@ Transform:
   - {fileID: 549508716}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1406015858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1406015856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 3778911125
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects:
-  - {fileID: 633000031}
-  NetworkedBehaviours: []
-  ForceRemoteRenderTimeframe: 0
 --- !u!1 &1597335578
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,6 @@ public class TargetManager : MonoBehaviour
     public LayerMask layerMask;
 
     private ITargetableEntity _currentTarget;
-    private InputManager _inputManager;
 
     public ITargetableEntity CurrentTarget => _currentTarget;
     public static bool IsHoveredOnEntity => _currentHoveredEntity != null;
@@ -30,13 +29,13 @@ public class TargetManager : MonoBehaviour
     }
 
    
-    public void Init()
-    {
-        _inputManager = GameManager.Instance.InputManager;
-    }
+
     public void ClickOnEntity()
     {
-        if (_inputManager.IsMouseOverUI)
+        if (GameTest.LocalCharacter == null)
+            return;
+
+        if (GameTest.LocalCharacter.InputManager.IsMouseOverUI)
         {
             return;
         }

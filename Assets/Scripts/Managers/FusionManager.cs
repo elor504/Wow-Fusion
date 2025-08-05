@@ -45,23 +45,23 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 	{
         Debug.Log("[Client] start connection to main city async");
         //loading screen
-        var result = await GameTest.GetMyRunner().StartGame(new StartGameArgs
-        {
-            CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
-            SessionName = MainCityID,
-            GameMode = GameMode.Client,
-            PlayerCount = 20
-        }) ;
+        //var result = await GameTest.GetMyRunner().StartGame(new StartGameArgs
+        //{
+        //    CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
+        //    SessionName = MainCityID,
+        //    GameMode = GameMode.Client,
+        //    PlayerCount = 20
+        //}) ;
 
-		if (result.Ok)
-		{
-			//Debug.Log($"Joined lobby: {GameTest.GetMyRunner().UserId}");
-            LoadingScreen.Instance.LoadIntoOpenWorld();
-        }
-		else
-		{
-			Debug.LogError($"Failed to join session lobby{result.ShutdownReason}");
-		}
+		//if (result.Ok)
+		//{
+		//	//Debug.Log($"Joined lobby: {GameTest.GetMyRunner().UserId}");
+          LoadingScreen.Instance.LoadIntoOpenWorld();
+  //      }
+		//else
+		//{
+		//	Debug.LogError($"Failed to join session lobby{result.ShutdownReason}");
+		//}
 		//await Task.Run(() => JoinLobby(GameTest.GetMyRunner(), MainCityID));
 
 
@@ -114,11 +114,11 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-        throw new NotImplementedException();
+       
     }
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        throw new NotImplementedException();
+       
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -128,7 +128,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-        throw new NotImplementedException();
+        Debug.Log($"Shutdown: {shutdownReason}");
     }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
@@ -148,7 +148,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
-        throw new NotImplementedException();
+        Debug.Log($"Shutdown: {reason}");
     }
 
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)

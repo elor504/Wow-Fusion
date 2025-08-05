@@ -17,10 +17,12 @@ public class ManaHUD : MonoBehaviour
 
     private void OnEnable()
     {
-        GameTest.LocalCharacter.CharacterStat.OnManaChanged += UpdateMana;
+        if (GameTest.LocalCharacter)
+            GameTest.LocalCharacter.CharacterStat.OnManaChanged += UpdateMana;
     }
     private void OnDisable()
     {
-        GameTest.LocalCharacter.CharacterStat.OnManaChanged -= UpdateMana;
+        if (GameTest.LocalCharacter)
+            GameTest.LocalCharacter.CharacterStat.OnManaChanged -= UpdateMana;
     }
 }

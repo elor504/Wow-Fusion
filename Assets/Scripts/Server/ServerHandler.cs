@@ -1,13 +1,16 @@
 using Fusion;
 using Fusion.Sockets;
+using PlayFab.MultiplayerModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static Unity.Collections.Unicode;
 
 public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
-    private static int CHANNEL_AMOUNT = 5;
+    private static int CHANNEL_AMOUNT = 1;
     private static int PLAYER_AMOUNT = 20;
     public static string CUSTOM_LOBBY_NAME = "MAIN_LOBBY";
     private Dictionary<string, SessionServerInfo> _sessionList = new Dictionary<string, SessionServerInfo>();
@@ -16,17 +19,16 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     private async void Awake()
     {
-#if UNITY_SERVER
+
         await CreateSessions();
-#else
-        
-#endif
+
     }
     private async Task CreateSessions()
     {
         for (int i = 0; i < CHANNEL_AMOUNT; i++)
         {
             await CreateNewSession($"Lobby_{i}");
+            Debug.Log($"Created new session: {"Lobby_" + i}");
         }
     }
 
@@ -34,27 +36,31 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         var newGO = new GameObject(sessionName + " Session");
         var networkRunner = newGO.AddComponent<NetworkRunner>();
+      
         _sessionList[sessionName] = new SessionServerInfo
         {
             sessionRunner = networkRunner,
             playersRefs = new List<PlayerRef>(),
-            playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>()
+            playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>(),
+            
 
         };
         await OpenNewSession(networkRunner, sessionName);
-        Debug.Log($"Created new session: {newGO.name}");
     }
     private async Task OpenNewSession(NetworkRunner runner, string sessionName)
     {
         runner.AddCallbacks(this);
+        int sceneIndex = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Main_City.unity");
         var gameArg = new StartGameArgs
         {
             CustomLobbyName = CUSTOM_LOBBY_NAME,
             SessionName = sessionName,
             GameMode = GameMode.Server,
-            PlayerCount = PLAYER_AMOUNT
+            PlayerCount = PLAYER_AMOUNT,
+            Scene = SceneRef.FromIndex(sceneIndex)
+
         };
-        var result = await runner.StartGame(gameArg);
+        await runner.StartGame(gameArg);
     }
 
     public void OnConnectedToServer(NetworkRunner runner)
@@ -66,14 +72,16 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log($"A player joined a session: {runner.IsServer} player: {player.PlayerId}");
         GetServerInfo(runner).playersRefs.Add(player);
         SpawnCharacter(runner, player);
-        // FusionManager.RPC_LoadMainCity(player,runner);
+
+        //int sceneIndex = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Main_City.unity");
+        //runner.LoadScene(SceneRef.FromIndex(sceneIndex));
     }
 
     private async void SpawnCharacter(NetworkRunner runner, PlayerRef player)
     {
         var spawnResult = await runner.SpawnAsync(characterPF, Vector3.zero, Quaternion.identity, player);
         GetServerInfo(runner).playersCharacters.Add(player, spawnResult.gameObject.GetComponent<PlayerCharacter>());
-        spawnResult.gameObject.SetActive(false);
+        GetServerInfo(runner).playersCharacters[player].InitPlayer();
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

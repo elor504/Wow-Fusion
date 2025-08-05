@@ -2,46 +2,78 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 
 public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 {
+    public PlayerMovement playerMovement;
     public PlayerControls playerControls;
-    
+
     public static event Action OnHoldingRightMouse;
     public static event Action OnClickLeftMouse;
     public static event Action<float> OnScroll;
-    
+
     public static event Action<Vector2> OnMovementInput;
     public static event Action<Vector2> OnStartedMovingInput;
-        
+
     private bool _isHoldingRightMouseDown;
     private float _scroll;
-    
+
     private List<HotKey> _hotKeysList = new List<HotKey>();
 
     public InputAction Movement;
     public InputAction MouseWheel;
     public InputAction HotKeys;
-     
+
     private bool _isMouseOverUI;
     public bool IsMouseOverUI => _isMouseOverUI;
 
     private bool _denyInput;
-    
 
-    [Header("Testing")] 
+
+    [Header("Testing")]
     [SerializeField] private ProjectileSpellData spellToTest;
     private ProjectileSpell projectileToTest;
     [SerializeField] private StatBuffData selfBuffDataToTest;
     [SerializeField] private SelfBuffSpell selfBuffToTest;
-    
-    public void Init()
+
+
+    ///Try to place it on the new unity input system
+    private void Update()
     {
+        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
+            return;
+
+        _isHoldingRightMouseDown = Input.GetMouseButton(1);
+
+        if (_isHoldingRightMouseDown)
+            OnHoldingRightMouse?.Invoke();
+
+        HandleMouseLeftClick();
+    }
+    public override void FixedUpdateNetwork()
+    {
+       if(GetInput(out PlayerInputStruct input))
+       {
+            OnMovementInput?.Invoke(input.MovementInput);
+            if(input.MovementInput != Vector2.zero)
+            Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
+       }
+
+    }
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        var clientInput = new PlayerInputStruct();
+        clientInput.MovementInput = Movement.ReadValue<Vector2>();
+        input.Set(clientInput);
+
+        Debug.Log("[Client] Input sent");
+    }
+    public override void Spawned()
+    {
+        base.Spawned();
         playerControls = new PlayerControls();
         projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
         selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
@@ -50,30 +82,9 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID, Attack);
         _hotKeysList.Add(new HotKey("2"));
         _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID, SelfCast);
+        Debug.Log("Spawned input manager");
+        GameTest.AddCallBacks(this);
     }
-    
-
-    ///Try to place it on the new unity input system
-    private void Update()
-    {
-        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
-            return;
-
-
-        _isHoldingRightMouseDown = Input.GetMouseButton(1);
-        
-        if (_isHoldingRightMouseDown)
-            OnHoldingRightMouse?.Invoke();
-
-        HandleMouseLeftClick();
-      
-    }
-    public override void FixedUpdateNetwork()
-    {
-        if (!GetInput<PlayerInput>(out var input)) return;
-        OnMovementInput?.Invoke(input.MovementInput);
-    }
-
     private void HandleMouseLeftClick()
     {
         ///Check only for targetable for now
@@ -81,11 +92,11 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         {
             OnClickLeftMouse?.Invoke();
         }
-        
+
         ///need to test with ui
-        
+
     }
-    
+
     private void OnClickedHotKey(InputAction.CallbackContext context)
     {
         var key = context.control.name;
@@ -120,12 +131,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
     }
-    
+
     private HotKey GetHotKey(string key)
     {
         return _hotKeysList.Find(hotKey => hotKey.HotKeyID == key);
     }
-    
+
     private void OnMouseWheelScroll(InputAction.CallbackContext context)
     {
         Vector2 scroll = context.action.ReadValue<Vector2>();
@@ -145,6 +156,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     private void OnEnable()
     {
+        if (playerControls == null)
+            playerControls = new PlayerControls();
         Movement = playerControls.Player.Move;
         MouseWheel = playerControls.Player.MouseWheel;
         HotKeys = playerControls.Player.NumKeys;
@@ -163,7 +176,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         playerControls.Disable();
         MouseWheel.Disable();
         HotKeys.Disable();
-        
+
         Movement.performed -= DetectMovementInput;
         MouseWheel.performed -= OnMouseWheelScroll;
         HotKeys.performed -= OnClickedHotKey;
@@ -186,116 +199,109 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
 
 
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-        var clientInput = new PlayerInput();
+  
 
-        clientInput.MovementInput = Movement.ReadValue<Vector2>();
-
-        input.Set(clientInput);
-    }
-
-    private struct PlayerInput : INetworkInput
-    {
-        public Vector2 MovementInput;
-        public float RotationInput;
-        public Vector3 CharacterFoward;
-    }
+ 
 
     #region unused
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
-     
+
     }
 
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
-     
+
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-       
+
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-       
+
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-      
+
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
-       
+
     }
 
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
     {
-       
+
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
-        
+
     }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
-       
+
     }
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
     {
-      
+
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
     {
-       
+
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
     {
-       
+
     }
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
-       
+
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-       
+
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
     {
-      
+
     }
 
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
-      
+
     }
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-      
+
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-       
+
     }
     #endregion
 
 }
-
+public struct PlayerInputStruct : INetworkInput
+{
+    public Vector2 MovementInput;
+    public float RotationInput;
+    public Vector3 CharacterFoward;
+}
 
 public class HotKey
 {
@@ -304,20 +310,20 @@ public class HotKey
     public event Action OnPressed;
 
     private string _hotKeyableID;
-    
-    
+
+
     public HotKey(string hotKeyID)
     {
         _hotKeyID = hotKeyID;
     }
-    
+
     public void Press()
     {
         OnPressed?.Invoke();
     }
 
 
-    public void AddHotkeyable(string hotKeyableID,Action action)
+    public void AddHotkeyable(string hotKeyableID, Action action)
     {
         _hotKeyableID = hotKeyableID;
         OnPressed += action;

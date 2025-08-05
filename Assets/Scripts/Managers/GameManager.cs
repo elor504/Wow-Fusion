@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
     public static GameManager Instance => _instance;
 
     [Header("Managers")]
-    [SerializeField] private InputManager inputManager;
+
     [SerializeField] private TargetManager targetManager;
     [SerializeField] private ClassSkillManager skillManager;
    
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
     [Header("Data")]
     [SerializeField] private CharacterVisualSO equipmentVisualData;
 
-    public InputManager InputManager => inputManager;
+
     public TargetManager TargetManager => targetManager;
     public ClassSkillManager ClassSkillManager => skillManager;
 
@@ -32,8 +32,6 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
     private void Awake()
     {
         Init();
-
-
         playerHUD.SetActive(true);
     }
 
@@ -48,8 +46,7 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
             Destroy(this);
         }
 
-        InputManager.Init();
-        targetManager.Init();
+        //targetManager.Init();
         skillManager.Init();
         GameTest.AddCallBacks(this);
     }
