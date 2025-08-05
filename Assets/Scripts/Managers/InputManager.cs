@@ -72,16 +72,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var clientInput = new PlayerInputStruct();
 
-        Vector2 movementInput = Movement.ReadValue<Vector2>();
-        if (_isHoldingRightMouseDown)
-        {
-            Vector3 Foward = PlayerCamera.Instance.Foward;
-            Vector3 Right = PlayerCamera.Instance.transform.right;
-            Vector3 fowardRelativeVerticalInput = movementInput.y * Foward;
-            Vector3 rightRelativeVerticalInput = movementInput.x * Right;
-            Vector3 cameraRelativeMovement = fowardRelativeVerticalInput + rightRelativeVerticalInput;
-            movementInput = cameraRelativeMovement;
-        }
+        Vector2 movementInput = _isHoldingRightMouseDown? Movement.ReadValue<Vector2>(): GetMovementRelativeToCamera(clientInput.MovementInput);
+
         clientInput.MovementInput = movementInput;
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
         input.Set(clientInput);
@@ -90,6 +82,17 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         Debug.Log("[Client] Input sent");
     }
+
+    private Vector2 GetMovementRelativeToCamera(Vector2 movementInput)
+    {
+        Vector3 Foward = PlayerCamera.Instance.Foward;
+        Vector3 Right = PlayerCamera.Instance.transform.right;
+        Vector3 fowardRelativeVerticalInput = movementInput.y * Foward;
+        Vector3 rightRelativeVerticalInput = movementInput.x * Right;
+        Vector3 cameraRelativeMovement = fowardRelativeVerticalInput + rightRelativeVerticalInput;
+        return cameraRelativeMovement;
+    }
+
     public override void Spawned()
     {
         base.Spawned();
