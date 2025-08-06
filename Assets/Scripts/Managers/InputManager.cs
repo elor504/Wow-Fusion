@@ -78,16 +78,14 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
 
         clientInput.MovementInput = movementInput;
-        Debug.Log($"[Client] player movement input After calculation: {movementInput}");
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
-        var foward = transform.forward;
-
+        var foward = PlayerCamera.Instance.Foward;
+        foward.y = 0;
         clientInput.CharacterFoward = foward;
+
         input.Set(clientInput);
 
         _isHoldingRightMouseDown = false;
-
-        Debug.Log("[Client] Input sent");
     }
     public Vector3 TranslatePlayerInputRelatedToPlayer(Vector2 playerInput)
     {
@@ -97,9 +95,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         Vector3 fwd = transform.forward;
         Vector3 right = transform.right;
         Vector3 move = fwd * verticalInput + right * horizontalInput;
-
-        Debug.Log($"Forward: {fwd}, Right: {right}, MoveRaw: {move}, Normalized: {move.normalized}");
-
 
         return move.normalized;
     }
