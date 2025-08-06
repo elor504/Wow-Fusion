@@ -28,11 +28,11 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnEnable()
     {
-        InputManager.OnMovementInput += ListenToMovementInput;
+        InputManager.OnMovementDirection += ListenToMovementInput;
     }
     private void OnDisable()
     {
-        InputManager.OnMovementInput -= ListenToMovementInput;
+        InputManager.OnMovementDirection -= ListenToMovementInput;
     }
 
 }

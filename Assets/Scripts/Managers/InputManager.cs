@@ -15,7 +15,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public static event Action OnClickLeftMouse;
     public static event Action<float> OnScroll;
 
-    public static event Action<Vector3> OnMovementInput;
+    public static event Action<Vector2> OnMovementInput;
+    public static event Action<Vector3> OnMovementDirection;
     public static event Action<Vector2> OnStartedMovingInput;
 
     private bool _isHoldingRightMouseDown;
@@ -62,6 +63,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             _isHoldingRightMouseDown = input.MouseRightClick;
             Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
             OnMovementInput?.Invoke(input.MovementInput);
+            OnMovementDirection?.Invoke(input.MovementDirection);
 
             if (_isHoldingRightMouseDown)
                 playerMovement.Rotate(input.CharacterFoward);
@@ -77,7 +79,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
 
-        clientInput.MovementInput = movementInput;
+        clientInput.MovementInput = Movement.ReadValue<Vector2>();
+        clientInput.MovementDirection = movementInput;
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
         var foward = PlayerCamera.Instance.Foward;
         foward.y = 0;
@@ -341,7 +344,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 }
 public struct PlayerInputStruct : INetworkInput
 {
-    public Vector3 MovementInput;
+    public Vector2 MovementInput;
+    public Vector3 MovementDirection;
     public float RotationInput;
     public bool MouseRightClick;
     public Vector3 CharacterFoward;
