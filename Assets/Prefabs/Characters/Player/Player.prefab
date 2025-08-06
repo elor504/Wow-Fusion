@@ -1349,7 +1349,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 2010637626868590251}
-  moveSpeed: 20
+  moveSpeed: 200
+  rotationSpeed: 50
 --- !u!114 &1858899842764595908
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -46,7 +46,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         }
         else if(Object.HasStateAuthority)
         {
-            _myRunner = NetworkRunner.GetRunnerForGameObject(gameObject);
+            _myRunner = Object.Runner;
         }
         else
         {

@@ -69,6 +69,7 @@ public class PlayerCamera : MonoBehaviour
 
         InputManager.OnScroll += HandleMouseWheel;
         InputManager.OnHoldingRightMouse += HandleCameraRotation;
+        InputManager.OnHoldingLeftMouseOnEmpty += HandleCameraRotation;
 
 
     }
@@ -77,6 +78,7 @@ public class PlayerCamera : MonoBehaviour
     {
         InputManager.OnScroll -= HandleMouseWheel;
         InputManager.OnHoldingRightMouse -= HandleCameraRotation;
+        InputManager.OnHoldingLeftMouseOnEmpty -= HandleCameraRotation;
     }
 
 
@@ -92,23 +94,6 @@ public class PlayerCamera : MonoBehaviour
         playerTrans = playerToFollow;
     }
 
-    public Vector3 TranslatePlayerInputRelatedToCamera(Vector2 playerInput)
-    {
-        int multiply = invertYAxis ? -1 : 1;
-
-        float fowardInput = playerInput.y;
-        float rightInput = playerInput.x;
-
-        Vector3 cameraFoward = camera.transform.forward;
-        cameraFoward.y = 0;
-        Vector3 cameraRight = camera.transform.right;
-        cameraRight.y = 0;
-
-        Vector3 fowardRelative = fowardInput * cameraFoward;
-        Vector3 rightRelative = rightInput * cameraRight;
-
-        return fowardRelative + rightRelative;
-    }
 
     private void UpdateCamera()
     {
@@ -117,8 +102,6 @@ public class PlayerCamera : MonoBehaviour
 
     private void HandleCameraRotation()
     {
-        ///Detect if mouse is on any ui
-        
         int multiply = invertYAxis ? -1 : 1;
         _mouseAxis.x = Input.GetAxis("Mouse Y") * cameraRotationXSpeed * multiply;
         _mouseAxis.y = Input.GetAxis("Mouse X") * cameraRotationYSpeed;

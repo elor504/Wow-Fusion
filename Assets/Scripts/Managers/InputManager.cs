@@ -12,15 +12,19 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public PlayerControls playerControls;
 
     public static event Action OnHoldingRightMouse;
+    public static event Action OnHoldingLeftMouseOnEmpty;
     public static event Action OnClickLeftMouse;
     public static event Action<float> OnScroll;
 
+    public static event Action<int, float> OnRotateCharacterInput;
     public static event Action<Vector2> OnMovementInput;
     public static event Action<Vector3> OnMovementDirection;
     public static event Action<Vector2> OnStartedMovingInput;
 
     private bool _isHoldingRightMouseDown;
+    private bool _isHoldingLeftMouseDown;
     private float _scroll;
+    private int _characterRotationInput;
 
     private List<HotKey> _hotKeysList = new List<HotKey>();
 
@@ -31,6 +35,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     private bool _isMouseOverUI;
     public bool IsMouseOverUI => _isMouseOverUI;
 
+
     private bool _denyInput;
 
 
@@ -40,22 +45,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] private StatBuffData selfBuffDataToTest;
     [SerializeField] private SelfBuffSpell selfBuffToTest;
 
-
-    ///Try to place it on the new unity input system
-    private void Update()
-    {
-        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
-            return;
-
-        _isHoldingRightMouseDown = Input.GetMouseButton(1);
-
-        if (_isHoldingRightMouseDown)
-        {
-            OnHoldingRightMouse?.Invoke();
-        }
-
-        HandleMouseLeftClick();
-    }
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out PlayerInputStruct input))
@@ -64,6 +53,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
             OnMovementInput?.Invoke(input.MovementInput);
             OnMovementDirection?.Invoke(input.MovementDirection);
+            OnRotateCharacterInput?.Invoke(input.RotationInput,Object.Runner.DeltaTime);
 
             if (_isHoldingRightMouseDown)
                 playerMovement.Rotate(input.CharacterFoward);
@@ -81,15 +71,46 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         clientInput.MovementInput = Movement.ReadValue<Vector2>();
         clientInput.MovementDirection = movementInput;
+
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
         var foward = PlayerCamera.Instance.Foward;
         foward.y = 0;
         clientInput.CharacterFoward = foward;
 
+        clientInput.RotationInput = _characterRotationInput;
+
         input.Set(clientInput);
 
         _isHoldingRightMouseDown = false;
     }
+
+    private void Update()
+    {
+        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
+            return;
+
+        HandleMouseRightClick();
+        HandleMouseLeftClick();
+        HandleCharacterRotationInput();
+    }
+
+    private void HandleCharacterRotationInput()
+    {
+        //Think of a better way ><
+        if (Input.GetKey(KeyCode.E))
+        {
+            _characterRotationInput = 1;
+        }
+        else if (Input.GetKey(KeyCode.Q))
+        {
+            _characterRotationInput = -1;
+        }
+        else if (_characterRotationInput != 0)
+        {
+            _characterRotationInput = 0;
+        }
+    }
+
     public Vector3 TranslatePlayerInputRelatedToPlayer(Vector2 playerInput)
     {
         float verticalInput = playerInput.y;
@@ -102,20 +123,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         return move.normalized;
     }
 
-    private Vector2 GetMovementRelativeToCamera(Vector2 movementInput)
-    {
-        Vector3 Foward = PlayerCamera.Instance.Foward;
-        Foward.y = 0;
-        Foward.Normalize();
-        Vector3 Right = PlayerCamera.Instance.Right;
-        Right.y = 0;
-        Right.Normalize();
-
-        Vector3 fowardRelativeVerticalInput = movementInput.y * Foward;
-        Vector3 rightRelativeVerticalInput = movementInput.x * Right;
-        Vector3 cameraRelativeMovement = fowardRelativeVerticalInput + rightRelativeVerticalInput;
-        return cameraRelativeMovement;
-    }
 
     public override void Spawned()
     {
@@ -133,15 +140,28 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     private void HandleMouseLeftClick()
     {
-        ///Check only for targetable for now
+        //TODO: make a way to skip a frame check to prevent holding if i only want to click
+        _isHoldingLeftMouseDown = Input.GetMouseButton(0);
+        if (_isHoldingLeftMouseDown && !_isMouseOverUI)
+        {
+            OnHoldingLeftMouseOnEmpty.Invoke();
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             OnClickLeftMouse?.Invoke();
         }
-
-        ///need to test with ui
-
     }
+    private void HandleMouseRightClick()
+    {
+        _isHoldingRightMouseDown = Input.GetMouseButton(1);
+        if (_isHoldingRightMouseDown)
+        {
+            OnHoldingRightMouse?.Invoke();
+        }
+    }
+
+
 
     private void OnClickedHotKey(InputAction.CallbackContext context)
     {
@@ -160,7 +180,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
                 break;
         }
     }
-
     public void Attack()
     {
         if (GameManager.Instance.TargetManager.CurrentTarget != null)
@@ -172,12 +191,10 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             Debug.Log("No target");
         }
     }
-
     public void SelfCast()
     {
         GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
     }
-
     private HotKey GetHotKey(string key)
     {
         return _hotKeysList.Find(hotKey => hotKey.HotKeyID == key);
@@ -188,18 +205,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         Vector2 scroll = context.action.ReadValue<Vector2>();
         OnScroll?.Invoke(scroll.y);
     }
-
-    private void MovementInput(InputAction.CallbackContext context)
-    {
-        Vector2 movementInput = context.ReadValue<Vector2>();
-        OnMovementInput.Invoke(movementInput);
-    }
-
     private void DetectMovementInput(InputAction.CallbackContext context)
     {
         Vector2 movementInput = context.ReadValue<Vector2>();
         OnStartedMovingInput?.Invoke(movementInput);
     }
+
     private void OnEnable()
     {
         if (playerControls == null)
@@ -346,7 +357,7 @@ public struct PlayerInputStruct : INetworkInput
 {
     public Vector2 MovementInput;
     public Vector3 MovementDirection;
-    public float RotationInput;
+    public int RotationInput;
     public bool MouseRightClick;
     public Vector3 CharacterFoward;
 }

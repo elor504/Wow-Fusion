@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private NetworkCharacterController controller;
     [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float rotationSpeed;
 
     private Vector3 _movementDirection;
     public bool IsPressingMovement => _movementDirection != Vector3.zero;
@@ -22,6 +23,12 @@ public class PlayerMovement : MonoBehaviour
         transform.forward = foward;
     }
 
+    public void RotateByInput(int direction,float networkedTime)
+    {
+        var currentRotation = transform.rotation;
+        currentRotation.y += direction * (rotationSpeed * networkedTime);
+        transform.Rotate(Vector3.up, currentRotation.y + direction * (rotationSpeed * networkedTime));
+    }
     public void ListenToMovementInput(Vector3 movement)
     {
         _movementDirection = movement;
@@ -29,10 +36,12 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         InputManager.OnMovementDirection += ListenToMovementInput;
+        InputManager.OnRotateCharacterInput += RotateByInput;
     }
     private void OnDisable()
     {
         InputManager.OnMovementDirection -= ListenToMovementInput;
+        InputManager.OnRotateCharacterInput -= RotateByInput;
     }
 
 }
