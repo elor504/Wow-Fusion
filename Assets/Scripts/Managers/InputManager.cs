@@ -74,12 +74,13 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var clientInput = new PlayerInputStruct();
+        Vector2 movementInput = Vector2.zero;
+        if (Movement.ReadValue<Vector2>() != Vector2.zero)
+            movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
 
-
-        Vector2 movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
         clientInput.MovementInput = movementInput;
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
-        var foward = PlayerCamera.Instance.Foward;
+        var foward = transform.forward;
         foward.y = 0;
         clientInput.CharacterFoward = foward;
         input.Set(clientInput);
@@ -97,7 +98,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         Vector3 playerFoward = transform.forward;
         Vector3 playerRight = transform.right;
 
-        return playerFoward * verticalInput + playerRight * horizontalInput;
+        return (playerFoward * verticalInput + playerRight * horizontalInput).normalized;
     }
 
     private Vector2 GetMovementRelativeToCamera(Vector2 movementInput)
