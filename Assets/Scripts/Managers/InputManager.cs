@@ -60,14 +60,13 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (GetInput(out PlayerInputStruct input))
         {
             _isHoldingRightMouseDown = input.MouseRightClick;
+            Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
             OnMovementInput?.Invoke(input.MovementInput);
 
             if (_isHoldingRightMouseDown)
                 playerMovement.Rotate(input.CharacterFoward);
 
 
-            if (input.MovementInput != Vector2.zero)
-                Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
         }
 
     }
@@ -82,7 +81,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         Debug.Log($"[Client] player movement input After calculation: {movementInput}");
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
         var foward = transform.forward;
-        
+
         clientInput.CharacterFoward = foward;
         input.Set(clientInput);
 
