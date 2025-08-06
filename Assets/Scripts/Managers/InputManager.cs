@@ -53,7 +53,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
             OnMovementInput?.Invoke(input.MovementInput);
             OnMovementDirection?.Invoke(input.MovementDirection);
-            OnRotateCharacterInput?.Invoke(input.RotationInput,Object.Runner.DeltaTime);
+            if (input.RotationInput != 0)
+                OnRotateCharacterInput?.Invoke(input.RotationInput, Object.Runner.DeltaTime);
 
             if (_isHoldingRightMouseDown)
                 playerMovement.Rotate(input.CharacterFoward);
