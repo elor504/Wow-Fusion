@@ -62,7 +62,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             _isHoldingRightMouseDown = input.MouseRightClick;
             OnMovementInput?.Invoke(input.MovementInput);
 
-            playerMovement.Rotate(input.CharacterFoward);
+            if (_isHoldingRightMouseDown)
+                playerMovement.Rotate(input.CharacterFoward);
 
 
             if (input.MovementInput != Vector2.zero)
@@ -75,7 +76,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         var clientInput = new PlayerInputStruct();
 
 
-        Vector2 movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>()) ;
+        Vector2 movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
         clientInput.MovementInput = movementInput;
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
         var foward = PlayerCamera.Instance.Foward;
@@ -90,18 +91,13 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public Vector3 TranslatePlayerInputRelatedToPlayer(Vector2 playerInput)
     {
 
-        float fowardInput = playerInput.y;
-        float rightInput = playerInput.x;
+        float verticalInput = playerInput.y;
+        float horizontalInput = playerInput.x;
 
         Vector3 playerFoward = transform.forward;
-        playerFoward.y = 0;
         Vector3 playerRight = transform.right;
-        playerRight.y = 0;
 
-        Vector3 fowardRelative = fowardInput * playerFoward;
-        Vector3 rightRelative = rightInput * playerRight;
-
-        return (fowardRelative + rightRelative).normalized;
+        return playerFoward * verticalInput + playerRight * horizontalInput;
     }
 
     private Vector2 GetMovementRelativeToCamera(Vector2 movementInput)
