@@ -25,8 +25,6 @@ public class PlayerMovement : MonoBehaviour
     public void ListenToMovementInput(Vector2 movement)
     {
         _movementInput = movement;
-        if (_movementInput != Vector2.zero)
-            Debug.Log($"[PlayerMovement, ListenToMovementInput]Movement Input: {_movementInput}");
     }
     private void OnEnable()
     {

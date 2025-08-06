@@ -75,13 +75,13 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var clientInput = new PlayerInputStruct();
         Vector2 movementInput = Vector2.zero;
-        if (Movement.ReadValue<Vector2>() != Vector2.zero)
-            movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
+
+        movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
 
         clientInput.MovementInput = movementInput;
+        Debug.Log($"[Client] player movement input After calculation: {movementInput}");
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
         var foward = transform.forward;
-        foward.y = 0;
         clientInput.CharacterFoward = foward;
         input.Set(clientInput);
 
@@ -91,7 +91,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     public Vector3 TranslatePlayerInputRelatedToPlayer(Vector2 playerInput)
     {
-
+        Debug.Log($"[Client] player movement input: {playerInput}");
         float verticalInput = playerInput.y;
         float horizontalInput = playerInput.x;
 
