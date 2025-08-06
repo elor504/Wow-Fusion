@@ -6,12 +6,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private NetworkCharacterController controller;
     [SerializeField] private float moveSpeed = 10f;
 
-    private Vector2 _movementInput;
-    public bool IsPressingMovement => _movementInput != Vector2.zero;
+    private Vector2 _movementDirection;
+    public bool IsPressingMovement => _movementDirection != Vector2.zero;
 
     public void Move(float networkedTime)
     {
-        Vector3 direction = _movementInput;
+        Vector3 direction = _movementDirection;
         direction.Normalize();
         var velocity = direction * (moveSpeed * networkedTime);
         Debug.Log($"[PlayerMovement, Move Function] Move character: {velocity}");
@@ -22,9 +22,9 @@ public class PlayerMovement : MonoBehaviour
         transform.forward = foward;
     }
 
-    public void ListenToMovementInput(Vector2 movement)
+    public void ListenToMovementInput(Vector3 movement)
     {
-        _movementInput = movement;
+        _movementDirection = movement;
     }
     private void OnEnable()
     {

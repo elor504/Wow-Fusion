@@ -15,7 +15,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public static event Action OnClickLeftMouse;
     public static event Action<float> OnScroll;
 
-    public static event Action<Vector2> OnMovementInput;
+    public static event Action<Vector3> OnMovementInput;
     public static event Action<Vector2> OnStartedMovingInput;
 
     private bool _isHoldingRightMouseDown;

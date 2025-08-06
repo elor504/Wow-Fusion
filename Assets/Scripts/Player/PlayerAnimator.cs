@@ -5,8 +5,8 @@ public class PlayerAnimator : MonoBehaviour
 {
    [SerializeField] private Animator animator;
 
-   private Vector2 _movementInput;
-   public Vector2 MovementInput => _movementInput;
+   private Vector3 _movementInput;
+   public Vector3 MovementInput => _movementInput;
 
 
    private static readonly int movementX = Animator.StringToHash("MovementX");
@@ -29,10 +29,10 @@ public class PlayerAnimator : MonoBehaviour
    public void UpdateMovementOnAnimator()
    {
       SetFloat(movementX, _movementInput.x);
-      SetFloat(movementY, _movementInput.y);
+      SetFloat(movementY, _movementInput.z);
    }
    
-   private void UpdateMovementInput(Vector2 input)
+   private void UpdateMovementInput(Vector3 input)
    {
       _movementInput = input;
    }
