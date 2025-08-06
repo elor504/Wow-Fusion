@@ -6,8 +6,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private NetworkCharacterController controller;
     [SerializeField] private float moveSpeed = 10f;
 
-    private Vector2 _movementDirection;
-    public bool IsPressingMovement => _movementDirection != Vector2.zero;
+    private Vector3 _movementDirection;
+    public bool IsPressingMovement => _movementDirection != Vector3.zero;
 
     public void Move(float networkedTime)
     {
