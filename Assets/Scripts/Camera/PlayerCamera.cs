@@ -80,10 +80,6 @@ public class PlayerCamera : MonoBehaviour
     }
 
 
-    private void Update()
-    {
-        
-    }
     private void LateUpdate()
     {
         if (!playerTrans)
@@ -96,6 +92,23 @@ public class PlayerCamera : MonoBehaviour
         playerTrans = playerToFollow;
     }
 
+    public Vector3 TranslatePlayerInputRelatedToCamera(Vector2 playerInput)
+    {
+        int multiply = invertYAxis ? -1 : 1;
+
+        float fowardInput = playerInput.y;
+        float rightInput = playerInput.x;
+
+        Vector3 cameraFoward = camera.transform.forward;
+        cameraFoward.y = 0;
+        Vector3 cameraRight = camera.transform.right;
+        cameraRight.y = 0;
+
+        Vector3 fowardRelative = fowardInput * cameraFoward;
+        Vector3 rightRelative = rightInput * cameraRight;
+
+        return fowardRelative + rightRelative;
+    }
 
     private void UpdateCamera()
     {
@@ -112,6 +125,7 @@ public class PlayerCamera : MonoBehaviour
         _cameraRotation += _mouseAxis * Time.deltaTime;
         _cameraRotation.x = Mathf.Clamp(_cameraRotation.x, yCameraRange.x, yCameraRange.y);
         transform.localEulerAngles = _cameraRotation;
+        Debug.Log($"[Player Camera] camera's foward: {transform.forward}");
     }
 
     

@@ -16,6 +16,11 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log($"[PlayerMovement, Move Function] Move character: {velocity}");
         controller.Move(velocity);
     }
+    public void Rotate(Vector3 foward)
+    {
+        transform.forward = foward;
+    }
+
     public void ListenToMovementInput(Vector2 movement)
     {
         _movementInput = movement;

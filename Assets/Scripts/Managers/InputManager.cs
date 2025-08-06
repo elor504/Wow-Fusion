@@ -62,6 +62,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             _isHoldingRightMouseDown = input.MouseRightClick;
             OnMovementInput?.Invoke(input.MovementInput);
 
+            playerMovement.Rotate(input.CharacterFoward);
+
 
             if (input.MovementInput != Vector2.zero)
                 Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
@@ -72,10 +74,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var clientInput = new PlayerInputStruct();
 
-        Vector2 movementInput = _isHoldingRightMouseDown? GetMovementRelativeToCamera(Movement.ReadValue<Vector2>()) : Movement.ReadValue<Vector2>();
+        Vector2 movementInput = _isHoldingRightMouseDown? PlayerCamera.Instance.TranslatePlayerInputRelatedToCamera(Movement.ReadValue<Vector2>()) : Movement.ReadValue<Vector2>();
 
         clientInput.MovementInput = movementInput;
         clientInput.MouseRightClick = _isHoldingRightMouseDown;
+        var foward = PlayerCamera.Instance.Foward;
+        clientInput.CharacterFoward = foward;
         input.Set(clientInput);
 
         _isHoldingRightMouseDown = false;

@@ -16,9 +16,10 @@ public class LoadingScreen : NetworkBehaviour
     private const string DUNGEON_SCENE = "DungeonScene";
 
 
-    private IEnumerator loadingCouru;
+    private bool _isLoadingScreenActive;
+    private IEnumerator _loadingCouru;
 
-
+    public bool IsLoadingScreenActive => _isLoadingScreenActive;
     private void Awake()
     {
         if (_instance == null)
@@ -34,15 +35,16 @@ public class LoadingScreen : NetworkBehaviour
 
     public void LoadIntoOpenWorld()
     {
-        if (loadingCouru != null)
-            StopCoroutine(loadingCouru);
+        if (_loadingCouru != null)
+            StopCoroutine(_loadingCouru);
 
-        loadingCouru = LoadOpenWorld();
-        StartCoroutine(loadingCouru);
+        _loadingCouru = LoadOpenWorld();
+        StartCoroutine(_loadingCouru);
     }
 
     private IEnumerator LoadOpenWorld()
     {
+        _isLoadingScreenActive = true;
         //show loading ui
         //wait untill the scene loads
         Debug.Log("[LoadingScreen,Client] starting to load open world");
@@ -101,10 +103,7 @@ public class LoadingScreen : NetworkBehaviour
         yield return null;
         GameTest.LocalCharacter.InputManager.DisableDenyInput();
 
-        loadingCouru = null;
+        _loadingCouru = null;
+        _isLoadingScreenActive = false;
     }
-
-
-
-
 }
