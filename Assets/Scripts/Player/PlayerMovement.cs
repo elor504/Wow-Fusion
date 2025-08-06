@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(float networkedTime)
     {
-        Vector3 direction = new Vector3(_movementInput.x, 0f, _movementInput.y);
+        Vector3 direction = _movementInput;
         direction.Normalize();
         var velocity = direction * (moveSpeed * networkedTime);
         Debug.Log($"[PlayerMovement, Move Function] Move character: {velocity}");

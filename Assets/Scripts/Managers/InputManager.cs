@@ -73,7 +73,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var clientInput = new PlayerInputStruct();
-        Vector2 movementInput = Vector2.zero;
+        Vector3 movementInput = Vector3.zero;
 
         movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
 
@@ -346,7 +346,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 }
 public struct PlayerInputStruct : INetworkInput
 {
-    public Vector2 MovementInput;
+    public Vector3 MovementInput;
     public float RotationInput;
     public bool MouseRightClick;
     public Vector3 CharacterFoward;
