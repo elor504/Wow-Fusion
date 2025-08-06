@@ -93,15 +93,15 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         float fowardInput = playerInput.y;
         float rightInput = playerInput.x;
 
-        Vector3 cameraFoward = transform.forward;
-        cameraFoward.y = 0;
-        Vector3 cameraRight = transform.right;
-        cameraRight.y = 0;
+        Vector3 playerFoward = transform.forward;
+        playerFoward.y = 0;
+        Vector3 playerRight = transform.right;
+        playerRight.y = 0;
 
-        Vector3 fowardRelative = fowardInput * cameraFoward;
-        Vector3 rightRelative = rightInput * cameraRight;
+        Vector3 fowardRelative = fowardInput * playerFoward;
+        Vector3 rightRelative = rightInput * playerRight;
 
-        return fowardRelative + rightRelative;
+        return (fowardRelative + rightRelative).normalized;
     }
 
     private Vector2 GetMovementRelativeToCamera(Vector2 movementInput)
