@@ -95,7 +95,7 @@ public class PlayerCastState : BaseState
         if (_pressedMovement)
         {
             _finishedCasting = false;
-            _playerBrain.ChangeState((int) PlayerStates.Idle);
+            _playerBrain.RPC_ChangeState((int) PlayerStates.Idle);
             return;
         }
         
@@ -107,7 +107,7 @@ public class PlayerCastState : BaseState
             _castTime = 0;
             
             _finishedCasting = true;
-            _playerBrain.ChangeState((int) PlayerStates.Idle);
+            _playerBrain.RPC_ChangeState((int) PlayerStates.Idle);
             return;
         }
     }

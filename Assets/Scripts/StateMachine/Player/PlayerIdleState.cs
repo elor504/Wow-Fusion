@@ -35,7 +35,7 @@ public class PlayerIdleState : BaseState
         {
             if (TryToChangeToMovementState())
             {
-                _brain.ChangeState((int)PlayerStates.Walk);
+                _brain.RPC_ChangeState((int)PlayerStates.Walk);
                 return;
             }
         }

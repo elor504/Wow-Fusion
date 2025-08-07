@@ -36,10 +36,10 @@ namespace StateMachine.Dragon
             idleState.InitState(this,animator);
             walkState.Init(this, rb, bodyTrans,animator);
 
-            ChangeState((int)DragonState.idle);
+            RPC_ChangeState((int)DragonState.idle);
         }
 
-        public override void ChangeState(int state)
+        public override void RPC_ChangeState(int state)
         {
             _currentState?.ExitState();
             _currentState = GetStateByID((DragonState)state);
@@ -54,7 +54,7 @@ namespace StateMachine.Dragon
             else
             {
                 //Roaming behaviour
-                ChangeState(Random.Range(0, 2));
+                RPC_ChangeState(Random.Range(0, 2));
             }
         }
         public override void FixedUpdateState(float fixedDeltaTime)

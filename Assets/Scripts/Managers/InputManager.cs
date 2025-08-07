@@ -215,7 +215,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_Attack(NetworkId networkID)
+    public void RPC_Attack(NetworkId networkID,RpcSources source = default)
     {
         var target = ServerHandler.Instance.GetEnemyByNetworkID(networkID,Object.Runner);
         character.CastSpell(projectileToTest, target);
