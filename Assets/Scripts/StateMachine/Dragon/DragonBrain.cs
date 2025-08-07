@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 namespace StateMachine.Dragon
 {
     public enum DragonState
@@ -14,14 +16,20 @@ namespace StateMachine.Dragon
     [Serializable]
     public class DragonBrain : BaseBrain
     {
+        [Header("References")]
+        [SerializeField] private Rigidbody rb;
+        [SerializeField] private Transform bodyTrans;
+
+        [Header("States")]
         [SerializeField] private DragonIdleState idleState;
+        [SerializeField] private DragonWalkState walkState;
 
         private BaseState _currentState;
         //TODO: make the dragon start the timer in the idle state only after the players aggro him (distance or damaging)
         public void Init()
         {
             idleState.InitState(this);
-
+            walkState.Init(this, rb, bodyTrans);
 
             ChangeState((int)DragonState.idle);
         }
@@ -40,7 +48,7 @@ namespace StateMachine.Dragon
         public override void FixedUpdateState(float fixedDeltaTime)
         {
             _currentState?.FixedUpdateState(fixedDeltaTime);
-        }    
+        }
         public override void UpdateState(float time)
         {
             _currentState?.UpdateState(time);
@@ -56,10 +64,13 @@ namespace StateMachine.Dragon
             {
                 case DragonState.idle:
                     return idleState;
+                case DragonState.Walk:
+                    walkState.SetTargetPosition(bodyTrans.position + Vector3.forward * Random.Range(1,3));
+                    return walkState;
             }
             return null;
         }
 
-        
+
     }
 }
