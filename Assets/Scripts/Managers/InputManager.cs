@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 {
+    [SerializeField] private PlayerCharacter character;
     public PlayerMovement playerMovement;
     public PlayerControls playerControls;
 
@@ -38,7 +39,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     private bool _denyInput;
 
-
     [Header("Testing")]
     [SerializeField] private ProjectileSpellData spellToTest;
     private ProjectileSpell projectileToTest;
@@ -61,7 +61,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
             if(input.PressedHotKeyOne)
             {
-                GetHotKey("1")?.Press();
+                //GetHotKey("1")?.Press();
             }
             if(input.PressedHotKeyTwo)
             {
@@ -87,8 +87,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         clientInput.RotationInput = _characterRotationInput;
 
-        clientInput.PressedHotKeyOne = _pressedHotKeyOne;
-        clientInput.PressedHotKeyTwo = _pressedHotKeyTwo;
+      //  clientInput.PressedHotKeyOne = _pressedHotKeyOne;
+       // clientInput.PressedHotKeyTwo = _pressedHotKeyTwo;
 
 
 
@@ -183,11 +183,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     private void OnClickedHotKey(InputAction.CallbackContext context)
     {
         var key = context.control.name;
+        //_targetObjectNetworkID = GameManager.Instance.TargetManager.CurrentTarget.GetNetworkID();
         switch (key)
         {
             case "1":
                 _pressedHotKeyOne = true;
-                //GetHotKey("1")?.Press();
+                GetHotKey("1")?.Press();
                 break;
             case "2":
                 _pressedHotKeyTwo = true;
@@ -199,17 +200,27 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
                 break;
         }
     }
+
+    
+
     public void Attack()
     {
         if (GameManager.Instance.TargetManager.CurrentTarget != null)
         {
-            GameTest.LocalCharacter.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
+            RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());    
         }
         else
         {
             Debug.Log("No target");
         }
     }
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_Attack(NetworkId networkID)
+    {
+        var target = ServerHandler.Instance.GetEnemyByNetworkID(networkID,Object.Runner);
+        character.CastSpell(projectileToTest, target);
+    }
+
     public void SelfCast()
     {
         GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
@@ -382,6 +393,7 @@ public struct PlayerInputStruct : INetworkInput
 
     public bool PressedHotKeyOne;
     public bool PressedHotKeyTwo;
+
 }
 
 public class HotKey

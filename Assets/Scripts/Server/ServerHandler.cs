@@ -1,15 +1,16 @@
 using Fusion;
 using Fusion.Sockets;
-using PlayFab.MultiplayerModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Unity.Collections.Unicode;
 
 public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
+    private static ServerHandler _instance;
+    public static ServerHandler Instance => _instance;
+
     private static int CHANNEL_AMOUNT = 1;
     private static int PLAYER_AMOUNT = 20;
     public static string CUSTOM_LOBBY_NAME = "MAIN_LOBBY";
@@ -19,10 +20,36 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     private async void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         await CreateSessions();
 
     }
+
+    public void AddEnemyNetworkID(NetworkId networkID,DragonEnemy enemy,NetworkRunner serverRunner)
+    {
+        GetServerInfo(serverRunner).dragonEntity[networkID] = enemy;
+        Debug.Log($"[Server Handler] Registered enemy entity: {enemy.transform.name} into the server enemy dictionary, Server name: {serverRunner.SessionInfo.Name}");
+    }
+    public void RemoveEnemyNetworkID(NetworkId networkID, NetworkRunner serverRunner)
+    {
+        GetServerInfo(serverRunner).dragonEntity.Remove(networkID);
+    }
+
+    public DragonEnemy GetEnemyByNetworkID(NetworkId networkID, NetworkRunner serverRunner)
+    { 
+        return GetServerInfo(serverRunner).dragonEntity[networkID];
+    }
+
     private async Task CreateSessions()
     {
         for (int i = 0; i < CHANNEL_AMOUNT; i++)
@@ -31,18 +58,17 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
             Debug.Log($"Created new session: {"Lobby_" + i}");
         }
     }
-
     private async Task CreateNewSession(string sessionName)
     {
         var newGO = new GameObject(sessionName + " Session");
         var networkRunner = newGO.AddComponent<NetworkRunner>();
-      
+
         _sessionList[sessionName] = new SessionServerInfo
         {
             sessionRunner = networkRunner,
             playersRefs = new List<PlayerRef>(),
             playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>(),
-            
+            dragonEntity = new Dictionary<NetworkId, DragonEnemy>()
 
         };
         await OpenNewSession(networkRunner, sessionName);
@@ -62,6 +88,10 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         };
         await runner.StartGame(gameArg);
     }
+
+
+
+
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -201,6 +231,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         public NetworkRunner sessionRunner;
         public List<PlayerRef> playersRefs;
         public Dictionary<PlayerRef, PlayerCharacter> playersCharacters;
+        public Dictionary<NetworkId, DragonEnemy> dragonEntity;
     }
 
 

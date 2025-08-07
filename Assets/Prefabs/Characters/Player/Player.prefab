@@ -1486,6 +1486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eec44c82623d58458fb75592c95bd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 3090110417922915932}
   playerMovement: {fileID: 163371969025237802}
   Movement:
     m_Name: Movement

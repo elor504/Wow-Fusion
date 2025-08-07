@@ -1,3 +1,4 @@
+using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
 {
     [Header("References")] [SerializeField]
     private GameObject hoveringVisual;
+    [SerializeField] private NetworkObject networkObj;
 
     [SerializeField] private GameObject beingTargetedVisual;
     [SerializeField] private Transform projectileSpawn;
@@ -146,5 +148,10 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         TargetManager.SetCurrentHoveredEntity(null);
+    }
+
+    public NetworkId GetNetworkId()
+    {
+        return networkObj.Id;
     }
 }

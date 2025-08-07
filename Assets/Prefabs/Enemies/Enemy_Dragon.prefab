@@ -2874,6 +2874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: {fileID: 4815025298118810345}
+  networkObject: {fileID: 6919534075827677563}
   hoveringVisual: {fileID: 8518718917931710376}
   beingTargetedVisual: {fileID: 5217130478491299851}
   hitPosition: {fileID: 5710750942424469939}
@@ -2890,6 +2891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 037e58732ec58fc4dbff7dec7cd9c6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 7134543898082133891}
   dragonBrain:
     actor: {fileID: 8358105044349586380}
     rb: {fileID: 4104489624287654719}

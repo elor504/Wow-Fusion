@@ -177,4 +177,9 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         return hitPosition;
     }
+
+    public NetworkId GetNetworkId()
+    {
+        return networkObject.Id;
+    }
 }

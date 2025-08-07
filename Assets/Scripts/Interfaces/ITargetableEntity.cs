@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,10 @@ public interface ITargetableEntity : ITargetable
 
     public bool TryGetEntityStat(out EntityStat entityStat);
     public bool TryGetEntityVisualPosition(out CharacterVFXVisual vfxVisual);
+
     public GameObject GetEntityGO();
     public Transform GetProjectileSpawnPosition();
     public Transform GetHitPosition();
+
+    public NetworkId GetNetworkId();
 }

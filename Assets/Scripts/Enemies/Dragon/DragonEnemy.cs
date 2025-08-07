@@ -1,3 +1,4 @@
+using Fusion;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -5,7 +6,7 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
 {
     [Header("References")]
     [SerializeField] private EnemyHealth health;
-
+    [SerializeField] private NetworkObject networkObject;
 
     [Header("Targetable")]
     [SerializeField] private GameObject hoveringVisual;
@@ -107,5 +108,10 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
     public void OnPointerExit(PointerEventData eventData)
     {
         TargetManager.SetCurrentHoveredEntity(null);
+    }
+
+    public NetworkId GetNetworkId()
+    {
+        return networkObject.Id;
     }
 }

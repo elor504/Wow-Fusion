@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DragonActor : NetworkBehaviour
 {
+    [SerializeField] private DragonEnemy enemy;
     [Header("Brain")]
     [SerializeField] private DragonBrain dragonBrain;
     [Header("Roaming Settings")]
@@ -20,6 +21,7 @@ public class DragonActor : NetworkBehaviour
         {
             _serverRunner = Object.Runner;
             dragonBrain.Init();
+            ServerHandler.Instance.AddEnemyNetworkID(enemy.GetNetworkId(), enemy, _serverRunner);
             Debug.Log("[DragonActor] has been initialized at the server");
         }
     }
