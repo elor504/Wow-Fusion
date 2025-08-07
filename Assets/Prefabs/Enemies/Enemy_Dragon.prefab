@@ -2891,6 +2891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragonBrain:
+    actor: {fileID: 8358105044349586380}
     rb: {fileID: 4104489624287654719}
     bodyTrans: {fileID: 3644735014078371505}
     animator: {fileID: 317907028980627323}
@@ -2900,7 +2901,9 @@ MonoBehaviour:
       minRandomActionTime: 6
     walkState:
       stateID: 0
-      movementSpeed: 10
+      movementSpeed: 2
+  roamingTrans: {fileID: 0}
+  roamingRadius: 0
 --- !u!114 &4815025298118810345
 MonoBehaviour:
   m_ObjectHideFlags: 0

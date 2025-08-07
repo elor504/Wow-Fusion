@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class DragonActor : NetworkBehaviour
 {
+    [Header("Brain")]
     [SerializeField] private DragonBrain dragonBrain;
+    [Header("Roaming Settings")]
+    [SerializeField] private Transform roamingTrans;
+    [SerializeField] private float roamingRadius;
 
     private NetworkRunner _serverRunner;
 
@@ -31,5 +35,19 @@ public class DragonActor : NetworkBehaviour
         if (!Object.HasStateAuthority) return;
         base.FixedUpdateNetwork();
         dragonBrain.FixedUpdateState(_serverRunner.DeltaTime);
+    }
+    public Vector3 GetWalkTargetPosition()
+    {
+        var position = roamingTrans.position + Random.onUnitSphere * roamingRadius;
+        position.y = 0;
+        return position;
+    }
+
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!roamingTrans) return;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(roamingTrans.position, roamingRadius);
     }
 }

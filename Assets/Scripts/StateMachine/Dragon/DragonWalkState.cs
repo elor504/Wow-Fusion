@@ -56,9 +56,9 @@ namespace StateMachine.Dragon
 
             var MovePosition = _rb.position + _direction * fixedDeltaTime * movementSpeed;
 
-			_rb.MovePosition(MovePosition);
+			_rb.Move(MovePosition,Quaternion.LookRotation(_direction));
 
-            if (Vector3.Distance(_dragonTrans.position, _targetPosition) < 0.01f)
+            if (Vector3.Distance(_dragonTrans.position, _targetPosition) < 0.2f)
             {
                 _brain.ChooseRandomBehaviour();
             }

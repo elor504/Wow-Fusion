@@ -17,6 +17,7 @@ namespace StateMachine.Dragon
     public class DragonBrain : BaseBrain
     {
         [Header("References")]
+        [SerializeField] private DragonActor actor;
         [SerializeField] private Rigidbody rb;
         [SerializeField] private Transform bodyTrans;
         [SerializeField] private Animator animator;
@@ -59,6 +60,11 @@ namespace StateMachine.Dragon
 
         }
 
+        public Vector3 GetRandomWalkPosition()
+        {
+            return actor.GetWalkTargetPosition();
+        }
+
         private BaseState GetStateByID(DragonState state)
         {
             switch (state)
@@ -66,7 +72,7 @@ namespace StateMachine.Dragon
                 case DragonState.idle:
                     return idleState;
                 case DragonState.Walk:
-                    walkState.SetTargetPosition(bodyTrans.position + Vector3.forward * Random.Range(1,3));
+                    walkState.SetTargetPosition(GetRandomWalkPosition());
                     return walkState;
             }
             return null;
