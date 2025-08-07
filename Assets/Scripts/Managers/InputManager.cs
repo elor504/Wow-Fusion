@@ -59,7 +59,14 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             if (_isHoldingRightMouseDown)
                 playerMovement.Rotate(input.CharacterFoward);
 
-
+            if(input.PressedHotKeyOne)
+            {
+                GetHotKey("1")?.Press();
+            }
+            if(input.PressedHotKeyTwo)
+            {
+                GetHotKey("2")?.Press();
+            }
         }
 
     }
@@ -80,9 +87,16 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         clientInput.RotationInput = _characterRotationInput;
 
+        clientInput.PressedHotKeyOne = _pressedHotKeyOne;
+        clientInput.PressedHotKeyTwo = _pressedHotKeyTwo;
+
+
+
         input.Set(clientInput);
 
         _isHoldingRightMouseDown = false;
+        _pressedHotKeyOne = false;
+        _pressedHotKeyTwo = false;
     }
 
     private void Update()
@@ -163,6 +177,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
 
 
+    private bool _pressedHotKeyOne;
+    private bool _pressedHotKeyTwo;
 
     private void OnClickedHotKey(InputAction.CallbackContext context)
     {
@@ -170,10 +186,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         switch (key)
         {
             case "1":
-                GetHotKey("1")?.Press();
+                _pressedHotKeyOne = true;
+                //GetHotKey("1")?.Press();
                 break;
             case "2":
-                GetHotKey("2")?.Press();
+                _pressedHotKeyTwo = true;
+                //GetHotKey("2")?.Press();
                 break;
             case "3":
                 break;
@@ -361,6 +379,9 @@ public struct PlayerInputStruct : INetworkInput
     public int RotationInput;
     public bool MouseRightClick;
     public Vector3 CharacterFoward;
+
+    public bool PressedHotKeyOne;
+    public bool PressedHotKeyTwo;
 }
 
 public class HotKey
