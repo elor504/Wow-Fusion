@@ -71,12 +71,12 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
 
     public void OnStopTargeting()
     {
-        hoveringVisual.SetActive(false);
+        beingTargetedVisual.SetActive(false);
     }
 
     public void OnTargeted()
     {
-        hoveringVisual.SetActive(true);
+        beingTargetedVisual.SetActive(true);
     }
 
     public bool IsAlly()
