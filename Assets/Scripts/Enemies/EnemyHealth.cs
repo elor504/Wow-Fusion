@@ -4,10 +4,12 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
 
-    private int maxHealth;
+    [SerializeField] private int maxHealth;
     [Networked] public int CurrentHP { get; private set; }
 
     public bool IsDead => CurrentHP <= 0;
+
+
 
     public void Init(int maxHP)
     {
@@ -26,6 +28,7 @@ public class EnemyHealth : MonoBehaviour
             CurrentHP = 0;
             //Death
         }
+        Debug.Log($"[EnemyHealth] Dealing damage to enemy, damage: {damage}, hp left: {CurrentHP}");
 
     }
 
