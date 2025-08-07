@@ -44,7 +44,7 @@ namespace StateMachine.Dragon
         public void ChooseRandomBehaviour()
         {
             //TODO: Small random for the attacks (less hp maybe more aggro)
-            ChangeState((int)DragonState.idle);
+            ChangeState( Random.Range(0,2));
         }
         public override void FixedUpdateState(float fixedDeltaTime)
         {
