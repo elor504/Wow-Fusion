@@ -6,38 +6,41 @@ namespace StateMachine.Dragon
     [Serializable]
     public class DragonIdleState : BaseState
     {
-        [SerializeField] private int stateID;
+        //References
+        private DragonBrain _brain;
+        private Animator _animator;
 
+        [SerializeField] private int stateID;
         [SerializeField] private float maxRandomActionTime = 10f;
         [SerializeField] private float minRandomActionTime = 6f;
 
-        private DragonBrain _brain;
+        private float _actionCounter;
+
+        private static int IdleStateVariable = Animator.StringToHash("Idle");
 
 
-
-        private float actionCounter;
-
-        public void InitState(DragonBrain brain)
+        public void InitState(DragonBrain brain, Animator animator)
         {
             _brain = brain;
+            _animator = animator;
         }
 
         public override void EnterState()
         {
-            actionCounter = Random.Range(minRandomActionTime, maxRandomActionTime);
+            _actionCounter = Random.Range(minRandomActionTime, maxRandomActionTime);
+            _animator.SetBool(IdleStateVariable, true);
             Debug.Log("[DragonIdleState] Enter state");
-            //Set Animator 
         }
         public override void ExitState()
         {
+            _animator.SetBool(IdleStateVariable, false);
             Debug.Log("[DragonIdleState] Exit state");
-            //Set Animator 
         }
 
         public override void FixedUpdateState(float fixedDeltaTime)
         {
-            actionCounter -= fixedDeltaTime;
-            if (actionCounter <= 0)
+            _actionCounter -= fixedDeltaTime;
+            if (_actionCounter <= 0)
             {
                 _brain.ChooseRandomBehaviour();
                 Debug.Log("[DragonIdleState]Change state");

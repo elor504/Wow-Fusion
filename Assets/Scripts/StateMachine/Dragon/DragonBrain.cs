@@ -19,6 +19,7 @@ namespace StateMachine.Dragon
         [Header("References")]
         [SerializeField] private Rigidbody rb;
         [SerializeField] private Transform bodyTrans;
+        [SerializeField] private Animator animator;
 
         [Header("States")]
         [SerializeField] private DragonIdleState idleState;
@@ -28,8 +29,8 @@ namespace StateMachine.Dragon
         //TODO: make the dragon start the timer in the idle state only after the players aggro him (distance or damaging)
         public void Init()
         {
-            idleState.InitState(this);
-            walkState.Init(this, rb, bodyTrans);
+            idleState.InitState(this,animator);
+            walkState.Init(this, rb, bodyTrans,animator);
 
             ChangeState((int)DragonState.idle);
         }
