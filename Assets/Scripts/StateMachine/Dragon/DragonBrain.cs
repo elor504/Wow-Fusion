@@ -27,6 +27,9 @@ namespace StateMachine.Dragon
         [SerializeField] private DragonWalkState walkState;
 
         private BaseState _currentState;
+
+        private bool _isAggressive;//TODO: This is the trigger for him to act differently
+
         //TODO: make the dragon start the timer in the idle state only after the players aggro him (distance or damaging)
         public void Init()
         {
@@ -44,8 +47,15 @@ namespace StateMachine.Dragon
         }
         public void ChooseRandomBehaviour()
         {
-            //TODO: Small random for the attacks (less hp maybe more aggro)
-            ChangeState( Random.Range(0,2));
+            if (_isAggressive)
+            {
+                //TODO: Aggressive Behaviour
+            }
+            else
+            {
+                //Roaming behaviour
+                ChangeState(Random.Range(0, 2));
+            }
         }
         public override void FixedUpdateState(float fixedDeltaTime)
         {
