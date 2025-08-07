@@ -2835,6 +2835,7 @@ GameObject:
   - component: {fileID: 5335095589796439855}
   - component: {fileID: 4104489624287654719}
   - component: {fileID: 8016832304983831937}
+  - component: {fileID: 588154456446514106}
   m_Layer: 10
   m_Name: Enemy_Dragon
   m_TagString: Entity_Enemy
@@ -2926,6 +2927,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 8358105044349586380}
   - {fileID: 5335095589796439855}
+  - {fileID: 588154456446514106}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &5335095589796439855
 MonoBehaviour:
@@ -2967,8 +2969,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2993,3 +2995,26 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &588154456446514106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9213060443913266577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 1
+  _interpolationTarget: {fileID: 0}
+  UsePreciseRotation: 0
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01
