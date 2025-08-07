@@ -33,7 +33,7 @@ public class PlayerWalkState : BaseState
         {
             if (TryToChangeToIdleState())
             {
-                _brain.RPC_ChangeState((int)PlayerStates.Idle);
+                _brain.ChangeState((int)PlayerStates.Idle);
                 return;
             }
         }

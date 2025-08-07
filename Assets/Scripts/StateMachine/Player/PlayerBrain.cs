@@ -20,10 +20,10 @@ public class PlayerBrain : BaseBrain
         _playerStates.Add(new PlayerWalkState((int) PlayerStates.Walk, this));
         _playerStates.Add(new PlayerCastState((int) PlayerStates.Cast, this));
 
-        RPC_ChangeState((int) PlayerStates.Idle);
+        ChangeState((int) PlayerStates.Idle);
     }
-    [Rpc(RpcSources.StateAuthority,RpcTargets.All)]
-    public override void RPC_ChangeState(int state)
+
+    public override void ChangeState(int state)
     {
         _currentState?.ExitState();
         _currentState = GetStateByID(state);
@@ -51,7 +51,7 @@ public class PlayerBrain : BaseBrain
         if (!IsInCastingState() && castState is PlayerCastState playerCastState && spell.CanCast(caster, target))
         {
             playerCastState.SetSpellToCast(spell,caster,target);
-            RPC_ChangeState(castStateIndex);
+            ChangeState(castStateIndex);
 
             return true;
         }

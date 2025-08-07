@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
@@ -207,7 +208,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         if (GameManager.Instance.TargetManager.CurrentTarget != null)
         {
-            RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());    
+            RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
+            character.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
         }
         else
         {
