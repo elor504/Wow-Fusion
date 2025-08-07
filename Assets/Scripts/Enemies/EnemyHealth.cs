@@ -9,8 +9,12 @@ public class EnemyHealth : MonoBehaviour
 
     public bool IsDead => CurrentHP <= 0;
 
-
-
+    //TEMP
+    private void Awake()
+    {
+        Init(maxHealth);
+    }
+    //TODO: Call this function from the Dungeon/Raid manager
     public void Init(int maxHP)
     {
         maxHealth = maxHP;
