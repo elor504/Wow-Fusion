@@ -19,7 +19,7 @@ namespace StateMachine.Dragon
 
         [SerializeField] private float movementSpeed;
 
-        private Vector2 _direction;
+        private Vector3 _direction;
         private Vector3 _targetPosition;
 
         public void Init(DragonBrain brain, Rigidbody rb, Transform dragonTrans, Animator animator)
@@ -53,7 +53,10 @@ namespace StateMachine.Dragon
         public override void FixedUpdateState(float fixedDeltaTime)
         {
             _direction = (_targetPosition - _dragonTrans.position).normalized;
-            _rb.MovePosition(_direction * (movementSpeed * fixedDeltaTime));
+
+            var MovePosition = _rb.position + _direction * fixedDeltaTime * movementSpeed;
+
+			_rb.MovePosition(MovePosition);
 
             if (Vector3.Distance(_dragonTrans.position, _targetPosition) < 0.01f)
             {
