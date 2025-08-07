@@ -1,65 +1,69 @@
-using StateMachine.Dragon;
+using System;
 using UnityEngine;
 
-public class DragonWalkState : BaseState
+namespace StateMachine.Dragon
 {
-    private static int WalkStateVariable = Animator.StringToHash("Walk");
-
-    //References
-    private DragonBrain _brain;
-    private Rigidbody _rb;
-    private Transform _dragonTrans;
-    private Animator _animator;
-
-    [Header("State Settings")]
-    [SerializeField] private int stateID;
-
-    [SerializeField] private float movementSpeed;
-
-    private Vector2 _direction;
-    private Vector3 _targetPosition;
-
-    public void Init(DragonBrain brain, Rigidbody rb,Transform dragonTrans,Animator animator)
+    [Serializable]
+    public class DragonWalkState : BaseState
     {
-        _brain = brain;
-        _rb = rb;
-        _dragonTrans = dragonTrans;
-        _animator = animator;
-    }
+        private static int WalkStateVariable = Animator.StringToHash("Walk");
 
-    public override bool CompareID(int id)
-    {
-        return stateID == id;
-    }
+        //References
+        private DragonBrain _brain;
+        private Rigidbody _rb;
+        private Transform _dragonTrans;
+        private Animator _animator;
 
-    public override void EnterState()
-    {
-        _animator.SetBool(WalkStateVariable, true);
-    }
+        [Header("State Settings")]
+        [SerializeField] private int stateID;
 
-    public override void ExitState()
-    {
-        _animator.SetBool(WalkStateVariable, false);
-    }
-    public void SetTargetPosition(Vector3 targetPosition)
-    {
-        _targetPosition = targetPosition;
-        _targetPosition.y = 0;
-    }
+        [SerializeField] private float movementSpeed;
 
-    public override void FixedUpdateState(float fixedDeltaTime)
-    {
-        _direction = (_targetPosition - _dragonTrans.position ).normalized;
-        _rb.MovePosition(_direction * (movementSpeed * fixedDeltaTime));
+        private Vector2 _direction;
+        private Vector3 _targetPosition;
 
-        if(Vector3.Distance(_dragonTrans.position, _targetPosition) < 0.01f)
+        public void Init(DragonBrain brain, Rigidbody rb, Transform dragonTrans, Animator animator)
         {
-            _brain.ChooseRandomBehaviour();
+            _brain = brain;
+            _rb = rb;
+            _dragonTrans = dragonTrans;
+            _animator = animator;
         }
-    }
 
-    public override void UpdateState(float deltaTime)
-    {
-       
+        public override bool CompareID(int id)
+        {
+            return stateID == id;
+        }
+
+        public override void EnterState()
+        {
+            _animator.SetBool(WalkStateVariable, true);
+        }
+
+        public override void ExitState()
+        {
+            _animator.SetBool(WalkStateVariable, false);
+        }
+        public void SetTargetPosition(Vector3 targetPosition)
+        {
+            _targetPosition = targetPosition;
+            _targetPosition.y = 0;
+        }
+
+        public override void FixedUpdateState(float fixedDeltaTime)
+        {
+            _direction = (_targetPosition - _dragonTrans.position).normalized;
+            _rb.MovePosition(_direction * (movementSpeed * fixedDeltaTime));
+
+            if (Vector3.Distance(_dragonTrans.position, _targetPosition) < 0.01f)
+            {
+                _brain.ChooseRandomBehaviour();
+            }
+        }
+
+        public override void UpdateState(float deltaTime)
+        {
+
+        }
     }
 }

@@ -2898,6 +2898,9 @@ MonoBehaviour:
       stateID: 0
       maxRandomActionTime: 10
       minRandomActionTime: 6
+    walkState:
+      stateID: 0
+      movementSpeed: 10
 --- !u!114 &4815025298118810345
 MonoBehaviour:
   m_ObjectHideFlags: 0
