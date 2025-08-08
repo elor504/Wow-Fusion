@@ -8,6 +8,7 @@ public class PlayerCastState : BaseState
     private PlayerBrain _playerBrain;
     private EntityStat _characterStat;
     private InputManager _inputManager;
+    private PlayerAnimator _playerAnimator;
     private bool _finishedCasting;
     private bool _pressedMovement;
     private int _id;
@@ -38,6 +39,7 @@ public class PlayerCastState : BaseState
     {
         _playerBrain = playerBrain;
         _inputManager = _playerBrain.PlayerCharacter.InputManager;
+        _playerAnimator = _playerBrain.PlayerCharacter.GetAnimator;
         _id = id;
         _characterStat = _playerBrain.PlayerCharacter.CharacterStat;
         AttemptToAddHandsToVFXList();
@@ -59,9 +61,9 @@ public class PlayerCastState : BaseState
         _finishedCasting = false;
         Debug.Log("Entering Cast State");
         TryToAddHandVFX();
-        
-        _playerBrain.PlayerCharacter.GetAnimator.SetBool(Cast,true);
-        _playerBrain.PlayerCharacter.GetAnimator.SetTrigger(StartCasting);
+
+        _playerAnimator.SetBool(Cast,true);
+        _playerAnimator.SetTrigger(StartCasting);
         
         StartCastHandler?.Invoke(_castTime,_castTime);
     }
@@ -84,7 +86,7 @@ public class PlayerCastState : BaseState
             handVFX.StopParticleSystem();
         }
         _handVFXs.Clear();
-        _playerBrain.PlayerCharacter.GetAnimator.SetBool(Cast,false);
+        _playerAnimator.SetBool(Cast,false);
 
         _pressedMovement = false;
         
@@ -146,6 +148,7 @@ public class PlayerCastState : BaseState
     
     private bool TryToAddHandVFX()
     {
+        //TODO Server spawn vfx locally
         _handVFXs.Clear();
         
         if (_handVFX == null)
