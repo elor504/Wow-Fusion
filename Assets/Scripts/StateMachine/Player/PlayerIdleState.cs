@@ -9,7 +9,6 @@ public class PlayerIdleState : BaseState
     private int _id;
     private PlayerBrain _brain;
     private PlayerAnimator _animator;
-    private NetworkMecanimAnimator _mecanimAnimator;
     private PlayerMovement _movement;
     private InputManager _inputManager;
 
@@ -22,21 +21,20 @@ public class PlayerIdleState : BaseState
         _animator = _brain.PlayerCharacter.GetAnimator;
         _movement = _brain.PlayerCharacter.GetMovement;
         _inputManager = _brain.PlayerCharacter.InputManager;
-        _mecanimAnimator = _animator.GetAnimator.GetComponent<NetworkMecanimAnimator>();
+
     }
     
     public override void EnterState()
     {
         Debug.Log($"[Player Idle State] Enter state");
-        //_animator.SetBool(Idle,true);
-        _mecanimAnimator.Animator.SetBool(Idle,true);
+        _animator.SetBool(Idle,true);
+
     }
 
     public override void ExitState()
     {
         Debug.Log($"[Player Idle State] Exit state");
-        //_animator.SetBool(Idle,false);
-        _mecanimAnimator.Animator.SetBool(Idle, false);
+        _animator.SetBool(Idle,false);
     }
 
     public override void UpdateState(float deltaTime)
