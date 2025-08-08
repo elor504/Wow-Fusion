@@ -1249,7 +1249,6 @@ GameObject:
   - component: {fileID: 1014140497616985380}
   - component: {fileID: 4659427904211304433}
   - component: {fileID: 1375669553972253304}
-  - component: {fileID: 1772457234645839868}
   - component: {fileID: 7347465352698932254}
   - component: {fileID: 1369398142500631968}
   - component: {fileID: 7533706926005682185}
@@ -1452,28 +1451,10 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 3090110417922915932}
-  - {fileID: 1772457234645839868}
   - {fileID: 7347465352698932254}
   - {fileID: 2010637626868590251}
+  - {fileID: 3565475899856392749}
   ForceRemoteRenderTimeframe: 0
---- !u!114 &1772457234645839868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1494308358068181615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Animator: {fileID: 5819242086079178730}
-  ApplyTiming: 2
-  SyncSettings: 79
-  StateHashes: 000000002b1a167c794069554c617d567fd25861fbcb4cdc7fe89a33249a8c8fcf590472d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
-  TriggerHashes: 0000000027286b35
-  TotalWords: 4
 --- !u!114 &7347465352698932254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1823,6 +1804,7 @@ GameObject:
   - component: {fileID: 7481809739153484982}
   - component: {fileID: 5193696491558285291}
   - component: {fileID: 5819242086079178730}
+  - component: {fileID: 3565475899856392749}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -1882,6 +1864,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3565475899856392749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009175978097344086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 5819242086079178730}
+  ApplyTiming: 2
+  SyncSettings: 79
+  StateHashes: 000000002b1a167c794069554c617d567fd25861fbcb4cdc7fe89a33249a8c8fcf590472d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
+  TriggerHashes: 0000000027286b35
+  TotalWords: 4
 --- !u!1 &2116207090642043302
 GameObject:
   m_ObjectHideFlags: 0
