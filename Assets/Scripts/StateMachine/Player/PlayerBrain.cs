@@ -53,7 +53,8 @@ public class PlayerBrain : BaseBrain
         if (!IsInCastingState() && castState is PlayerCastState playerCastState && spell.CanCast(caster, target))
         {
             playerCastState.SetSpellToCast(spell,caster,target);
-            ChangeState(castStateIndex);
+            _playerCharacter.CurrentState = castStateIndex;
+            //ChangeState(castStateIndex);
 
             return true;
         }
