@@ -248,7 +248,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public void DebugTarget()
     {
-        Debug.Log($"[InputManager] {gameObject.name} Successfully updated current targetID");
+        Debug.Log($"[InputManager] {gameObject.name} Successfully updated current targetID: {targetID}");
     }
 
     public void Attack()
@@ -279,12 +279,15 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     public void SetTargetNetworkID(ITargetableEntity target)
     {
-        if (target != null)
+        
+        if (target != default)
         {
             targetID = target.GetNetworkId();
+            Debug.Log($"[InputManager] Succesfully found a target: {targetID} ");
         }
         else
         {
+            Debug.Log($"[InputManager] target is null");
             targetID = default;
         }
     }
