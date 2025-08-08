@@ -1303,6 +1303,7 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 4218192414086152221}
   hitPosition: {fileID: 6670549599876932771}
   baseClassData: {fileID: 11400000, guid: 6d3aed36eca6f2046b8cbe7067102c0b, type: 2}
+  _CurrentState: 0
 --- !u!114 &924406234744575382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1315,6 +1316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180ebcfe74f35c145a1e11ea6bf7bbd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputManager: {fileID: 7347465352698932254}
   animator: {fileID: 5819242086079178730}
 --- !u!114 &9085191246481254314
 MonoBehaviour:
@@ -1348,6 +1350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 2010637626868590251}
+  inputManager: {fileID: 7347465352698932254}
   moveSpeed: 200
   rotationSpeed: 50
 --- !u!114 &1858899842764595908
