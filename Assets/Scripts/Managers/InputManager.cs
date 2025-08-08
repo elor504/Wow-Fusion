@@ -282,15 +282,24 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         
         if (target != default)
         {
-            targetID = target.GetNetworkId();
+            RPC_SetTarget(target.GetNetworkId());
+            //targetID = target.GetNetworkId();
             Debug.Log($"[InputManager] Succesfully found a target: {targetID} ");
         }
         else
         {
+            RPC_SetTarget(default);
+            //targetID = default;
             Debug.Log($"[InputManager] target is null");
-            targetID = default;
         }
     }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetTarget(NetworkId targetId)
+    {
+        targetID = targetId;
+    }
+
 
     private void OnMouseWheelScroll(InputAction.CallbackContext context)
     {
