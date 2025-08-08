@@ -1,4 +1,5 @@
 using Fusion;
+using System;
 using UnityEngine;
 
 public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
@@ -23,6 +24,13 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     private NetworkRunner _myRunner;
     private PlayerBrain _playerBrain;
 
+    [Networked,OnChangedRender(nameof(CharacterNicknameChange))]
+    public string CharacterName { get; set; }
+
+    private void CharacterNicknameChange()
+    {
+        gameObject.name = $"Player: {CharacterName}";
+    }
 
     public PlayerAnimator GetAnimator => animator;
     public PlayerMovement GetMovement => movement;
