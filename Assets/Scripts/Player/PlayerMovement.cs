@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private NetworkCharacterController controller;
+    [SerializeField] private InputManager inputManager;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float rotationSpeed;
 
@@ -35,13 +36,13 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnEnable()
     {
-        InputManager.OnMovementDirection += ListenToMovementInput;
-        InputManager.OnRotateCharacterInput += RotateByInput;
+        inputManager.OnMovementDirection += ListenToMovementInput;
+        inputManager.OnRotateCharacterInput += RotateByInput;
     }
     private void OnDisable()
     {
-        InputManager.OnMovementDirection -= ListenToMovementInput;
-        InputManager.OnRotateCharacterInput -= RotateByInput;
+        inputManager.OnMovementDirection -= ListenToMovementInput;
+        inputManager.OnRotateCharacterInput -= RotateByInput;
     }
 
 }

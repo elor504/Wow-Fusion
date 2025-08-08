@@ -12,15 +12,15 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public PlayerMovement playerMovement;
     public PlayerControls playerControls;
 
-    public static event Action OnHoldingRightMouse;
-    public static event Action OnHoldingLeftMouseOnEmpty;
-    public static event Action OnClickLeftMouse;
-    public static event Action<float> OnScroll;
+    public event Action OnHoldingRightMouse;
+    public event Action OnHoldingLeftMouseOnEmpty;
+    public event Action OnClickLeftMouse;
+    public event Action<float> OnScroll;
 
-    public static event Action<int, float> OnRotateCharacterInput;
-    public static event Action<Vector2> OnMovementInput;
-    public static event Action<Vector3> OnMovementDirection;
-    public static event Action<Vector2> OnStartedMovingInput;
+    public event Action<int, float> OnRotateCharacterInput;
+    public event Action<Vector2> OnMovementInput;
+    public  event Action<Vector3> OnMovementDirection;
+    public event Action<Vector2> OnStartedMovingInput;
 
     private bool _pressedHotKeyOne;
     private bool _pressedHotKeyTwo;
@@ -62,8 +62,13 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         {
             _isHoldingRightMouseDown = input.MouseRightClick;
             Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
-            OnMovementInput?.Invoke(input.MovementInput);
+
+          
+            //OnMovementInput?.Invoke(input.MovementInput);
             OnMovementDirection?.Invoke(input.MovementDirection);
+
+
+
             if (input.RotationInput != 0)
                 OnRotateCharacterInput?.Invoke(input.RotationInput, Object.Runner.DeltaTime);
 
