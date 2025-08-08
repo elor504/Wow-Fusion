@@ -46,6 +46,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             GameTest.LocalCharacter = this;
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
+            InitPlayer();
         }
         else if(Object.HasStateAuthority)
         {

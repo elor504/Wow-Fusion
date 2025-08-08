@@ -417,7 +417,7 @@ BlendTree:
     m_DirectBlendParameter: MovementX
     m_Mirror: 0
   m_BlendParameter: MovementX
-  m_BlendParameterY: MovementZ
+  m_BlendParameterY: MovementY
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
