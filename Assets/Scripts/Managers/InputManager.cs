@@ -55,7 +55,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public override void FixedUpdateNetwork()
     {
-        if (!Object.HasInputAuthority)
+        if (!Object.HasStateAuthority)
             return;
 
 
