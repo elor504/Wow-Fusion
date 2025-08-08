@@ -80,6 +80,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+
+
         var clientInput = new PlayerInputStruct();
         Vector3 movementInput = Vector3.zero;
 
