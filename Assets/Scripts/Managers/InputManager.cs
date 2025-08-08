@@ -253,10 +253,11 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public void Attack()
     {
-        if (GameManager.Instance.TargetManager.CurrentTarget != null)
+        if (targetID != default)
         {
             //RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
-            character.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
+            var targetGO = ServerHandler.Instance.GetEnemyByNetworkID(targetID, Object.Runner);
+            character.CastSpell(projectileToTest, targetGO);
         }
         else
         {
