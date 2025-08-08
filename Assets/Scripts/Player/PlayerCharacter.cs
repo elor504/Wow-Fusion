@@ -65,8 +65,10 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
-
-        _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
+        if (Object.HasStateAuthority)
+        {
+            _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
+        }
     }
     private void Update()
     {
