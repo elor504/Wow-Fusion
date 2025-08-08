@@ -55,6 +55,42 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] private StatBuffData selfBuffDataToTest;
     [SerializeField] private SelfBuffSpell selfBuffToTest;
 
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        if (Object.HasStateAuthority)
+        {
+            //Server
+
+            projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
+            selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
+
+            _hotKeysList.Add(new HotKey("1"));
+            _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID, Attack);
+            _hotKeysList.Add(new HotKey("2"));
+            _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID, SelfCast);
+        }
+        else if (Object.HasInputAuthority)
+        {
+            playerControls = new PlayerControls();
+            //Client
+            Debug.Log("Spawned input manager");
+            GameTest.AddCallBacks(this);
+        }
+    }
+
+
+    private void Update()
+    {
+        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
+            return;
+
+        HandleMouseRightClick();
+        HandleMouseLeftClick();
+        HandleCharacterRotationInput();
+    }
+
     public override void FixedUpdateNetwork()
     {
         if (!Object.HasStateAuthority)
@@ -123,15 +159,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         _pressedHotKeyTwo = false;
     }
 
-    private void Update()
-    {
-        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
-            return;
-
-        HandleMouseRightClick();
-        HandleMouseLeftClick();
-        HandleCharacterRotationInput();
-    }
 
     private void HandleCharacterRotationInput()
     {
@@ -163,22 +190,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
 
 
-    public override void Spawned()
-    {
-        base.Spawned();
-        if (!Object.HasInputAuthority)
-            return;
-        playerControls = new PlayerControls();
-        projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
-        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
-
-        _hotKeysList.Add(new HotKey("1"));
-        _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID, Attack);
-        _hotKeysList.Add(new HotKey("2"));
-        _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID, SelfCast);
-        Debug.Log("Spawned input manager");
-        GameTest.AddCallBacks(this);
-    }
+ 
     private void HandleMouseLeftClick()
     {
         //TODO: make a way to skip a frame check to prevent holding if i only want to click
