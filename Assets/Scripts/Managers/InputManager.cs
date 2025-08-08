@@ -77,16 +77,19 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             if (_isHoldingRightMouseDown)
                 playerMovement.Rotate(input.CharacterFoward);
 
-            if (input.PressedHotKeyOne)
-            {
-                GetHotKey("1")?.Press();
-                Debug.Log($"[Server] {gameObject.name} Pressed Hotkey One");
-            }
-            if (input.PressedHotKeyTwo)
-            {
-                GetHotKey("2")?.Press();
-                Debug.Log($"[Server] {gameObject.name} Pressed Hotkey Two");
-            }
+
+            _pressedHotKeyOne = input.PressedHotKeyOne;
+            _pressedHotKeyTwo = input.PressedHotKeyTwo;
+            //if (input.PressedHotKeyOne)
+            //{
+            //    GetHotKey("1")?.Press();
+            //    Debug.Log($"[Server] {gameObject.name} Pressed Hotkey One");
+            //}
+            //if (input.PressedHotKeyTwo)
+            //{
+            //    GetHotKey("2")?.Press();
+            //    Debug.Log($"[Server] {gameObject.name} Pressed Hotkey Two");
+            //}
         }
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
