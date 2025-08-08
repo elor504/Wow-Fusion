@@ -7,6 +7,7 @@ public class PlayerCastState : BaseState
 {
     private PlayerBrain _playerBrain;
     private EntityStat _characterStat;
+    private InputManager _inputManager;
     private bool _finishedCasting;
     private bool _pressedMovement;
     private int _id;
@@ -36,6 +37,7 @@ public class PlayerCastState : BaseState
     public PlayerCastState(int id, PlayerBrain playerBrain)
     {
         _playerBrain = playerBrain;
+        _inputManager = _playerBrain.PlayerCharacter.InputManager;
         _id = id;
         _characterStat = _playerBrain.PlayerCharacter.CharacterStat;
         AttemptToAddHandsToVFXList();
@@ -52,7 +54,7 @@ public class PlayerCastState : BaseState
     
     public override void EnterState()
     {
-        InputManager.OnStartedMovingInput += ListenToMovementInput;
+        _inputManager.OnStartedMovingInput += ListenToMovementInput;
         
         _finishedCasting = false;
         Debug.Log("Entering Cast State");
@@ -66,7 +68,7 @@ public class PlayerCastState : BaseState
 
     public override void ExitState()
     {
-        InputManager.OnStartedMovingInput -= ListenToMovementInput;
+        _inputManager.OnStartedMovingInput -= ListenToMovementInput;
         if (_finishedCasting)
         {
             //Cast spell
