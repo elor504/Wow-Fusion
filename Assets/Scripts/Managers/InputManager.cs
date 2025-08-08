@@ -12,14 +12,16 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public PlayerMovement playerMovement;
     public PlayerControls playerControls;
 
-    public event Action OnHoldingRightMouse;
-    public event Action OnHoldingLeftMouseOnEmpty;
-    public event Action OnClickLeftMouse;
-    public event Action<float> OnScroll;
+    //Client based events
+    public static event Action OnHoldingRightMouse;
+    public static event Action OnHoldingLeftMouseOnEmpty;
+    public static event Action OnClickLeftMouse;
+    public static event Action<float> OnScroll;
 
+    //Server based Events
     public event Action<int, float> OnRotateCharacterInput;
     public event Action<Vector2> OnMovementInput;
-    public  event Action<Vector3> OnMovementDirection;
+    public event Action<Vector3> OnMovementDirection;
     public event Action<Vector2> OnStartedMovingInput;
 
     private bool _pressedHotKeyOne;
@@ -63,7 +65,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             _isHoldingRightMouseDown = input.MouseRightClick;
             Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
 
-          
+
             //OnMovementInput?.Invoke(input.MovementInput);
             OnMovementDirection?.Invoke(input.MovementDirection);
 
@@ -87,7 +89,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        
+
 
         var clientInput = new PlayerInputStruct();
         Vector3 movementInput = Vector3.zero;
