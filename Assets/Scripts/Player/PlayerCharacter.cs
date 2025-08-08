@@ -40,23 +40,24 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public override void Spawned()
     {
         base.Spawned();
-
+        InitPlayer();
         if (Object.HasInputAuthority)
         {
             GameTest.LocalCharacter = this;
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
-            InitPlayer();
+           
         }
         else if(Object.HasStateAuthority)
         {
-            InitPlayer();
+
             _myRunner = Object.Runner;
         }
         else
         {
             //gameObject.tag = TargetManager.FRIENDLY_TAG;
         }
+     
     }
 
     public void InitPlayer()
@@ -70,7 +71,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
-        if (Object.HasStateAuthority && Object.HasInputAuthority)
+        if (Object.HasStateAuthority)
         {
             _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
         }
