@@ -39,13 +39,13 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
         if (Object.HasInputAuthority)
         {
-            InitPlayer();
             GameTest.LocalCharacter = this;
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
         }
         else if(Object.HasStateAuthority)
         {
+            InitPlayer();
             _myRunner = Object.Runner;
         }
         else

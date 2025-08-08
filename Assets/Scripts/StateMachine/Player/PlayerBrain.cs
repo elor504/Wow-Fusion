@@ -25,6 +25,7 @@ public class PlayerBrain : BaseBrain
 
     public override void ChangeState(int state)
     {
+        Debug.Log($"[Player Brain] Changing state to {(PlayerStates)state}");
         _currentState?.ExitState();
         _currentState = GetStateByID(state);
         _currentState?.EnterState();

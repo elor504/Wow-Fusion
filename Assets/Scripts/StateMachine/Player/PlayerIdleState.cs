@@ -24,11 +24,13 @@ public class PlayerIdleState : BaseState
     
     public override void EnterState()
     {
+        Debug.Log($"[Player Idle State] Enter state");
         _animator.SetBool(Idle,true);
     }
 
     public override void ExitState()
     {
+        Debug.Log($"[Player Idle State] Exit state");
         _animator.SetBool(Idle,false);
     }
 
