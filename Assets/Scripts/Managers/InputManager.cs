@@ -80,12 +80,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             if (input.PressedHotKeyOne)
             {
                 GetHotKey("1")?.Press();
-                Debug.Log("[Server] Pressed Hotkey One");
+                Debug.Log($"[Server] {gameObject.name} Pressed Hotkey One");
             }
             if (input.PressedHotKeyTwo)
             {
                 GetHotKey("2")?.Press();
-                Debug.Log("[Server] Pressed Hotkey Two");
+                Debug.Log($"[Server] {gameObject.name} Pressed Hotkey Two");
             }
         }
     }
