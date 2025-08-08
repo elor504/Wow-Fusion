@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -8,6 +9,7 @@ public class PlayerIdleState : BaseState
     private int _id;
     private PlayerBrain _brain;
     private PlayerAnimator _animator;
+    private NetworkMecanimAnimator _mecanimAnimator;
     private PlayerMovement _movement;
     private InputManager _inputManager;
 
@@ -25,13 +27,15 @@ public class PlayerIdleState : BaseState
     public override void EnterState()
     {
         Debug.Log($"[Player Idle State] Enter state");
-        _animator.SetBool(Idle,true);
+        //_animator.SetBool(Idle,true);
+        _mecanimAnimator.Animator.SetBool(Idle,true);
     }
 
     public override void ExitState()
     {
         Debug.Log($"[Player Idle State] Exit state");
-        _animator.SetBool(Idle,false);
+        //_animator.SetBool(Idle,false);
+        _mecanimAnimator.Animator.SetBool(Idle, false);
     }
 
     public override void UpdateState(float deltaTime)
