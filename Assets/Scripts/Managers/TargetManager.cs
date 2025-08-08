@@ -16,7 +16,7 @@ public class TargetManager : MonoBehaviour
     public static string MY_PLAYER_TAG = "Player";
     public static string ENEMY_TAG = "Enemy";
 
-
+    public event Action<ITargetableEntity> OnTarget;
 
     private void OnEnable()
     {
@@ -59,6 +59,7 @@ public class TargetManager : MonoBehaviour
         _currentTarget?.OnStopTargeting();
         _currentTarget = entity;
         _currentTarget?.OnTargeted();
+        OnTarget?.Invoke(_currentTarget);
     }
 
     public static void SetCurrentHoveredEntity(ITargetableEntity entity)

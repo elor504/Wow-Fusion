@@ -2,6 +2,7 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,11 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] private PlayerCharacter character;
     public PlayerMovement playerMovement;
     public PlayerControls playerControls;
+
+    [Networked,OnChangedRender(nameof(DebugTarget))]
+    public NetworkId targetID { get; set; }
+
+ 
 
     //Client based events
     public static event Action OnHoldingRightMouse;
@@ -47,6 +53,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     private bool _denyInput;
 
+
+
     [Header("Testing")]
     [SerializeField] private ProjectileSpellData spellToTest;
     //TODO: move into the combat class
@@ -55,6 +63,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] private StatBuffData selfBuffDataToTest;
     [SerializeField] private SelfBuffSpell selfBuffToTest;
 
+   
+
 
     public override void Spawned()
     {
@@ -62,7 +72,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (Object.HasStateAuthority)
         {
             //Server
-
             projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
             selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
 
@@ -73,10 +82,11 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         }
         else if (Object.HasInputAuthority)
         {
-            playerControls = new PlayerControls();
             //Client
+            playerControls = new PlayerControls();
             Debug.Log("Spawned input manager");
             GameTest.AddCallBacks(this);
+            GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
         }
     }
 
@@ -236,14 +246,17 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
 
-
+    public void DebugTarget()
+    {
+        Debug.Log($"[InputManager] {gameObject.name} Successfully updated current targetID");
+    }
 
     public void Attack()
     {
         if (GameManager.Instance.TargetManager.CurrentTarget != null)
         {
-            RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
-            //character.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
+            //RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
+            character.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
         }
         else
         {
@@ -253,8 +266,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_Attack(NetworkId networkID, RpcSources source = default)
     {
-        var target = ServerHandler.Instance.GetEnemyByNetworkID(networkID, Object.Runner);
-        character.CastSpell(projectileToTest, target);
+
     }
 
     public void SelfCast()
@@ -264,6 +276,17 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public HotKey GetHotKey(string key)
     {
         return _hotKeysList.Find(hotKey => hotKey.HotKeyID == key);
+    }
+    public void SetTargetNetworkID(ITargetableEntity target)
+    {
+        if (target != null)
+        {
+            targetID = target.GetNetworkId();
+        }
+        else
+        {
+            targetID = default;
+        }
     }
 
     private void OnMouseWheelScroll(InputAction.CallbackContext context)
