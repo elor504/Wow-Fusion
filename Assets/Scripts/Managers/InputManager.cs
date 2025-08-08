@@ -55,8 +55,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public override void FixedUpdateNetwork()
     {
+        if (!Object.HasInputAuthority)
+            return;
 
-        if (GetInput(out PlayerInputStruct input) && Object.HasStateAuthority)
+
+
+        if (GetInput(out PlayerInputStruct input))
         {
             _isHoldingRightMouseDown = input.MouseRightClick;
             Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
@@ -80,7 +84,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-
+        
 
         var clientInput = new PlayerInputStruct();
         Vector3 movementInput = Vector3.zero;
