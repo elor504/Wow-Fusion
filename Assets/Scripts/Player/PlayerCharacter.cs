@@ -1,6 +1,5 @@
 using Fusion;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 {
@@ -32,6 +31,11 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public PlayerCamera CharacterCamera => characterCamera;
     public NetworkObject NetworkObject => networkObject;
     public InputManager InputManager => inputManager;
+
+
+    [Networked,OnChangedRender(nameof(ChangedState))]
+    public int CurrentState { get; set; }
+
 
     public override void Spawned()
     {
@@ -65,7 +69,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
-        if (Object.HasStateAuthority || Object.HasInputAuthority)
+        if (Object.HasStateAuthority)
         {
             _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
         }
@@ -75,6 +79,10 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         _playerBrain?.UpdateState(Time.deltaTime);
     }
 
+    private void ChangedState()
+    {
+        _playerBrain.ChangeState(CurrentState);
+    }
 
     public void LoadCharacterData(CharacterData data)
     {

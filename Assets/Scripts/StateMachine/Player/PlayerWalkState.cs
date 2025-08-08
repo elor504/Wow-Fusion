@@ -46,7 +46,8 @@ public class PlayerWalkState : BaseState
         {
             if (TryToChangeToIdleState())
             {
-                _brain.ChangeState((int)PlayerStates.Idle);
+                _brain.PlayerCharacter.CurrentState = (int)PlayerStates.Idle;
+                //_brain.ChangeState((int)PlayerStates.Idle);
                 return;
             }
         }

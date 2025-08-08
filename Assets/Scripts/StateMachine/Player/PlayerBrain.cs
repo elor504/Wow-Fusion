@@ -10,7 +10,8 @@ public class PlayerBrain : BaseBrain
     private List<BaseState> _playerStates = new List<BaseState>();
     private BaseState _currentState;
 
-    
+    //TODO: Handle state by holding a int
+
     public PlayerCharacter PlayerCharacter => _playerCharacter;
 
     public void InitBrain(PlayerCharacter player)
