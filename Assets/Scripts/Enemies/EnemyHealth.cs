@@ -1,7 +1,7 @@
 using Fusion;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : NetworkBehaviour
 {
 
     [SerializeField] private int maxHealth;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VFX;
 
 public class PlayerCastState : BaseState
 {
@@ -19,22 +18,22 @@ public class PlayerCastState : BaseState
     private BasicVFX _handVFX;
     private ITargetableEntity _caster;
     private ITargetableEntity _target;
-    
+
     private static readonly int Cast = Animator.StringToHash("Cast");
     private static readonly int StartCasting = Animator.StringToHash("StartCasting");
 
     private const string leftHandID = "LeftHand";
     private const string rightHandID = "RightHand";
-    
 
-    private List<Transform> _handVFXParents = new List<Transform>() ;
+
+    private List<Transform> _handVFXParents = new List<Transform>();
     private List<BasicVFX> _handVFXs = new List<BasicVFX>();
 
-    public static event Action<float,float> StartCastHandler;
+    public static event Action<float, float> StartCastHandler;
     public static event Action CastedHandler;
-    public static event Action<float,float> UpdateCastingHandler;
-    
-    
+    public static event Action<float, float> UpdateCastingHandler;
+
+
     public PlayerCastState(int id, PlayerBrain playerBrain)
     {
         _playerBrain = playerBrain;
@@ -45,7 +44,7 @@ public class PlayerCastState : BaseState
         AttemptToAddHandsToVFXList();
     }
 
-    public void SetSpellToCast(BaseSpell spellToCast,ITargetableEntity caster,ITargetableEntity target)
+    public void SetSpellToCast(BaseSpell spellToCast, ITargetableEntity caster, ITargetableEntity target)
     {
         _spellToCast = spellToCast;
         _caster = caster;
@@ -53,19 +52,19 @@ public class PlayerCastState : BaseState
         _handVFX = _spellToCast.HandsSpellVFX;
         _castTime = _spellToCast.TimeToCast;
     }
-    
+
     public override void EnterState()
     {
         _inputManager.OnStartedMovingInput += ListenToMovementInput;
-        
+
         _finishedCasting = false;
         Debug.Log("Entering Cast State");
         TryToAddHandVFX();
 
-        _playerAnimator.SetBool(Cast,true);
+        _playerAnimator.SetBool(Cast, true);
         _playerAnimator.SetTrigger(StartCasting);
-        
-        StartCastHandler?.Invoke(_castTime,_castTime);
+
+        StartCastHandler?.Invoke(_castTime, _castTime);
     }
 
     public override void ExitState()
@@ -74,7 +73,7 @@ public class PlayerCastState : BaseState
         if (_finishedCasting)
         {
             //Cast spell
-            _spellToCast.CastSkill(_caster,_target);
+            _spellToCast.CastSkill(_caster, _target);
             var manaCost = _spellToCast.ManaCost;
             _characterStat.UseMana(manaCost);
             _spellToCast = null;
@@ -86,21 +85,21 @@ public class PlayerCastState : BaseState
             handVFX.StopParticleSystem();
         }
         _handVFXs.Clear();
-        _playerAnimator.SetBool(Cast,false);
+        _playerAnimator.SetBool(Cast, false);
 
         _pressedMovement = false;
-        
+
         CastedHandler?.Invoke();
         Debug.Log("Exiting Cast State");
     }
 
     public override void UpdateState(float deltaTime)
     {
-       
+
     }
-    
-    
-    
+
+
+
     public override void FixedUpdateState(float fixedDeltaTime)
     {
         if (_pressedMovement)
@@ -130,8 +129,8 @@ public class PlayerCastState : BaseState
 
     private void ListenToMovementInput(Vector2 input)
     {
-        if(input != Vector2.zero)
-        _pressedMovement = true;
+        if (input != Vector2.zero)
+            _pressedMovement = true;
     }
 
     private void AttemptToAddHandsToVFXList()
@@ -145,22 +144,23 @@ public class PlayerCastState : BaseState
             _handVFXParents.Add(rightHand);
         }
     }
-    
+
     private bool TryToAddHandVFX()
     {
         //TODO Server spawn vfx locally
         _handVFXs.Clear();
-        
+
         if (_handVFX == null)
         {
-            Debug.LogError($"Hand VFX is null with the spell: {_spellToCast.SpellID}");
+            if (_spellToCast != null)
+                Debug.LogError($"Hand VFX is null with the spell: {_spellToCast.SpellID}");
             return false;
         }
 
         foreach (var hand in _handVFXParents)
         {
             Debug.Log("Hand " + hand);
-            var vfx = VFXPoolSystem.Instance.GetAvailableObjectFromPool(_handVFX,hand.position);
+            var vfx = VFXPoolSystem.Instance.GetAvailableObjectFromPool(_handVFX, hand.position);
             vfx.SetParent(hand);
             vfx.InitVFX(hand.position);
             vfx.gameObject.SetActive(true);
@@ -169,5 +169,5 @@ public class PlayerCastState : BaseState
 
         return true;
     }
-    
+
 }
