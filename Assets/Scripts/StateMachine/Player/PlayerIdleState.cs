@@ -34,24 +34,7 @@ public class PlayerIdleState : BaseState
 
     public override void UpdateState(float deltaTime)
     {
-        if (_movement.IsPressingMovement)
-        {
-            if (TryToChangeToMovementState())
-            {
-                _brain.ChangeState((int)PlayerStates.Walk);
-                return;
-            }
-        }
-        if(_inputManager.PressedHotKeyOne)
-        {
-            _inputManager.GetHotKey("1").Press();
-            return;
-        }
-        if (_inputManager.PressedHotKeyTwo)
-        {
-            _inputManager.GetHotKey("2").Press();
-            return;
-        }
+
     }
 
     private bool TryToChangeToMovementState()
@@ -63,7 +46,24 @@ public class PlayerIdleState : BaseState
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
-       
+        if (_movement.IsPressingMovement)
+        {
+            if (TryToChangeToMovementState())
+            {
+                _brain.ChangeState((int)PlayerStates.Walk);
+                return;
+            }
+        }
+        if (_inputManager.PressedHotKeyOne)
+        {
+            _inputManager.GetHotKey("1").Press();
+            return;
+        }
+        if (_inputManager.PressedHotKeyTwo)
+        {
+            _inputManager.GetHotKey("2").Press();
+            return;
+        }
     }
 
     public override bool CompareID(int id)
