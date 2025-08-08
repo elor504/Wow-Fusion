@@ -156,6 +156,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public override void Spawned()
     {
         base.Spawned();
+        if (!Object.HasInputAuthority)
+            return;
         playerControls = new PlayerControls();
         projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
         selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
