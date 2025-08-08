@@ -94,30 +94,31 @@ public class PlayerCastState : BaseState
 
     public override void UpdateState(float deltaTime)
     {
-        if (_pressedMovement)
-        {
-            _finishedCasting = false;
-            _playerBrain.ChangeState((int) PlayerStates.Idle);
-            return;
-        }
-        
-        
-        _castTime -= Time.deltaTime;
-        UpdateCastingHandler?.Invoke(_castTime,_spellToCast.TimeToCast);
-        if (_castTime <= 0)
-        {
-            _castTime = 0;
-            
-            _finishedCasting = true;
-            _playerBrain.ChangeState((int) PlayerStates.Idle);
-            return;
-        }
+       
     }
     
     
     
     public override void FixedUpdateState(float fixedDeltaTime)
     {
+        if (_pressedMovement)
+        {
+            _finishedCasting = false;
+            _playerBrain.PlayerCharacter.CurrentState = (int)PlayerStates.Idle;
+            return;
+        }
+
+
+        _castTime -= fixedDeltaTime;
+        UpdateCastingHandler?.Invoke(_castTime, _spellToCast.TimeToCast);
+        if (_castTime <= 0)
+        {
+            _castTime = 0;
+
+            _finishedCasting = true;
+            _playerBrain.PlayerCharacter.CurrentState = (int)PlayerStates.Idle;
+            return;
+        }
     }
 
     public override bool CompareID(int id)
