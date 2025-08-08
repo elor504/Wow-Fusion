@@ -29,7 +29,7 @@ public class PlayerWalkState : BaseState
 
     public override void UpdateState(float deltaTime)
     {
-        _brain.PlayerCharacter.GetAnimator.UpdateMovementOnAnimator();
+        
     }
 
     private bool TryToChangeToIdleState()
@@ -40,6 +40,7 @@ public class PlayerWalkState : BaseState
 
     public override void FixedUpdateState(float fixedDeltaTime)
     {
+        _brain.PlayerCharacter.GetAnimator.UpdateMovementOnAnimator();
         if (!_movement.IsPressingMovement)
         {
             if (TryToChangeToIdleState())

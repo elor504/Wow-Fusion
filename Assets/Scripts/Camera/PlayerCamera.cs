@@ -108,7 +108,7 @@ public class PlayerCamera : MonoBehaviour
         _cameraRotation += _mouseAxis * Time.deltaTime;
         _cameraRotation.x = Mathf.Clamp(_cameraRotation.x, yCameraRange.x, yCameraRange.y);
         transform.localEulerAngles = _cameraRotation;
-        Debug.Log($"[Player Camera] camera's foward: {transform.forward}");
+        //Debug.Log($"[Player Camera] camera's foward: {transform.forward}");
     }
 
     

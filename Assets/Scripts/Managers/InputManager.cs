@@ -58,8 +58,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (!Object.HasStateAuthority)
             return;
 
-
-
         if (GetInput(out PlayerInputStruct input))
         {
             _isHoldingRightMouseDown = input.MouseRightClick;
