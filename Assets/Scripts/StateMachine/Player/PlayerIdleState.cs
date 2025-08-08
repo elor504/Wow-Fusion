@@ -22,6 +22,7 @@ public class PlayerIdleState : BaseState
         _animator = _brain.PlayerCharacter.GetAnimator;
         _movement = _brain.PlayerCharacter.GetMovement;
         _inputManager = _brain.PlayerCharacter.InputManager;
+        _mecanimAnimator = _animator.GetComponent<NetworkMecanimAnimator>();
     }
     
     public override void EnterState()
