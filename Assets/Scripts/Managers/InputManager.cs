@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.GraphicsBuffer;
 
 
 public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
@@ -23,10 +22,15 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public static event Action<Vector3> OnMovementDirection;
     public static event Action<Vector2> OnStartedMovingInput;
 
+    private bool _pressedHotKeyOne;
+    private bool _pressedHotKeyTwo;
+
     private bool _isHoldingRightMouseDown;
     private bool _isHoldingLeftMouseDown;
     private float _scroll;
     private int _characterRotationInput;
+
+
 
     private List<HotKey> _hotKeysList = new List<HotKey>();
 
@@ -36,13 +40,16 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     private bool _isMouseOverUI;
     public bool IsMouseOverUI => _isMouseOverUI;
-
+    public bool PressedHotKeyOne => _pressedHotKeyOne;
+    public bool PressedHotKeyTwo => _pressedHotKeyTwo;
 
     private bool _denyInput;
 
     [Header("Testing")]
     [SerializeField] private ProjectileSpellData spellToTest;
+    //TODO: move into the combat class
     private ProjectileSpell projectileToTest;
+    public ProjectileSpell ProjectileToTest => projectileToTest;
     [SerializeField] private StatBuffData selfBuffDataToTest;
     [SerializeField] private SelfBuffSpell selfBuffToTest;
 
@@ -60,16 +67,15 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             if (_isHoldingRightMouseDown)
                 playerMovement.Rotate(input.CharacterFoward);
 
-            if(input.PressedHotKeyOne)
+            if (input.PressedHotKeyOne)
             {
                 //GetHotKey("1")?.Press();
             }
-            if(input.PressedHotKeyTwo)
+            if (input.PressedHotKeyTwo)
             {
                 GetHotKey("2")?.Press();
             }
         }
-
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
@@ -88,8 +94,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         clientInput.RotationInput = _characterRotationInput;
 
-      //  clientInput.PressedHotKeyOne = _pressedHotKeyOne;
-       // clientInput.PressedHotKeyTwo = _pressedHotKeyTwo;
+        clientInput.PressedHotKeyOne = _pressedHotKeyOne;
+        clientInput.PressedHotKeyTwo = _pressedHotKeyTwo;
 
 
 
@@ -178,9 +184,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
 
 
-    private bool _pressedHotKeyOne;
-    private bool _pressedHotKeyTwo;
-
     private void OnClickedHotKey(InputAction.CallbackContext context)
     {
         var key = context.control.name;
@@ -189,7 +192,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         {
             case "1":
                 _pressedHotKeyOne = true;
-                GetHotKey("1")?.Press();
+                //GetHotKey("1")?.Press();
                 break;
             case "2":
                 _pressedHotKeyTwo = true;
@@ -202,14 +205,14 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    
+
 
     public void Attack()
     {
         if (GameManager.Instance.TargetManager.CurrentTarget != null)
         {
             RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
-            character.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
+            //character.CastSpell(projectileToTest, GameManager.Instance.TargetManager.CurrentTarget);
         }
         else
         {
@@ -217,9 +220,9 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_Attack(NetworkId networkID,RpcSources source = default)
+    public void RPC_Attack(NetworkId networkID, RpcSources source = default)
     {
-        var target = ServerHandler.Instance.GetEnemyByNetworkID(networkID,Object.Runner);
+        var target = ServerHandler.Instance.GetEnemyByNetworkID(networkID, Object.Runner);
         character.CastSpell(projectileToTest, target);
     }
 
@@ -227,7 +230,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
     }
-    private HotKey GetHotKey(string key)
+    public HotKey GetHotKey(string key)
     {
         return _hotKeysList.Find(hotKey => hotKey.HotKeyID == key);
     }

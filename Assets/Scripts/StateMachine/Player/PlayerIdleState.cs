@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerIdleState : BaseState
@@ -8,7 +9,8 @@ public class PlayerIdleState : BaseState
     private PlayerBrain _brain;
     private PlayerAnimator _animator;
     private PlayerMovement _movement;
-    
+    private InputManager _inputManager;
+
     private static readonly int Idle = Animator.StringToHash("Idle");
     public PlayerIdleState(int id, PlayerBrain brain)
     {
@@ -17,6 +19,7 @@ public class PlayerIdleState : BaseState
 
         _animator = _brain.PlayerCharacter.GetAnimator;
         _movement = _brain.PlayerCharacter.GetMovement;
+        _inputManager = _brain.PlayerCharacter.InputManager;
     }
     
     public override void EnterState()
@@ -38,6 +41,16 @@ public class PlayerIdleState : BaseState
                 _brain.ChangeState((int)PlayerStates.Walk);
                 return;
             }
+        }
+        if(_inputManager.PressedHotKeyOne)
+        {
+            _inputManager.GetHotKey("1").Press();
+            return;
+        }
+        if (_inputManager.PressedHotKeyTwo)
+        {
+            _inputManager.GetHotKey("2").Press();
+            return;
         }
     }
 
