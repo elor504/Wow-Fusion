@@ -6,7 +6,9 @@ public class PlayerAnimator : MonoBehaviour
    [SerializeField] private Animator animator;
 
    private Vector2 _movementInput;
+
    public Vector2 MovementInput => _movementInput;
+   public Animator GetAnimator => animator;
 
 
    private static readonly int movementX = Animator.StringToHash("MovementX");
