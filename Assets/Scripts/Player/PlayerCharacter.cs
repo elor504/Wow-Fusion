@@ -29,17 +29,14 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
 
 
-    [Networked,OnChangedRender(nameof(CharacterNicknameChange))]
+    [Networked,OnChangedRender(nameof(UpdateCharacterNicknameText))]
     public string CharacterName { get; set; }
 
 
 
 
 
-    private void CharacterNicknameChange()
-    {
-        gameObject.name = $"Player: {CharacterName}";
-    }
+  
 
     public PlayerAnimator GetAnimator => animator;
     public PlayerMovement GetMovement => movement;
@@ -66,7 +63,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             GameTest.LocalCharacter = this;
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
-            CharacterNicknameChange();
+            UpdateCharacterNicknameText();
         }
         else if(Object.HasStateAuthority)
         {
@@ -216,13 +213,21 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     #region nickname Update
     public void UpdateCharacterName(string nickname)
     {
-        RPC_UpdateCharacterNickname(nickname);
+        RPC_RequestCharacterNickname(nickname);
     }
     [Rpc(RpcSources.InputAuthority,RpcTargets.StateAuthority)]
-    public void RPC_UpdateCharacterNickname(string nickname)
+    public void RPC_RequestCharacterNickname(string nickname)
     {
         CharacterName = nickname;
     }
+
+    public void UpdateCharacterNicknameText()
+    {
+        nickNameText.text = CharacterName;
+        gameObject.name = $"Player: {CharacterName}";
+    }
+    
+
 
     #endregion
     #region visual update
