@@ -71,10 +71,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         base.Spawned();
         if (Object.HasStateAuthority)
         {
-            //Server
-            projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
-            selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
-
+            // Server
             _hotKeysList.Add(new HotKey("1"));
             _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID, Attack);
             _hotKeysList.Add(new HotKey("2"));
@@ -82,12 +79,15 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         }
         else if (Object.HasInputAuthority)
         {
-            //Client
+            // Client
             playerControls = new PlayerControls();
             Debug.Log("Spawned input manager");
             GameTest.AddCallBacks(this);
             GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
         }
+        // Everyone
+        projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
+        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
     }
 
 
