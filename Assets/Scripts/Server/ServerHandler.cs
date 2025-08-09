@@ -113,7 +113,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         var spawnResult = await runner.SpawnAsync(characterPF, Vector3.zero, Quaternion.identity, player);
         var character = spawnResult.gameObject.GetComponent<PlayerCharacter>();
         GetServerInfo(runner).playersCharacters.Add(player, character);
-        character.CharacterName = spawnResult.Id.ToString();
+        //character.CharacterName = spawnResult.Id.ToString();
         GetServerInfo(runner).playersCharacters[player].InitPlayer();
     }
 

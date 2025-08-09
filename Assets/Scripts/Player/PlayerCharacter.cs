@@ -1,5 +1,6 @@
 using Fusion;
 using System;
+using TMPro;
 using UnityEngine;
 
 public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
@@ -14,6 +15,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [SerializeField] private PlayerCamera characterCamera;
     [SerializeField] private NetworkObject networkObject;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private TextMeshPro nickNameText;
     [Header("Transform references")]
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Transform hitPosition;
@@ -24,6 +26,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     private NetworkRunner _myRunner;
     private PlayerBrain _playerBrain;
     private CharacterData _characterData;
+
+
 
     [Networked,OnChangedRender(nameof(CharacterNicknameChange))]
     public string CharacterName { get; set; }
@@ -56,6 +60,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         base.Spawned();
         InitPlayer();
         _characterData = new CharacterData();
+        nickNameText.text = CharacterName;
         if (Object.HasInputAuthority)
         {
             GameTest.LocalCharacter = this;
@@ -208,6 +213,14 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         return hitPosition;
     }
 
+    #region nickname Update
+    public void UpdateCharacterName(string nickname)
+    {
+        CharacterName = nickname;
+    }
+
+    #endregion
+    #region visual update
     public void UpdateCharacterVisualData(string characterData)
     {
         RPC_RequestCharacterVisualData(characterData);
@@ -230,6 +243,9 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         equipment.Init(_characterData);
         //LoadCharacterData();
     }
+    #endregion
+
+
     public NetworkId GetNetworkId()
     {
         return networkObject.Id;

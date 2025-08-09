@@ -12,6 +12,8 @@ public class PlayerEquipment : NetworkBehaviour
     [Networked]
     public int HairColor { get; set; }
 
+    //TODO: Add Id hold for each equipment for getting the visuals
+
 
     private void OnValidate()
     {
@@ -46,15 +48,24 @@ public class PlayerEquipment : NetworkBehaviour
     public void Init(CharacterData data)
     {
         HairColor = (int)data.CharacterVisualData.HairColor;
+
+
         Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType(data.CharacterVisualData.HairColor);
         characterHairMeshes.ChangeHairMeshesColor(hairColor);
         Mesh[] meshes = null;
         EquipmentType type = EquipmentType.Helmet;
-        for (int i = 0; i < equipmentVisuals.Count; i++)
+        if (data.CharacterEquipmentData != null)
         {
-            type = (EquipmentType)i;
-            meshes = DataBankSO.Instance.GetEquipmentDataByID(data.CharacterEquipmentData.GetEquipableDataByType(type).ItemName).EquipmentMeshes;
-            UpdateVisual(type, meshes);
+            for (int i = 0; i < equipmentVisuals.Count; i++)
+            {
+                type = (EquipmentType)i;
+                meshes = DataBankSO.Instance.GetEquipmentDataByID(data.CharacterEquipmentData.GetEquipableDataByType(type).ItemName).EquipmentMeshes;
+                UpdateVisual(type, meshes);
+            }
+        }
+        else
+        {
+            Debug.Log("[Player Equipment] Character EquipmentData is null");
         }
     }
 

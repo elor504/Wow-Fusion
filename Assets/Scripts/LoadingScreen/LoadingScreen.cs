@@ -83,6 +83,7 @@ public class LoadingScreen : NetworkBehaviour
         //check spawn positions
         GameTest.LocalCharacter.transform.position = Vector3.zero;
         GameTest.LocalCharacter.gameObject.SetActive(true);
+        GameTest.LocalCharacter.UpdateCharacterName(GameTest.FusionManager.SelectedCharacterData.CharacterName);
         GameTest.LocalCharacter.UpdateCharacterVisualData(GameTest.FusionManager.SelectedCharacterData.SerializeVisual());
 
         //camera
