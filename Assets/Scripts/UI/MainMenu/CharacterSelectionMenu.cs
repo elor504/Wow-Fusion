@@ -11,6 +11,7 @@ public class CharacterSelectionMenu : MonoBehaviour
 	[SerializeField] private MainMenu mainMenu;
 	[SerializeField] private GameObject panel;
 	[SerializeField] private Button createCharacterButton;
+	[SerializeField] private Button playerGameButton;
 	[SerializeField] private List<CharacterButton> characterButtonsGO;
 	[Header("Visual")]
 	[SerializeField] private GameObject characterVisualGO;
@@ -66,12 +67,14 @@ public class CharacterSelectionMenu : MonoBehaviour
 		LoadCharacterDatas();
 		panel.SetActive(true);
 		characterVisualGO.SetActive(false);
-	}
+        playerGameButton.onClick.AddListener(PlayAsCharacter);
+    }
 	public void HidePanel()
 	{
 		panel.SetActive(false);
 		characterVisualGO.SetActive(false);
-	}
+        playerGameButton.onClick.RemoveListener(PlayAsCharacter);
+    }
 
 	private void GetCharacterData(string id)
 	{
@@ -107,6 +110,11 @@ public class CharacterSelectionMenu : MonoBehaviour
 		return null;
 	}
 
+
+	private void PlayAsCharacter()
+	{
+		GameTest.FusionManager.ConnectToMainCity();
+	}
 
 	private void GetCharacterDataResult(GetCharacterDataResult result)
 	{

@@ -1134,19 +1134,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 67356637}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1216737358}
-        m_TargetAssemblyTypeName: FusionManager, Assembly-CSharp
-        m_MethodName: ConnectToMainCity
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &67356637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2287,6 +2275,7 @@ MonoBehaviour:
   mainMenu: {fileID: 275834138}
   panel: {fileID: 751913587}
   createCharacterButton: {fileID: 1791973328}
+  playerGameButton: {fileID: 67356636}
   characterButtonsGO:
   - {fileID: 628063604}
   - {fileID: 1477581183}
