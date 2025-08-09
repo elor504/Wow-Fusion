@@ -216,6 +216,11 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     #region nickname Update
     public void UpdateCharacterName(string nickname)
     {
+        RPC_UpdateCharacterNickname(nickname);
+    }
+    [Rpc(RpcSources.InputAuthority,RpcTargets.StateAuthority)]
+    public void RPC_UpdateCharacterNickname(string nickname)
+    {
         CharacterName = nickname;
     }
 
