@@ -62,8 +62,9 @@ public class PlayerCastState : BaseState
 
         _playerAnimator.SetBool(Cast, true);
         _playerAnimator.SetTrigger(StartCasting);
-
-        StartCastHandler?.Invoke(_inputManager.CastCounter, _spellToCast.TimeToCast);
+        //Client 
+        if (_playerBrain.PlayerCharacter.Object.HasInputAuthority)
+            StartCastHandler?.Invoke(_inputManager.CastCounter, _spellToCast.TimeToCast);
     }
 
     public override void ExitState()
@@ -87,8 +88,9 @@ public class PlayerCastState : BaseState
         _playerAnimator.SetBool(Cast, false);
 
         _pressedMovement = false;
-
-        CastedHandler?.Invoke();
+        //Client
+        if (_playerBrain.PlayerCharacter.Object.HasInputAuthority)
+            CastedHandler?.Invoke();
         Debug.Log("Exiting Cast State");
     }
 
