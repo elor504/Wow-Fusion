@@ -9,11 +9,16 @@ public class EnemyHealth : NetworkBehaviour
 
     public bool IsDead => CurrentHP <= 0;
 
-    //TEMP
-    private void Awake()
+
+    public override void Spawned()
     {
-        Init(maxHealth);
+        base.Spawned();
+        if(Object.HasStateAuthority)
+        {
+            Init(maxHealth);
+        }
     }
+
     //TODO: Call this function from the Dungeon/Raid manager
     public void Init(int maxHP)
     {
