@@ -1302,6 +1302,7 @@ MonoBehaviour:
   networkObject: {fileID: 1375669553972253304}
   inputManager: {fileID: 7347465352698932254}
   nickNameText: {fileID: 116357133986461317}
+  nickNameLookAt: {fileID: 1631833009644881903}
   projectileSpawnPoint: {fileID: 4218192414086152221}
   hitPosition: {fileID: 6670549599876932771}
   baseClassData: {fileID: 11400000, guid: 6d3aed36eca6f2046b8cbe7067102c0b, type: 2}
@@ -1817,6 +1818,7 @@ GameObject:
   - component: {fileID: 6142507283085997730}
   - component: {fileID: 1827657424929880022}
   - component: {fileID: 116357133986461317}
+  - component: {fileID: 1631833009644881903}
   m_Layer: 10
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1831,13 +1833,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813759716718801131}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3357482681735623952}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 2.58}
@@ -1982,6 +1984,24 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1827657424929880022}
   m_maskType: 0
+--- !u!1183024399 &1631833009644881903
+LookAtConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813759716718801131}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_Roll: 0
+  m_WorldUpObject: {fileID: 0}
+  m_UseUpObject: 0
+  m_Active: 0
+  m_IsLocked: 0
+  m_Sources: []
 --- !u!1 &2009175978097344086
 GameObject:
   m_ObjectHideFlags: 0

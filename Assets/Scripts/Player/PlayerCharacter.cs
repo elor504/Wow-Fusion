@@ -2,6 +2,7 @@ using Fusion;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 {
@@ -16,6 +17,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [SerializeField] private NetworkObject networkObject;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private TextMeshPro nickNameText;
+    [SerializeField] private LookAtConstraint nickNameLookAt;
     [Header("Transform references")]
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Transform hitPosition;
@@ -64,14 +66,16 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
             UpdateCharacterNicknameText();
+            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform });
         }
-        else if(Object.HasStateAuthority)
+        else if (Object.HasStateAuthority)
         {
 
             _myRunner = Object.Runner;
         }
         else
         {
+            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform });
             //gameObject.tag = TargetManager.FRIENDLY_TAG;
         }
      
