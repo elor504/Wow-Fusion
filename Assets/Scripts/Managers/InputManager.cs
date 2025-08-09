@@ -20,7 +20,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public NetworkId targetID { get; set; }
     [Networked,OnChangedRender(nameof(UpdateKeyOneID))]
     public string UsedHotkeyOneID { get; set; }
-
+    [Networked]
+    public float CastCounter { get; set; }
 
 
 

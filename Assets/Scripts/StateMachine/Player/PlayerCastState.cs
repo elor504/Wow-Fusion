@@ -11,7 +11,6 @@ public class PlayerCastState : BaseState
     private bool _finishedCasting;
     private bool _pressedMovement;
     private int _id;
-    private float _castTime;
 
 
     private BaseSpell _spellToCast;
@@ -50,7 +49,7 @@ public class PlayerCastState : BaseState
         _caster = caster;
         _target = target;
         _handVFX = _spellToCast.HandsSpellVFX;
-        _castTime = _spellToCast.TimeToCast;
+        _inputManager.CastCounter = _spellToCast.TimeToCast;
     }
 
     public override void EnterState()
@@ -64,7 +63,7 @@ public class PlayerCastState : BaseState
         _playerAnimator.SetBool(Cast, true);
         _playerAnimator.SetTrigger(StartCasting);
 
-        StartCastHandler?.Invoke(_castTime, _castTime);
+        StartCastHandler?.Invoke(_inputManager.CastCounter, _spellToCast.TimeToCast);
     }
 
     public override void ExitState()
@@ -95,8 +94,7 @@ public class PlayerCastState : BaseState
 
     public override void UpdateState(float deltaTime)
     {
-        _castTime -= deltaTime;
-        UpdateCastingHandler?.Invoke(_castTime, _spellToCast.TimeToCast);
+        UpdateCastingHandler?.Invoke(_inputManager.CastCounter, _spellToCast.TimeToCast);
     }
 
 
@@ -111,11 +109,11 @@ public class PlayerCastState : BaseState
         }
 
 
-        _castTime -= fixedDeltaTime;
+        _inputManager.CastCounter -= fixedDeltaTime;
         //UpdateCastingHandler?.Invoke(_castTime, _spellToCast.TimeToCast);
-        if (_castTime <= 0)
+        if (_inputManager.CastCounter <= 0)
         {
-            _castTime = 0;
+            _inputManager.CastCounter = 0;
 
             _finishedCasting = true;
             _playerBrain.PlayerCharacter.CurrentState = (int)PlayerStates.Idle;
