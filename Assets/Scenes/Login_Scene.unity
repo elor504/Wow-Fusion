@@ -7405,6 +7405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36178a02ba7ea4e49a55c8f17c680444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterHairMeshes: {fileID: 0}
   equipmentVisuals:
   - EquipmentTypeName: Helmet
     EquipmentType: 0
@@ -7427,6 +7428,7 @@ MonoBehaviour:
     EquipmentType: 4
     MeshRenderer:
     - {fileID: 1394778289}
+  _HairColor: 0
 --- !u!1 &1098487436
 GameObject:
   m_ObjectHideFlags: 0
@@ -17601,6 +17603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36178a02ba7ea4e49a55c8f17c680444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterHairMeshes: {fileID: 0}
   equipmentVisuals:
   - EquipmentTypeName: Helmet
     EquipmentType: 0
@@ -17623,6 +17626,7 @@ MonoBehaviour:
     EquipmentType: 4
     MeshRenderer:
     - {fileID: 8848217695021171545}
+  _HairColor: 0
 --- !u!4 &4548762041142185945
 Transform:
   m_ObjectHideFlags: 0

@@ -66,7 +66,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
             UpdateCharacterNicknameText();
-            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform });
+            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1});
+            nickNameLookAt.constraintActive = true;
         }
         else if (Object.HasStateAuthority)
         {
@@ -75,7 +76,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         }
         else
         {
-            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform });
+            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1 });
+            nickNameLookAt.constraintActive = true;
             //gameObject.tag = TargetManager.FRIENDLY_TAG;
         }
      
