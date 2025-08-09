@@ -97,6 +97,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log($"[Client/Server] connected to server: {runner.name}");
     }
+    #region Player
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log($"A player joined a session: {runner.IsServer} player: {player.PlayerId}");
@@ -133,11 +134,14 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         }
         GetServerInfo(runner).playersCharacters.Remove(player);
     }
-
+    #endregion
     private SessionServerInfo GetServerInfo(NetworkRunner runner)
     {
         return _sessionList[runner.SessionInfo.Name];
     }
+
+
+
 
     #region unused
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
