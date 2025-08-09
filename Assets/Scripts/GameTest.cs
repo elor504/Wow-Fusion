@@ -79,6 +79,9 @@ public class GameTest
 
     public static void ReturnToLoginMenu()
     {
+        //TODO: Check if already logged in playfab
+        //If logged in then login or logout to prevent bugs
+
         SceneManager.LoadScene("Login_Scene");
     }
     #endregion
