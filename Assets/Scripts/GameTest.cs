@@ -1,6 +1,7 @@
 using Fusion;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameTest
 {
@@ -71,7 +72,14 @@ public class GameTest
         {
             _myRunner = CreateNewRunner();
         }
+
+
         return _myRunner;
+    }
+
+    public static void ReturnToLoginMenu()
+    {
+        SceneManager.LoadScene("Login_Scene");
     }
     #endregion
 

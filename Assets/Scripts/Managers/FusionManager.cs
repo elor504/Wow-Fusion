@@ -128,10 +128,12 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
+        GameTest.ReturnToLoginMenu();
         Debug.Log($"Shutdown: {shutdownReason}");
     }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
+        GameTest.ReturnToLoginMenu();
         Debug.LogError($"[Fusion Manager] failed to connect : {reason}");
     }
 
@@ -148,6 +150,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
+        GameTest.ReturnToLoginMenu();
         Debug.Log($"Shutdown: {reason}");
     }
 
