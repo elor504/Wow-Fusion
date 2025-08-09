@@ -2,7 +2,7 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler, IPointerExitHandler
+public class DragonEnemy : NetworkBehaviour, ITargetableEntity, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("References")]
     [SerializeField] private EnemyHealth health;
@@ -17,6 +17,11 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
     [SerializeField] private Transform hitPosition;
     [SerializeField] private Transform mouthPosition;
 
+    public override void Spawned()
+    {
+        base.Spawned();
+    }
+
     public bool CanBeTargeted()
     {
         return false;
@@ -29,7 +34,8 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
 
     public void DealDamage(ITargetableEntity caster, int damage)
     {
-        health.RPC_DealDamage(damage);
+        if (Object.HasStateAuthority)
+            health.RPC_DealDamage(damage);
     }
 
     public GameObject GetEntityGO()
