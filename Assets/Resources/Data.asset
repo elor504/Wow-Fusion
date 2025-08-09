@@ -20,3 +20,5 @@ MonoBehaviour:
   skillDatas:
   - {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}
   - {fileID: 11400000, guid: a1fe0993149a7a449982ea86eb828e77, type: 2}
+  projectilesData:
+  - {fileID: 4727345208012558461, guid: f4ca41ea21a5fdf419cba519bbb48413, type: 3}

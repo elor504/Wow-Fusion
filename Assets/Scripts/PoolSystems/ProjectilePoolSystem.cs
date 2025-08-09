@@ -1,14 +1,12 @@
 using Fusion;
-using System;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 
 public class ProjectilePoolSystem : BasePoolSystem<BaseProjectile>
 {
     private static ProjectilePoolSystem _instance;
     public static ProjectilePoolSystem Instance => _instance;
-    
+
 
     public override void Spawned()
     {
@@ -19,19 +17,19 @@ public class ProjectilePoolSystem : BasePoolSystem<BaseProjectile>
     public override void InitPool()
     {
         if (_instance == null)
-         {
+        {
             _instance = this;
-         }
-         else if (_instance != this)
-         {
+        }
+        else if (_instance != this)
+        {
             Destroy(gameObject);
             return;
         }
     }
 
-    public override bool TryToRespawnObject(BaseProjectile objPrefab, Vector3 position,out BaseProjectile instantiatedObject)
+    public override bool TryToRespawnObject(BaseProjectile objPrefab, Vector3 position, out BaseProjectile instantiatedObject)
     {
-        instantiatedObject = Instantiate(objPrefab,position,Quaternion.identity,transform);
+        instantiatedObject = Instantiate(objPrefab, position, Quaternion.identity, transform);
         return instantiatedObject;
     }
 
@@ -54,16 +52,21 @@ public class ProjectilePoolSystem : BasePoolSystem<BaseProjectile>
         return null;
     }
 
-    public void RequestSpawnAndInitProjectile(BaseProjectile objPrefab,Vector3 spawnPosition,ITargetableEntity caster, ITargetableEntity target,int damage,float speed)
+    public void RequestSpawnAndInitProjectile(string projectileID, Vector3 spawnPosition, NetworkId caster, NetworkId target, int damage, float speed)
     {
-        RPC_SpawnAndInitProjectile(objPrefab,spawnPosition,caster,target,damage,speed);
+        RPC_SpawnAndInitProjectile(projectileID, spawnPosition, caster, target, damage, speed);
     }
-    [Rpc(RpcSources.StateAuthority,RpcTargets.All)]
-    public void RPC_SpawnAndInitProjectile(BaseProjectile objPrefab, Vector3 spawnPosition, ITargetableEntity caster, ITargetableEntity target, int damage, float speed)
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SpawnAndInitProjectile(string projectileID, Vector3 spawnPosition, NetworkId caster, NetworkId target, int damage, float speed)
     {
-        if (TryToRespawnObject(objPrefab, spawnPosition, out var spawnProjectile))
+        var projectilePF = DataBankSO.Instance.GetProjectile(projectileID);
+
+        var casterEntity = Object.Runner.FindObject(caster).GetComponent<ITargetableEntity>();
+        var targetEntity = Object.Runner.FindObject(target).GetComponent<ITargetableEntity>();
+
+        if (TryToRespawnObject(projectilePF, spawnPosition, out var spawnProjectile))
         {
-            spawnProjectile.InitProjectile(spawnPosition, caster, target, damage, speed);
+            spawnProjectile.InitProjectile(spawnPosition, casterEntity, targetEntity, damage, speed);
         }
         else
         {

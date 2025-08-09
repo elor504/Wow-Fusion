@@ -21,6 +21,9 @@ public class DataBankSO : ScriptableObject
 
     [Header("Spells")]
     [SerializeField] private List<SkillDataSO> skillDatas;
+
+    [Header("Projectiles")]
+    [SerializeField] private List<BaseProjectile> projectilesData;
     public EquipmentDataSO GetEquipmentDataByID(string id)
     {
         return _equipmentData.Find(equipment => equipment.EquipmentName == id);
@@ -29,5 +32,10 @@ public class DataBankSO : ScriptableObject
     public SkillDataSO GetSkillData(string id)
     {
         return skillDatas.Find(skill => skill.ID == id);
+    }
+
+    public BaseProjectile GetProjectile(string id)
+    {
+        return projectilesData.Find(projectile => projectile.ProjectileID == id);
     }
 }

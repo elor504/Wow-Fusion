@@ -23,7 +23,7 @@ public class ProjectileSpell : BaseSpell
         {
             var spawnPos = caster.GetProjectileSpawnPosition().position;
 
-            ProjectilePoolSystem.Instance.RequestSpawnAndInitProjectile(_projectile, spawnPos, caster, target, _damage, _speed);
+            ProjectilePoolSystem.Instance.RequestSpawnAndInitProjectile(_projectile.ProjectileID, spawnPos, caster.GetNetworkId(), target.GetNetworkId(), _damage, _speed);
             //var proj = ProjectilePoolSystem.Instance.GetAvailableObjectFromPool(_projectile,spawnPos);           
             //proj.InitProjectile(spawnPos,caster, target, _damage, _speed);
         }
