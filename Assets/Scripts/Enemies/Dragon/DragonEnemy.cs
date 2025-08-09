@@ -7,6 +7,7 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
     [Header("References")]
     [SerializeField] private EnemyHealth health;
     [SerializeField] private NetworkObject networkObject;
+    [SerializeField] private SphereCollider sphereCollider;
 
     [Header("Targetable")]
     [SerializeField] private GameObject hoveringVisual;
@@ -113,5 +114,10 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
     public NetworkId GetNetworkId()
     {
         return networkObject.Id;
+    }
+
+    public float ColliderSize()
+    {
+        return sphereCollider.radius;
     }
 }

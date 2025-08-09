@@ -206,4 +206,10 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         return networkObject.Id;
     }
+
+    public float ColliderSize()
+    {
+        //TODO: Check size with collider
+        return 0.5f;
+    }
 }

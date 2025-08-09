@@ -26,5 +26,7 @@ public interface ITargetableEntity : ITargetable
     public Transform GetProjectileSpawnPosition();
     public Transform GetHitPosition();
 
+    public float ColliderSize();
+
     public NetworkId GetNetworkId();
 }

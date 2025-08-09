@@ -154,4 +154,9 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
     {
         return networkObj.Id;
     }
+
+    public float ColliderSize()
+    {
+        return 1f;
+    }
 }
