@@ -95,7 +95,8 @@ public class PlayerCastState : BaseState
 
     public override void UpdateState(float deltaTime)
     {
-
+        _castTime -= deltaTime;
+        UpdateCastingHandler?.Invoke(_castTime, _spellToCast.TimeToCast);
     }
 
 
@@ -111,7 +112,7 @@ public class PlayerCastState : BaseState
 
 
         _castTime -= fixedDeltaTime;
-        UpdateCastingHandler?.Invoke(_castTime, _spellToCast.TimeToCast);
+        //UpdateCastingHandler?.Invoke(_castTime, _spellToCast.TimeToCast);
         if (_castTime <= 0)
         {
             _castTime = 0;
