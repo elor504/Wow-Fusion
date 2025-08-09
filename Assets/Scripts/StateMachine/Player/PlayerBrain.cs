@@ -67,7 +67,7 @@ public class PlayerBrain : BaseBrain
         return _currentState is PlayerCastState;
     }
     
-    private BaseState GetStateByID(int id)
+    public BaseState GetStateByID(int id)
     {
         foreach (var state in _playerStates)
         {

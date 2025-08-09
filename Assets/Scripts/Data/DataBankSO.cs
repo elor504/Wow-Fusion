@@ -18,10 +18,16 @@ public class DataBankSO : ScriptableObject
 
     [Header("Equipments")]
     [SerializeField] private List<EquipmentDataSO> _equipmentData;
+
+    [Header("Spells")]
+    [SerializeField] private List<SkillDataSO> skillDatas;
     public EquipmentDataSO GetEquipmentDataByID(string id)
     {
         return _equipmentData.Find(equipment => equipment.EquipmentName == id);
     }
 
-
+    public SkillDataSO GetSkillData(string id)
+    {
+        return skillDatas.Find(skill => skill.ID == id);
+    }
 }

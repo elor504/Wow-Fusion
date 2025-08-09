@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 
 
 public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
@@ -13,10 +14,19 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public PlayerMovement playerMovement;
     public PlayerControls playerControls;
 
+
+    //Networking
     [Networked,OnChangedRender(nameof(DebugTarget))]
     public NetworkId targetID { get; set; }
+    [Networked,OnChangedRender(nameof(RPC_UpdateKeyOneID))]
+    public string UsedHotkeyOneID { get; set; }
 
- 
+
+
+
+
+   
+
 
     //Client based events
     public static event Action OnHoldingRightMouse;
@@ -63,8 +73,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] private StatBuffData selfBuffDataToTest;
     [SerializeField] private SelfBuffSpell selfBuffToTest;
 
-   
 
+    private BaseSpell spellOnKeyOne;
 
     public override void Spawned()
     {
@@ -89,8 +99,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
         }
     }
-
-
+   
     private void Update()
     {
         if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
@@ -250,6 +259,15 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log($"[InputManager] {gameObject.name} Successfully updated current targetID: {targetID}");
     }
+    #region Spells
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_UpdateKeyOneID()
+    {
+        spellOnKeyOne = DataBankSO.Instance.GetSkillData(UsedHotkeyOneID).GetSpell();
+        var castState = (PlayerCastState)character.GetBrain.GetStateByID((int)PlayerStates.Cast);
+
+        castState.SetSpellToCast(spellOnKeyOne, character, GameManager.Instance.TargetManager.CurrentTarget);
+    }
 
     public void Attack()
     {
@@ -264,16 +282,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             Debug.Log("No target");
         }
     }
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_Attack(NetworkId networkID, RpcSources source = default)
-    {
-
-    }
-
     public void SelfCast()
     {
         GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
     }
+
+    #endregion
     public HotKey GetHotKey(string key)
     {
         return _hotKeysList.Find(hotKey => hotKey.HotKeyID == key);

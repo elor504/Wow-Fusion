@@ -24,6 +24,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     private NetworkRunner _myRunner;
     private PlayerBrain _playerBrain;
 
+
     [Networked,OnChangedRender(nameof(CharacterNicknameChange))]
     public string CharacterName { get; set; }
 
@@ -39,6 +40,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public PlayerCamera CharacterCamera => characterCamera;
     public NetworkObject NetworkObject => networkObject;
     public InputManager InputManager => inputManager;
+    public PlayerBrain GetBrain => _playerBrain;
 
 
     [Networked,OnChangedRender(nameof(ChangedState))]
