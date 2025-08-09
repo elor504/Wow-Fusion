@@ -2875,6 +2875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: {fileID: 4815025298118810345}
   networkObject: {fileID: 6919534075827677563}
+  sphereCollider: {fileID: 8016832304983831937}
   hoveringVisual: {fileID: 8518718917931710376}
   beingTargetedVisual: {fileID: 5217130478491299851}
   hitPosition: {fileID: 5710750942424469939}
