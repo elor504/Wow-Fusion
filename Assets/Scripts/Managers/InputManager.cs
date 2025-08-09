@@ -262,7 +262,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     #region Spells
     private void UpdateKeyOneID()
     {
-        RPC_UpdateKeyOneID();
+        Debug.Log($"[Client] updated spell id on keyone");
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -279,6 +279,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (targetID != default)
         {
             //RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
+            RPC_UpdateKeyOneID();
             var targetGO = ServerHandler.Instance.GetEnemyByNetworkID(targetID, Object.Runner);
             UsedHotkeyOneID = projectileToTest.SpellID;
             character.CastSpell(projectileToTest, targetGO);

@@ -73,7 +73,7 @@ public class PlayerCastState : BaseState
         if (_finishedCasting)
         {
             //Cast spell
-            _spellToCast.CastSkill(_caster, _target);
+            //_spellToCast.CastSkill(_caster, _target);
             var manaCost = _spellToCast.ManaCost;
             _characterStat.UseMana(manaCost);
             _spellToCast = null;
