@@ -2919,6 +2919,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  _CurrentHP: 0
 --- !u!114 &6919534075827677563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2937,6 +2938,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 8358105044349586380}
+  - {fileID: 4815025298118810345}
   - {fileID: 5335095589796439855}
   - {fileID: 588154456446514106}
   ForceRemoteRenderTimeframe: 0

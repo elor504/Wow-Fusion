@@ -28,7 +28,7 @@ public class DragonEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandle
 
     public void DealDamage(ITargetableEntity caster, int damage)
     {
-        health.DealDamage(damage);
+        health.RPC_DealDamage(damage);
     }
 
     public GameObject GetEntityGO()
