@@ -69,6 +69,9 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public override void Spawned()
     {
         base.Spawned();
+        // Everyone
+        projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
+        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
         if (Object.HasStateAuthority)
         {
             // Server
@@ -85,9 +88,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             GameTest.AddCallBacks(this);
             GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
         }
-        // Everyone
-        projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
-        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
     }
 
 
