@@ -34,7 +34,7 @@ public class BaseProjectile : MonoBehaviour
         transform.position += dir * (_speed * Time.deltaTime);
         
         _distance = Vector3.Distance(transform.position, _target.position);
-        if (_distance <= 0.1f)
+        if (_distance <= 0.2f)
         {
             _isActive = false;
             var vfx = VFXPoolSystem.Instance.GetAvailableObjectFromPool(hitVfxPF, transform.position);
