@@ -55,6 +55,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         base.Spawned();
         InitPlayer();
+        _characterData = new CharacterData();
         if (Object.HasInputAuthority)
         {
             GameTest.LocalCharacter = this;
@@ -102,10 +103,11 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         _playerBrain.ChangeState(CurrentState);
     }
 
-    public void LoadCharacterData(CharacterData data)
+    public void LoadCharacterData()
     {
-        characterStat.Init(this, data);
-        equipment.Init(data);
+        characterStat.Init(this, _characterData);
+        equipment.Init(_characterData);
+
     }
 
     public void CastSpell(BaseSpell spell, ITargetableEntity target)
@@ -206,25 +208,27 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         return hitPosition;
     }
 
-    public void UpdateCharacterData(string characterData)
+    public void UpdateCharacterVisualData(string characterData)
     {
-        RPC_RequestCharacterData(characterData);
+        RPC_RequestCharacterVisualData(characterData);
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_RequestCharacterData(string serializedCharacterData)
+    public void RPC_RequestCharacterVisualData(string serializedCharacterData)
     {
-        SetCharacterData(serializedCharacterData);
+        SetCharacterVisualData(serializedCharacterData);
     }
 
-    private void SetCharacterData(string characterData)
+    private void SetCharacterVisualData(string characterData)
     {
-        RPC_UpdateCharacterData(characterData);
+        RPC_UpdateCharacterVisualData(characterData);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_UpdateCharacterData(string serializedData)
+    public void RPC_UpdateCharacterVisualData(string serializedData)
     {
-        _characterData.Deserialize(serializedData);
+        _characterData.DeserializeVisual(serializedData);
+        equipment.Init(_characterData);
+        //LoadCharacterData();
     }
     public NetworkId GetNetworkId()
     {

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerEquipment : NetworkBehaviour
 {
+    [SerializeField] private CharacterHairMeshes characterHairMeshes;
+
     [SerializeField] private List<EquipmentVisual> equipmentVisuals = new List<EquipmentVisual>();
 
 
@@ -36,6 +38,8 @@ public class PlayerEquipment : NetworkBehaviour
 
     public void Init(CharacterData data)
     {
+        Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType(data.CharacterVisualData.HairColor);
+        characterHairMeshes.ChangeHairMeshesColor(hairColor);
         Mesh[] meshes = null;
         EquipmentType type = EquipmentType.Helmet;
         for (int i = 0; i < equipmentVisuals.Count; i++)
@@ -46,7 +50,7 @@ public class PlayerEquipment : NetworkBehaviour
         }
     }
 
-    
+
 
 }
 

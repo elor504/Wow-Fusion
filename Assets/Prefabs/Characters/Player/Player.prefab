@@ -1273,10 +1273,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7481809739153484982}
   - {fileID: 4218192414086152221}
   - {fileID: 6670549599876932771}
   - {fileID: 8379284025784959466}
+  - {fileID: 7481809739153484982}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3090110417922915932
@@ -1403,6 +1403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36178a02ba7ea4e49a55c8f17c680444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterHairMeshes: {fileID: 5647952794923342299}
   equipmentVisuals:
   - EquipmentTypeName: Helmet
     EquipmentType: 0
@@ -1814,6 +1815,7 @@ GameObject:
   - component: {fileID: 5193696491558285291}
   - component: {fileID: 5819242086079178730}
   - component: {fileID: 3565475899856392749}
+  - component: {fileID: 5647952794923342299}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -1891,6 +1893,24 @@ MonoBehaviour:
   StateHashes: 000000002b1a167c794069554c617d567fd25861fbcb4cdc7fe89a33249a8c8fcf590472d9abd1781eb68335d7b777fdd5d7ca1aeefecb5eec9e76b9
   TriggerHashes: 0000000027286b35
   TotalWords: 4
+--- !u!114 &5647952794923342299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009175978097344086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a320af87c53115e429b2ee05b44f613d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hairMeshes:
+  - {fileID: 7242603173700399906}
+  - {fileID: 2399890376786075298}
+  - {fileID: 7629131966725559173}
+  - {fileID: 2489892955987940605}
+  - {fileID: 1357552338826052526}
 --- !u!1 &2116207090642043302
 GameObject:
   m_ObjectHideFlags: 0

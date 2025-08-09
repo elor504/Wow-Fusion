@@ -16,6 +16,9 @@ public class DataBankSO : ScriptableObject
         }
     }
 
+    [Header("Hair Visual")]
+    [SerializeField] private CharacterVisualSO _characterVisual;
+
     [Header("Equipments")]
     [SerializeField] private List<EquipmentDataSO> _equipmentData;
 
@@ -24,6 +27,9 @@ public class DataBankSO : ScriptableObject
 
     [Header("Projectiles")]
     [SerializeField] private List<BaseProjectile> projectilesData;
+
+    public CharacterVisualSO CharacterVisual => _characterVisual;
+
     public EquipmentDataSO GetEquipmentDataByID(string id)
     {
         return _equipmentData.Find(equipment => equipment.EquipmentName == id);
