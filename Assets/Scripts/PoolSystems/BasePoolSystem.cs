@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Fusion;
+using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BasePoolSystem<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class BasePoolSystem<T> : NetworkBehaviour where T : MonoBehaviour
 {
     private protected List<T> _objectPool = new List<T>();
 

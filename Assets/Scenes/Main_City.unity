@@ -684,6 +684,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1637274155}
   - component: {fileID: 1637274156}
+  - component: {fileID: 1637274157}
   m_Layer: 0
   m_Name: Pool_Projectile
   m_TagString: Untagged
@@ -718,6 +719,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4deca581f18f8a844b651acfb214c188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1637274157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1637274154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2804078521
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1637274156}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &1656582655
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,6 +748,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1656582656}
   - component: {fileID: 1656582657}
+  - component: {fileID: 1656582658}
   m_Layer: 0
   m_Name: Pool_VFX
   m_TagString: Untagged
@@ -762,6 +783,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34c8eaeb625af64ca7d2b45208c3ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1656582658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656582655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1755805854
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1656582657}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &1683405674
 GameObject:
   m_ObjectHideFlags: 0

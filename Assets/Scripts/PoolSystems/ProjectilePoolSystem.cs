@@ -1,5 +1,7 @@
+using Fusion;
 using System;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class ProjectilePoolSystem : BasePoolSystem<BaseProjectile>
@@ -7,11 +9,13 @@ public class ProjectilePoolSystem : BasePoolSystem<BaseProjectile>
     private static ProjectilePoolSystem _instance;
     public static ProjectilePoolSystem Instance => _instance;
     
-    private void Awake()
+
+    public override void Spawned()
     {
+        base.Spawned();
         InitPool();
     }
-    
+
     public override void InitPool()
     {
         if (_instance == null)
@@ -27,7 +31,7 @@ public class ProjectilePoolSystem : BasePoolSystem<BaseProjectile>
 
     public override bool TryToRespawnObject(BaseProjectile objPrefab, Vector3 position,out BaseProjectile instantiatedObject)
     {
-        instantiatedObject   = Instantiate(objPrefab,position,Quaternion.identity,transform);
+        instantiatedObject = Instantiate(objPrefab,position,Quaternion.identity,transform);
         return instantiatedObject;
     }
 
@@ -48,5 +52,22 @@ public class ProjectilePoolSystem : BasePoolSystem<BaseProjectile>
         }
         Debug.LogError("Attempting to spawn projectile but it return as null");
         return null;
+    }
+
+    public void RequestSpawnAndInitProjectile(BaseProjectile objPrefab,Vector3 spawnPosition,ITargetableEntity caster, ITargetableEntity target,int damage,float speed)
+    {
+        RPC_SpawnAndInitProjectile(objPrefab,spawnPosition,caster,target,damage,speed);
+    }
+    [Rpc(RpcSources.StateAuthority,RpcTargets.All)]
+    public void RPC_SpawnAndInitProjectile(BaseProjectile objPrefab, Vector3 spawnPosition, ITargetableEntity caster, ITargetableEntity target, int damage, float speed)
+    {
+        if (TryToRespawnObject(objPrefab, spawnPosition, out var spawnProjectile))
+        {
+            spawnProjectile.InitProjectile(spawnPosition, caster, target, damage, speed);
+        }
+        else
+        {
+            Debug.LogError("Failed to spawn and init projectile");
+        }
     }
 }

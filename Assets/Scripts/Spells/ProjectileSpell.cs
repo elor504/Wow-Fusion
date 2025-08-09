@@ -18,12 +18,14 @@ public class ProjectileSpell : BaseSpell
     
     public override void CastSkill(ITargetableEntity caster, ITargetableEntity target)
     {
+        //Server***
         if (CanCast(caster,target))
         {
             var spawnPos = caster.GetProjectileSpawnPosition().position;
-            var proj = ProjectilePoolSystem.Instance.GetAvailableObjectFromPool(_projectile,spawnPos);
-            
-            proj.InitProjectile(spawnPos,caster, target, _damage, _speed);
+
+            ProjectilePoolSystem.Instance.RequestSpawnAndInitProjectile(_projectile, spawnPos, caster, target, _damage, _speed);
+            //var proj = ProjectilePoolSystem.Instance.GetAvailableObjectFromPool(_projectile,spawnPos);           
+            //proj.InitProjectile(spawnPos,caster, target, _damage, _speed);
         }
     }
 
