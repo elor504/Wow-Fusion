@@ -9,6 +9,8 @@ public class PlayerEquipment : NetworkBehaviour
 
     [SerializeField] private List<EquipmentVisual> equipmentVisuals = new List<EquipmentVisual>();
 
+    [Networked]
+    public int HairColor { get; set; }
 
 
     private void OnValidate()
@@ -23,7 +25,12 @@ public class PlayerEquipment : NetworkBehaviour
             }
         }
     }
-
+    public override void Spawned()
+    {
+        base.Spawned();
+        Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType((HairColorType)HairColor);
+        characterHairMeshes.ChangeHairMeshesColor(hairColor);
+    }
     public void UpdateVisual(EquipmentType type, Mesh[] meshes)
     {
         EquipmentVisual equipment = equipmentVisuals.Find((e => e.EquipmentType == type));
@@ -38,6 +45,7 @@ public class PlayerEquipment : NetworkBehaviour
 
     public void Init(CharacterData data)
     {
+        HairColor = (int)data.CharacterVisualData.HairColor;
         Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType(data.CharacterVisualData.HairColor);
         characterHairMeshes.ChangeHairMeshesColor(hairColor);
         Mesh[] meshes = null;

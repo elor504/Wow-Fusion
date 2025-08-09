@@ -8,10 +8,10 @@ public class CharacterHairMeshes : MonoBehaviour
 
     public void ChangeHairMeshesColor(Color color)
     {
-    foreach (var hairMesh in hairMeshes)
-    {
+        foreach (var hairMesh in hairMeshes)
+        {
             hairMesh.material.color = color;
-    }
+        }
     }
 
 }
