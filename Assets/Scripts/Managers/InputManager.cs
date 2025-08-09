@@ -18,7 +18,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     //Networking
     [Networked,OnChangedRender(nameof(DebugTarget))]
     public NetworkId targetID { get; set; }
-    [Networked,OnChangedRender(nameof(RPC_UpdateKeyOneID))]
+    [Networked,OnChangedRender(nameof(UpdateKeyOneID))]
     public string UsedHotkeyOneID { get; set; }
 
 
@@ -260,6 +260,11 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         Debug.Log($"[InputManager] {gameObject.name} Successfully updated current targetID: {targetID}");
     }
     #region Spells
+    private void UpdateKeyOneID()
+    {
+        RPC_UpdateKeyOneID();
+    }
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_UpdateKeyOneID()
     {
