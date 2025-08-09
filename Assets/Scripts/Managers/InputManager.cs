@@ -275,6 +275,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         {
             //RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
             var targetGO = ServerHandler.Instance.GetEnemyByNetworkID(targetID, Object.Runner);
+            UsedHotkeyOneID = projectileToTest.SpellID;
             character.CastSpell(projectileToTest, targetGO);
         }
         else
