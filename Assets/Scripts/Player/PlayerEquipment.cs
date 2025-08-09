@@ -1,10 +1,14 @@
+using Fusion;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEquipment : MonoBehaviour
+public class PlayerEquipment : NetworkBehaviour
 {
     [SerializeField] private List<EquipmentVisual> equipmentVisuals = new List<EquipmentVisual>();
+
+
+
     private void OnValidate()
     {
         if (equipmentVisuals != null && equipmentVisuals.Count == 0)
@@ -41,6 +45,8 @@ public class PlayerEquipment : MonoBehaviour
             UpdateVisual(type, meshes);
         }
     }
+
+    
 
 }
 

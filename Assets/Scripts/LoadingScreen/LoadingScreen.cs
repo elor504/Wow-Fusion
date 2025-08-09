@@ -83,6 +83,8 @@ public class LoadingScreen : NetworkBehaviour
         //check spawn positions
         GameTest.LocalCharacter.transform.position = Vector3.zero;
         GameTest.LocalCharacter.gameObject.SetActive(true);
+        GameTest.LocalCharacter.UpdateCharacterData(GameTest.FusionManager.SelectedCharacterData.Serialize());
+
         //camera
         if (PlayerCamera.Instance)
         {
@@ -93,7 +95,7 @@ public class LoadingScreen : NetworkBehaviour
             Debug.LogError("Player camera does not exists in this scene");
         }
 
-        //GameTest.LocalCharacter.LoadCharacterData(null);
+     
 
         //wait untill the multiplayer stuff loads
 

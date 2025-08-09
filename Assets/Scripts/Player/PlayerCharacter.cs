@@ -23,10 +23,14 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
     private NetworkRunner _myRunner;
     private PlayerBrain _playerBrain;
-
+    private CharacterData _characterData;
 
     [Networked,OnChangedRender(nameof(CharacterNicknameChange))]
     public string CharacterName { get; set; }
+
+
+
+
 
     private void CharacterNicknameChange()
     {
@@ -202,6 +206,26 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         return hitPosition;
     }
 
+    public void UpdateCharacterData(string characterData)
+    {
+        RPC_RequestCharacterData(characterData);
+    }
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_RequestCharacterData(string serializedCharacterData)
+    {
+        SetCharacterData(serializedCharacterData);
+    }
+
+    private void SetCharacterData(string characterData)
+    {
+        RPC_UpdateCharacterData(characterData);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_UpdateCharacterData(string serializedData)
+    {
+        _characterData.Deserialize(serializedData);
+    }
     public NetworkId GetNetworkId()
     {
         return networkObject.Id;

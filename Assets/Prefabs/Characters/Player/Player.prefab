@@ -1303,6 +1303,7 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 4218192414086152221}
   hitPosition: {fileID: 6670549599876932771}
   baseClassData: {fileID: 11400000, guid: 6d3aed36eca6f2046b8cbe7067102c0b, type: 2}
+  _CharacterName: 
   _CurrentState: 0
 --- !u!114 &924406234744575382
 MonoBehaviour:
@@ -1454,6 +1455,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 3090110417922915932}
+  - {fileID: 1014140497616985380}
   - {fileID: 7347465352698932254}
   - {fileID: 2010637626868590251}
   - {fileID: 3565475899856392749}
@@ -1472,6 +1474,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 3090110417922915932}
   playerMovement: {fileID: 163371969025237802}
+  _targetID:
+    Raw: 0
+  _UsedHotkeyOneID: 
+  _CastCounter: 0
   Movement:
     m_Name: Movement
     m_Type: 0

@@ -31,4 +31,18 @@ public class CharacterData
         this.characterVisualData = characterVisualData;
         this.characterEquipmentData = characterEquipmentData;
     }
+
+    
+    public string Serialize()
+    {
+        return JsonUtility.ToJson(this);
+    }
+
+}
+public static class CharacterDataExtention
+{
+    public static void Deserialize(this CharacterData data, string serializedData)
+    {
+        data = JsonUtility.FromJson<CharacterData>(serializedData);
+    }
 }
