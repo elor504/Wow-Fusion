@@ -26,7 +26,7 @@ public class EnemyHealth : NetworkBehaviour
         CurrentHP = maxHealth;
     }
 
-    [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
+    [Rpc(RpcSources.StateAuthority,RpcTargets.StateAuthority)]
     public void RPC_DealDamage(int damage,RpcInfo source = default)
     {
         //TODO: Add the damage dealth by the player to this enemy into some kind of a recorder so show who dealth the most damage in the dungeon
