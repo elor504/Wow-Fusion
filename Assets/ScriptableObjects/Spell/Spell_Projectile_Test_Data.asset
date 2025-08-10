@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1bb922803c4341d4993d2fd3ec12492f, type: 3}
-  m_Name: SpellData
+  m_Name: Spell_Projectile_Test_Data
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileSpellData
-  id: PooBolt
-  name: Poo Bolt
+  id: GreenBolt
+  name: GreenBolt
   description: Disgusting projectile YUCK
   manaCost: 5
   timeToCast: 3
-  handsSpellVFX: {fileID: 6646758686748709502, guid: 40ba36b570ddb0244b7e052072302a94, type: 3}
+  handsSpellVFX: {fileID: 6646758686748709502, guid: 5fae0532311946f40b61f023eca213a5, type: 3}
   bodyVFX: {fileID: 0}
   damage: 1
   speed: 20
-  _projectile: {fileID: 4727345208012558461, guid: f4ca41ea21a5fdf419cba519bbb48413, type: 3}
+  _projectile: {fileID: 4727345208012558461, guid: fbb8cb45ecd1d844ca7d00a2b7695898, type: 3}

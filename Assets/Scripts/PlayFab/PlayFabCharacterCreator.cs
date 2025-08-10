@@ -93,7 +93,16 @@ public static class PlayFabCharacterCreator
         OnGetCharacterList?.Invoke(result);
     }
 
-
+    public static void GetCharacterPlayfabData(string characterName,Action<GetCharacterDataResult> callBackResults)
+    {
+        callBackResults = null;
+        GetCharacterDataRequest characterDataReq = new GetCharacterDataRequest()
+        {
+            CharacterId = characterName
+        };
+        PlayFabClientAPI.GetCharacterData(characterDataReq, callBackResults, OnPlayFabError);
+    }
+  
     private static void OnPlayFabError(PlayFabError obj)
     {
         Debug.Log(obj.GenerateErrorReport());

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d963256adfe5edd46b5c39bb83ed1327, type: 3}
+  m_Name: Warrior_ClassData
+  m_EditorClassIdentifier: 
+  classData:
+    classID: 100
+    className: Warrior
+    classDescription: SMASH!
+    classIcon: {fileID: 0}
+    classMainStatType: 0
+    classBaseStats:
+      stats:
+      - statName: Strength
+        StatID: 0
+        BaseValue: 24
+      - statName: Agility
+        StatID: 1
+        BaseValue: 10
+      - statName: Intellect
+        StatID: 2
+        BaseValue: 4
+      - statName: Stamina
+        StatID: 3
+        BaseValue: 7
+      - statName: Crit
+        StatID: 100
+        BaseValue: 5
+      - statName: Haste
+        StatID: 101
+        BaseValue: 3
+      - statName: Speed
+        StatID: 102
+        BaseValue: 6
+  classSkills:
+  - {fileID: 11400000, guid: 09b85d8bc7f96bc4a81c058c2e34b69d, type: 2}
+  startingEquipment:
+  - {fileID: 11400000, guid: 349abffe85f0fc742a8bf1f787924141, type: 2}
+  - {fileID: 11400000, guid: 670e0f6d02b2c3746b09ffbf7578c104, type: 2}
+  - {fileID: 11400000, guid: 349abffe85f0fc742a8bf1f787924141, type: 2}
