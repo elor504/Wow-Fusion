@@ -111,11 +111,6 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         _playerBrain.ChangeState(CurrentState);
     }
 
-    public void LoadCharacterData()
-    {
-        characterStat.Init(this, _characterData);
-        equipment.Init(_characterData);
-    }
 
     public void CastSpell(BaseSpell spell, ITargetableEntity target)
     {
@@ -255,11 +250,37 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public void RPC_UpdateCharacterVisualData(string serializedData)
     {
         _characterData.DeserializeVisual(serializedData);
-        equipment.Init(_characterData);
+        equipment.InitVisual(_characterData.CharacterVisualData);
         //LoadCharacterData();
     }
-    #endregion
 
+
+    #endregion
+    #region equipment
+    public void UpdateCharacterEquipmentData(string characterData)
+    {
+        RPC_RequestCharacterEquipmentData(characterData);
+    }
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_RequestCharacterEquipmentData(string serializedCharacterData)
+    {
+        SetCharacterEquipmentData(serializedCharacterData);
+    }
+
+    private void SetCharacterEquipmentData(string characterData)
+    {
+        RPC_UpdateCharacterEquipmentData(characterData);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_UpdateCharacterEquipmentData(string serializedData)
+    {
+        _characterData.DeserializeEquipment(serializedData);
+        equipment.InitEquipment(_characterData.CharacterEquipmentData);
+        //LoadCharacterData();
+    }
+
+    #endregion
 
     public NetworkId GetNetworkId()
     {

@@ -85,6 +85,7 @@ public class LoadingScreen : NetworkBehaviour
         GameTest.LocalCharacter.gameObject.SetActive(true);
         GameTest.LocalCharacter.UpdateCharacterName(GameTest.FusionManager.SelectedCharacterData.CharacterName);
         GameTest.LocalCharacter.UpdateCharacterVisualData(GameTest.FusionManager.SelectedCharacterData.SerializeVisual());
+        GameTest.LocalCharacter.UpdateCharacterEquipmentData(GameTest.FusionManager.SelectedCharacterData.SerializeEquipment());
 
         //camera
         if (PlayerCamera.Instance)

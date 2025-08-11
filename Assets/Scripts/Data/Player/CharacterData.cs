@@ -21,8 +21,8 @@ public class CharacterData
 
     ///Inventory?
 
-    public CharacterData (string characterName ,int characterLevel, ClassType classType, 
-        StatContainer characterBaseStat, CharacterVisualData characterVisualData,CharacterEquipmentData characterEquipmentData)
+    public CharacterData(string characterName, int characterLevel, ClassType classType,
+        StatContainer characterBaseStat, CharacterVisualData characterVisualData, CharacterEquipmentData characterEquipmentData)
     {
         this.characterName = characterName;
         this.characterLevel = characterLevel;
@@ -34,6 +34,15 @@ public class CharacterData
     public CharacterData()
     {
 
+    }
+
+    public void DeserializeEquipment(string serializedEquipmentData)
+    {
+        characterEquipmentData = JsonUtility.FromJson<CharacterEquipmentData>(serializedEquipmentData);
+    }
+    public string SerializeEquipment()
+    {
+        return JsonUtility.ToJson(characterEquipmentData);
     }
 
     public void DeserializeVisual(string serializedVisualData)
@@ -58,5 +67,5 @@ public static class CharacterDataExtention
         data = JsonUtility.FromJson<CharacterData>(serializedData);
     }
 
-  
+
 }

@@ -1,8 +1,6 @@
 using Fusion;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class PlayerEquipment : NetworkBehaviour
@@ -46,32 +44,37 @@ public class PlayerEquipment : NetworkBehaviour
         Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType((HairColorType)HairColor);
         characterHairMeshes.ChangeHairMeshesColor(hairColor);
     }
-    public void Init(CharacterData data)
+    public void InitVisual(CharacterVisualData data)
     {
-        HairColor = (int)data.CharacterVisualData.HairColor;
+        HairColor = (int)data.HairColor;
 
-        Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType(data.CharacterVisualData.HairColor);
+        Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType(data.HairColor);
         characterHairMeshes.ChangeHairMeshesColor(hairColor);
+
+      
+    }
+    public void InitEquipment(CharacterEquipmentData data)
+    {
         EquipmentType type = EquipmentType.Helmet;
-        var equipmentData = data.CharacterEquipmentData.GetEquipableDataByType(type);
+        var equipmentData = data.GetEquipableDataByType(type);
         int equipmentTypeLength = Enum.GetNames(typeof(EquipmentType)).Length;
 
-        if (data.CharacterEquipmentData != null)
-          {
-              for (int i = 0; i < equipmentTypeLength; i++)
-              {
-                  type = (EquipmentType)i;
-                  equipmentData = data.CharacterEquipmentData.GetEquipableDataByType(type);
+        if (data != null)
+        {
+            for (int i = 0; i < equipmentTypeLength; i++)
+            {
+                type = (EquipmentType)i;
+                equipmentData = data.GetEquipableDataByType(type);
 
-                  UpdateVisual(type, equipmentData);
-              }
-          }
-          else
-          {
-              Debug.Log("[Player Equipment] Character EquipmentData is null");
-          }
+                if (equipmentData != null)
+                    UpdateVisual(type, equipmentData);
+            }
+        }
+        else
+        {
+            Debug.Log("[Player Equipment] Character EquipmentData is null");
+        }
     }
-
 
     public void UpdateVisual(EquipmentType type, EquipableItemData equipment)
     {
@@ -137,12 +140,12 @@ public class PlayerEquipment : NetworkBehaviour
         var equipmentObj = _equipmentObjects.Find(equipment => equipment.EquipmentID == CurrentEquippedPantsID);
         equipmentObj.gameObject.SetActive(isActive);
     }
-   
 
 
 
 
-  
+
+
 
 
 }
