@@ -53,10 +53,9 @@ public class CharacterCreationMenu : MonoBehaviour
     private HairColorType hairColorType;
 
     private bool _isNameTaken;
-    private bool _spamPreventation;
+    private bool _createCharacterInProgress;
     private string _characterName;
     private ClassType _currentSelectedClass;
-    private int _currentClassIndex = -1;
 
     [Header("Testing")]
     public HairColorType startHairToTest = HairColorType.Ginger;
@@ -73,7 +72,7 @@ public class CharacterCreationMenu : MonoBehaviour
         checkCharacterNameValidationButton.onClick.AddListener(CheckNameValidation);
         ///Will be a dream to make it more flexible but its good for now :D
         mageButton.onClick.AddListener(ClickMageButtonHandler);
-
+        warriorButton.onClick.AddListener(ClickWarriorButtonHandler);
 
         PlayFabCharacterCreator.OnGrantedCharacter += GrantedCharacterHandler;
         PlayFabCharacterCreator.OnUpdatedCharacter += CharacterUpdateHandler;
@@ -86,6 +85,7 @@ public class CharacterCreationMenu : MonoBehaviour
         checkCharacterNameValidationButton.onClick.RemoveListener(CheckNameValidation);
 
         mageButton.onClick.RemoveListener(ClickMageButtonHandler);
+        warriorButton.onClick.RemoveListener(ClickWarriorButtonHandler);
 
         PlayFabCharacterCreator.OnGrantedCharacter -= GrantedCharacterHandler;
         PlayFabCharacterCreator.OnUpdatedCharacter -= CharacterUpdateHandler;
@@ -98,13 +98,13 @@ public class CharacterCreationMenu : MonoBehaviour
         _characterName = "";
         HandleCreationButton(CreationError.NameShort, false);
         SetErrorMessageCharacterCreation(CreationError.Available);
+        ClickMageButtonHandler();
         panel.SetActive(true);
     }
     public void HidePanel()
     {
         panel.SetActive(false);
     }
-
 
     public void OnSelectedClassButton(ClassType selectedClass)
     {
@@ -113,7 +113,6 @@ public class CharacterCreationMenu : MonoBehaviour
             _currentSelectedClass = selectedClass;
             className.text = data.ClassName;
             classDescription.text = data.ClassDescription;
-            _currentClassIndex = (int)selectedClass;
             var equipments = GetClassStartEquipment(_currentSelectedClass);
             int enumLength = Enum.GetNames(typeof(EquipmentType)).Length;
             for (int i = 0; i < enumLength; i++)
@@ -133,15 +132,15 @@ public class CharacterCreationMenu : MonoBehaviour
                     }
                 }
             }
-
         }
         else
         {
+            Debug.Log($"[CharacterCreationMenu] There is not class data available for class {selectedClass}");
             className.text = "";
             classDescription.text = "";
         }
+        HandleClassButtonInteraction();
     }
-
     private void SelectHairColor(HairColorType selectedHairColor)
     {
         hairColorType = selectedHairColor;
@@ -152,6 +151,10 @@ public class CharacterCreationMenu : MonoBehaviour
     {
         OnSelectedClassButton(ClassType.Mage);
     }
+    private void ClickWarriorButtonHandler()
+    {
+        OnSelectedClassButton(ClassType.Warrior);
+    }
     private bool TryGetClassDataByClassType(ClassType type, out BaseClassData data)
     {
         data = classesData.Find(c => c.GetClassData.GetClassID == type);
@@ -161,13 +164,14 @@ public class CharacterCreationMenu : MonoBehaviour
         }
         return data;
     }
-  
+
     private void OnClickCreateButton()
     {
+        if (_createCharacterInProgress) return;
+        _createCharacterInProgress = true;
+        createCharacterButton.interactable = false;
         PlayFabCharacterCreator.RequestCharacterCreation(_characterName, _currentSelectedClass.ToString());
     }
-
-
 
     private void UpdateCharacterNameInput(string input)
     {
@@ -186,7 +190,6 @@ public class CharacterCreationMenu : MonoBehaviour
     {
         menu.ChangeState(MainMenuState.CharacterSelection);
     }
-
 
     private void HandleCreationButton(CreationError errorType, bool showMessage = true)
     {
@@ -225,19 +228,22 @@ public class CharacterCreationMenu : MonoBehaviour
     }
     private void CheckNameValidation()
     {
+        checkCharacterNameValidationButton.interactable = false;
         if (IsNameTooShort())
         {
             HandleCreationButton(CreationError.NameShort);
+            checkCharacterNameValidationButton.interactable = true;
             return;
         }
 
         //CheckIfNameIsAvailable();
+
         HandleCreationButton(CreationError.Available);
+        checkCharacterNameValidationButton.interactable = true;
     }
 
     private bool IsNameTooShort()
     {
-
         return _characterName.Length < Name_Length_Min;
     }
     private void CheckIfNameIsAvailable()
@@ -256,6 +262,14 @@ public class CharacterCreationMenu : MonoBehaviour
         _isNameTaken = false;
         //The name is available
         HandleCreationButton(CreationError.Available);
+    }
+
+
+    private void HandleClassButtonInteraction()
+    {
+        mageButton.interactable = _currentSelectedClass != ClassType.Mage;
+        warriorButton.interactable = _currentSelectedClass != ClassType.Warrior;
+        rangerButton.interactable = _currentSelectedClass != ClassType.Ranger;
     }
 
     private StatContainer GetClassBasicStat(ClassType type)

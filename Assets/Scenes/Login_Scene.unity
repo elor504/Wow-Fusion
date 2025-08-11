@@ -2244,6 +2244,7 @@ MonoBehaviour:
   panel: {fileID: 1457327248}
   classesData:
   - {fileID: 11400000, guid: 6d3aed36eca6f2046b8cbe7067102c0b, type: 2}
+  - {fileID: 11400000, guid: 52881e0633fcd864c8827e7e4400e8e7, type: 2}
   visualSO: {fileID: 11400000, guid: 650e77259e6cd3f469fdba919df10e9d, type: 2}
   equipmentsData:
   - {fileID: 11400000, guid: 670e0f6d02b2c3746b09ffbf7578c104, type: 2}
