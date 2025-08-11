@@ -115,7 +115,6 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         characterStat.Init(this, _characterData);
         equipment.Init(_characterData);
-
     }
 
     public void CastSpell(BaseSpell spell, ITargetableEntity target)
