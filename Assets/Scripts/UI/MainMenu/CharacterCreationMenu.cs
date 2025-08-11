@@ -42,6 +42,7 @@ public class CharacterCreationMenu : MonoBehaviour
 
 
     [Header("Character visual")]
+    [SerializeField] private HairColorSelector hairColorSelector;
     [SerializeField] private CharacterHairMeshes characterHairRenderer;
     [SerializeField] private PlayerEquipment equipmentVisual;
     ///Character visual customization?
@@ -74,6 +75,9 @@ public class CharacterCreationMenu : MonoBehaviour
         mageButton.onClick.AddListener(ClickMageButtonHandler);
         warriorButton.onClick.AddListener(ClickWarriorButtonHandler);
 
+        hairColorSelector.HairColorSelected += ClickHairColorHandler;
+
+
         PlayFabCharacterCreator.OnGrantedCharacter += GrantedCharacterHandler;
         PlayFabCharacterCreator.OnUpdatedCharacter += CharacterUpdateHandler;
     }
@@ -86,6 +90,8 @@ public class CharacterCreationMenu : MonoBehaviour
 
         mageButton.onClick.RemoveListener(ClickMageButtonHandler);
         warriorButton.onClick.RemoveListener(ClickWarriorButtonHandler);
+
+        hairColorSelector.HairColorSelected -= ClickHairColorHandler;
 
         PlayFabCharacterCreator.OnGrantedCharacter -= GrantedCharacterHandler;
         PlayFabCharacterCreator.OnUpdatedCharacter -= CharacterUpdateHandler;
@@ -146,6 +152,10 @@ public class CharacterCreationMenu : MonoBehaviour
         hairColorType = selectedHairColor;
         characterHairRenderer.ChangeHairMeshesColor(visualSO.GetHairColorByType(hairColorType));
     }
+    private void ClickHairColorHandler(HairColorType selectedHairColor)
+    {
+        SelectHairColor(selectedHairColor);
+    }
 
     private void ClickMageButtonHandler()
     {
@@ -155,6 +165,7 @@ public class CharacterCreationMenu : MonoBehaviour
     {
         OnSelectedClassButton(ClassType.Warrior);
     }
+
     private bool TryGetClassDataByClassType(ClassType type, out BaseClassData data)
     {
         data = classesData.Find(c => c.GetClassData.GetClassID == type);
@@ -242,6 +253,7 @@ public class CharacterCreationMenu : MonoBehaviour
         checkCharacterNameValidationButton.interactable = true;
     }
 
+    #region Check character availability
     private bool IsNameTooShort()
     {
         return _characterName.Length < Name_Length_Min;
@@ -263,7 +275,7 @@ public class CharacterCreationMenu : MonoBehaviour
         //The name is available
         HandleCreationButton(CreationError.Available);
     }
-
+    #endregion
 
     private void HandleClassButtonInteraction()
     {

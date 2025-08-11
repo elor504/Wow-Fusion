@@ -9,7 +9,6 @@ public static class PlayFabCharacterCreator
 
     public static event Action<GrantCharacterToUserResult> OnGrantedCharacter;
     public static event Action<UpdateCharacterDataResult> OnUpdatedCharacter;
-    public static event Action<ListUsersCharactersResult> OnGetCharacterList;
 
     public static event Action<PlayFabError> OnFailedToGrantCharacter;
 
@@ -70,28 +69,19 @@ public static class PlayFabCharacterCreator
     }
     #endregion
 
-    public static bool TryToGetCharacterDatas(string playFabID, out List<CharacterData> characterDatas)
+    public static void TryToGetCharacterDatas(string playFabID, Action<ListUsersCharactersResult> OnGetCharacterList)
     {
-        characterDatas = new List<CharacterData>();
+    
         ListUsersCharactersRequest listUsersCharactersRequest = new ListUsersCharactersRequest()
         {
             PlayFabId = playFabID
         };
-        PlayFabClientAPI.GetAllUsersCharacters(listUsersCharactersRequest, GetCharacterDataList, OnPlayFabError);
+        PlayFabClientAPI.GetAllUsersCharacters(listUsersCharactersRequest, OnGetCharacterList, OnPlayFabError);
 
 
-        if (characterDatas.Count == 0)
-        {
-            return false;
-        }
-
-
-        return true;
+    
     }
-    private static void GetCharacterDataList(ListUsersCharactersResult result)
-    {
-        OnGetCharacterList?.Invoke(result);
-    }
+ 
 
     public static void GetCharacterPlayfabData(string characterName,Action<GetCharacterDataResult> callBackResults)
     {

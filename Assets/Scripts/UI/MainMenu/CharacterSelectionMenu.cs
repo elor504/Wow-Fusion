@@ -12,7 +12,11 @@ public class CharacterSelectionMenu : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private Button createCharacterButton;
     [SerializeField] private Button playerGameButton;
+    [SerializeField] private GameObject characterLoading;
+    [SerializeField] private GameObject characterList;
     [SerializeField] private List<CharacterButton> characterButtonsGO;
+
+
     [Header("Visual")]
     [SerializeField] private GameObject characterVisualGO;
     [SerializeField] private CharacterHairMeshes characterVisual;
@@ -27,25 +31,21 @@ public class CharacterSelectionMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayFabCharacterCreator.OnGetCharacterList += GetCharacterListHander;
         createCharacterButton.onClick.AddListener(mainMenu.ShowCharacterCreation);
     }
     private void OnDisable()
     {
-        PlayFabCharacterCreator.OnGetCharacterList -= GetCharacterListHander;
         createCharacterButton.onClick.RemoveListener(mainMenu.ShowCharacterCreation);
     }
 
     public void LoadCharacterDatas()
     {
-        if (PlayFabCharacterCreator.TryToGetCharacterDatas(PlayFabAuthenticator.GetPlayFabPlayerID, out var characterDatas))
-        {
-
-        }
+        PlayFabCharacterCreator.TryToGetCharacterDatas(PlayFabAuthenticator.GetPlayFabPlayerID, GetCharacterListHander);
     }
     public void ShowCharacter(int index)
     {
-        _currentSelectedCharacter = _charactersData[index];
+        createCharacterButton.interactable = false;
+            _currentSelectedCharacter = _charactersData[index];
         var characterVisualData = _currentSelectedCharacter.CharacterVisualData;
         var characterEquipmentData = _currentSelectedCharacter.CharacterEquipmentData;
         Color hairColor = visualSO.GetHairColorByType(characterVisualData.HairColor);
@@ -61,12 +61,15 @@ public class CharacterSelectionMenu : MonoBehaviour
                 characterEquipment.UpdateVisual(type, GetEquipmentMeshes(equipmentData.ItemName));
         }
 
-
         if (!characterVisualGO.activeInHierarchy)
             characterVisualGO.SetActive(true);
+
+        playerGameButton.interactable = true;
     }
     public void ShowPanel()
     {
+        characterLoading.SetActive(true);
+        characterList.SetActive(false);
         LoadCharacterDatas();
         panel.SetActive(true);
         characterVisualGO.SetActive(false);
@@ -98,7 +101,9 @@ public class CharacterSelectionMenu : MonoBehaviour
         {
             GetCharacterData(character.CharacterId);
         }
-
+        characterLoading.SetActive(false);
+        characterList.SetActive(true);
+        createCharacterButton.interactable = result.Characters.Count < 3;
     }
     private Mesh[] GetEquipmentMeshes(string id)
     {
