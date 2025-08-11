@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3c83f1ffac8cdb4a8db3d082fc455c2, type: 3}
-  m_Name: Equipment_Boot_Test
+  m_Name: Equipment_Chest_Test
   m_EditorClassIdentifier: 
-  equipmentName: Boot
+  equipmentName: Warrior_Chest
   equipmentDescription: 
-  equipmentType: 3
+  equipmentType: 1
   levelRequirement: 1
   statContainer:
     stats:
@@ -39,5 +39,4 @@ MonoBehaviour:
     - statName: Speed
       StatID: 102
       BaseValue: 0
-  equipmentMeshes:
-  - {fileID: 7953725260033477193, guid: ecec9226167ad6a449f4f1b112b740b3, type: 3}
+  equipmentObject: {fileID: 9048874689017602819, guid: e0592025b8b6f9c4e89beb2a17976d9b, type: 3}

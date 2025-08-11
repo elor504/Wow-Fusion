@@ -44,7 +44,7 @@ public class CharacterCreationMenu : MonoBehaviour
     [Header("Character visual")]
     [SerializeField] private HairColorSelector hairColorSelector;
     [SerializeField] private CharacterHairMeshes characterHairRenderer;
-    [SerializeField] private PlayerEquipment equipmentVisual;
+    [SerializeField] private CharacterVis equipmentVisual;
     ///Character visual customization?
 
     [Header("Error")]
@@ -102,6 +102,7 @@ public class CharacterCreationMenu : MonoBehaviour
         SelectHairColor(startHairToTest);
         characterNameInput.text = "";
         _characterName = "";
+        equipmentVisual.Init();
         HandleCreationButton(CreationError.NameShort, false);
         SetErrorMessageCharacterCreation(CreationError.Available);
         ClickMageButtonHandler();
@@ -127,15 +128,7 @@ public class CharacterCreationMenu : MonoBehaviour
                 EquipableItemData equipable = equipments.GetEquipableDataByType(type);
                 if (equipable != null)
                 {
-                    Mesh[] meshes = GetEquipmentMesh(equipable.ItemName);
-                    if (meshes != null)
-                    {
-                        equipmentVisual.UpdateVisual(type, meshes);
-                    }
-                    else
-                    {
-                        Debug.Log($"Meshes do not existed at equipment: {equipable.ItemName}");
-                    }
+                    equipmentVisual.UpdateVisual(type, equipable);
                 }
             }
         }
@@ -190,7 +183,7 @@ public class CharacterCreationMenu : MonoBehaviour
     }
     private void GrantedCharacterHandler(GrantCharacterToUserResult result)
     {
-        CharacterVisualData visualData = new CharacterVisualData(startHairToTest);
+        CharacterVisualData visualData = new CharacterVisualData(hairColorType);
         StatContainer baseClassStat = GetClassBasicStat(_currentSelectedClass);
         CharacterEquipmentData equipmentData = GetClassStartEquipment(_currentSelectedClass);
         CharacterData newCharData = new CharacterData(_characterName, 1, _currentSelectedClass, baseClassStat, visualData, equipmentData);
@@ -299,18 +292,7 @@ public class CharacterCreationMenu : MonoBehaviour
         }
         return equipmentData;
     }
-    private Mesh[] GetEquipmentMesh(string id)
-    {
-        foreach (var equipment in equipmentsData)
-        {
-            if (equipment.EquipmentName == id)
-            {
-                return equipment.EquipmentMeshes;
-            }
-        }
 
-        return null;
-    }
 
 }
 

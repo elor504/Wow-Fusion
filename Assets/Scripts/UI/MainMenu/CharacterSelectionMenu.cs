@@ -23,12 +23,15 @@ public class CharacterSelectionMenu : MonoBehaviour
     [SerializeField] private CharacterVisualSO visualSO;
     private List<CharacterData> _charactersData = new List<CharacterData>();
     [Header("Equipment")]
-    [SerializeField] private PlayerEquipment characterEquipment;
+    [SerializeField] private CharacterVis characterEquipment;
     [SerializeField] private List<EquipmentDataSO> equipmentsData;
 
 
     private CharacterData _currentSelectedCharacter;
-
+    private void Awake()
+    {
+        characterEquipment.Init();
+    }
     private void OnEnable()
     {
         createCharacterButton.onClick.AddListener(mainMenu.ShowCharacterCreation);
@@ -45,11 +48,10 @@ public class CharacterSelectionMenu : MonoBehaviour
     public void ShowCharacter(int index)
     {
         createCharacterButton.interactable = false;
-            _currentSelectedCharacter = _charactersData[index];
+        _currentSelectedCharacter = _charactersData[index];
         var characterVisualData = _currentSelectedCharacter.CharacterVisualData;
         var characterEquipmentData = _currentSelectedCharacter.CharacterEquipmentData;
         Color hairColor = visualSO.GetHairColorByType(characterVisualData.HairColor);
-
         characterVisual.ChangeHairMeshesColor(hairColor);
 
         int enumLength = Enum.GetNames(typeof(EquipmentType)).Length;
@@ -58,7 +60,7 @@ public class CharacterSelectionMenu : MonoBehaviour
             var type = (EquipmentType)i;
             EquipableItemData equipmentData = characterEquipmentData.GetEquipableDataByType(type);
             if (!equipmentData.IsEmpty())
-                characterEquipment.UpdateVisual(type, GetEquipmentMeshes(equipmentData.ItemName));
+                characterEquipment.UpdateVisual(type, equipmentData);
         }
 
         if (!characterVisualGO.activeInHierarchy)
@@ -104,18 +106,6 @@ public class CharacterSelectionMenu : MonoBehaviour
         characterLoading.SetActive(false);
         characterList.SetActive(true);
         createCharacterButton.interactable = result.Characters.Count < 3;
-    }
-    private Mesh[] GetEquipmentMeshes(string id)
-    {
-        foreach (var equipment in equipmentsData)
-        {
-            if (equipment.EquipmentName == id)
-            {
-                return equipment.EquipmentMeshes;
-            }
-        }
-
-        return null;
     }
 
 

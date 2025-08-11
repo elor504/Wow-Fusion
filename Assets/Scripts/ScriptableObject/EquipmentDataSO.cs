@@ -10,7 +10,7 @@ public class EquipmentDataSO : ScriptableObject
     [SerializeField] private StatContainer statContainer;
 
     [Header("Visual")]
-    [SerializeField] private Mesh[] equipmentMeshes;
+    [SerializeField] private EquipmentObject equipmentObject;
     
 
     public string EquipmentName => equipmentName;
@@ -18,8 +18,8 @@ public class EquipmentDataSO : ScriptableObject
     public EquipmentType EquipmentType => equipmentType;
     public int LevelRequirement => levelRequirement;
     public StatContainer StatContainer => statContainer;
-    public Mesh[] EquipmentMeshes => equipmentMeshes;
 
+    public EquipmentObject EquipmentObject => equipmentObject;
 
     public EquipableItemData GetEquipableItem()
     {

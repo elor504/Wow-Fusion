@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3c83f1ffac8cdb4a8db3d082fc455c2, type: 3}
-  m_Name: Equipment_Pants_Test
+  m_Name: Equipment_Pants_Mage
   m_EditorClassIdentifier: 
-  equipmentName: Pants
+  equipmentName: Mage_Pants
   equipmentDescription: 
   equipmentType: 2
   levelRequirement: 1
@@ -39,5 +39,4 @@ MonoBehaviour:
     - statName: Speed
       StatID: 102
       BaseValue: 0
-  equipmentMeshes:
-  - {fileID: -5176841049787537533, guid: ecec9226167ad6a449f4f1b112b740b3, type: 3}
+  equipmentObject: {fileID: -4418317652581789465, guid: dca5bc2045b135445b8091d27f9c6e07, type: 3}

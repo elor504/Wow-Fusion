@@ -44,6 +44,6 @@ MonoBehaviour:
   classSkills:
   - {fileID: 11400000, guid: 383a2b2071035eb4083690742a12d571, type: 2}
   startingEquipment:
-  - {fileID: 11400000, guid: 349abffe85f0fc742a8bf1f787924141, type: 2}
-  - {fileID: 11400000, guid: 670e0f6d02b2c3746b09ffbf7578c104, type: 2}
-  - {fileID: 11400000, guid: 349abffe85f0fc742a8bf1f787924141, type: 2}
+  - {fileID: 11400000, guid: dd6828927f11d1441bcae5244a479d09, type: 2}
+  - {fileID: 11400000, guid: cde897d940f19834bb684100c490d5a7, type: 2}
+  - {fileID: 11400000, guid: 387a41eec2d5e8c40b4ae35178b3ce0a, type: 2}

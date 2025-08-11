@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3c83f1ffac8cdb4a8db3d082fc455c2, type: 3}
-  m_Name: Equipment_Chest_Test
+  m_Name: Equipment_Chest_Mage
   m_EditorClassIdentifier: 
-  equipmentName: Chest
+  equipmentName: Mage_Chest
   equipmentDescription: 
   equipmentType: 1
   levelRequirement: 1
@@ -39,5 +39,4 @@ MonoBehaviour:
     - statName: Speed
       StatID: 102
       BaseValue: 0
-  equipmentMeshes:
-  - {fileID: 7021145606560831276, guid: ecec9226167ad6a449f4f1b112b740b3, type: 3}
+  equipmentObject: {fileID: 9048874689017602819, guid: 55fe3b1095bc02d48a478b88c8af78dc, type: 3}
