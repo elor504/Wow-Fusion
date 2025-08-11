@@ -42,6 +42,8 @@ public class CharacterEquipmentData
 
     public EquipableItemData UpdateEquipment(EquipableItemData equipableItemData)
     {
+        if(equipableItemData == null) return null;  
+
         EquipableItemData previousEquipment = null;
         switch (equipableItemData.EquipmentType)
         {
