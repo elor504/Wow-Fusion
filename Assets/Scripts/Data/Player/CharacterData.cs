@@ -42,6 +42,8 @@ public class CharacterData
     }
     public void DeserializeSpecificEquipment(string serializedEquipmentData)
     {
+        if(characterEquipmentData == null)
+            characterEquipmentData = new CharacterEquipmentData();
         characterEquipmentData.UpdateEquipment(JsonUtility.FromJson<EquipableItemData>(serializedEquipmentData));
     }
     public string SerializeEquipment()
