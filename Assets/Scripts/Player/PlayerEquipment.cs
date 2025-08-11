@@ -145,7 +145,7 @@ public class PlayerEquipment : NetworkBehaviour
     private void SetEquipmentVisualActive(string equipmentID, bool isActive)
     {
         var equipmentObj = _equipmentObjects.Find(equipment => equipment.EquipmentID == CurrentEquippedPantsID);
-        equipmentObj.gameObject.SetActive(isActive);
+        equipmentObj?.gameObject.SetActive(isActive);
     }
 
 
