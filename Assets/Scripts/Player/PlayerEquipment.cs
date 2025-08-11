@@ -51,7 +51,7 @@ public class PlayerEquipment : NetworkBehaviour
         Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType(data.HairColor);
         characterHairMeshes.ChangeHairMeshesColor(hairColor);
 
-      
+
     }
     public void InitEquipment(CharacterEquipmentData data)
     {
@@ -88,9 +88,16 @@ public class PlayerEquipment : NetworkBehaviour
         if (!currentEquipmentObject)
         {
             var armorPF = DataBankSO.Instance.GetEquipmentDataByID(equipment.ItemName).EquipmentObject;
-            var spawnedArmor = Instantiate(armorPF, armorParent);
-            spawnedArmor.Init(equipment.ItemName, root, bones);
-            _equipmentObjects.Add(spawnedArmor);
+            if (armorPF != null)
+            {
+                var spawnedArmor = Instantiate(armorPF, armorParent);
+                spawnedArmor.Init(equipment.ItemName, root, bones);
+                _equipmentObjects.Add(spawnedArmor);
+            }
+            else
+            {
+                return;
+            }
         }
         SetEquipmentVisualActive(previousEquippedID, false);
         SetEquipmentVisualActive(GetCurrentEquippedItemByType(type), true);
