@@ -37,6 +37,7 @@ public class PlayerEquipment : NetworkBehaviour
         {
             item.Init(item.EquipmentType.ToString());
         }
+        _equipmentObjects.Clear();
         _equipmentObjects.AddRange(defaultEquipment);
 
 
@@ -58,6 +59,13 @@ public class PlayerEquipment : NetworkBehaviour
         EquipmentType type = EquipmentType.Helmet;
         var equipmentData = data.GetEquipableDataByType(type);
         int equipmentTypeLength = Enum.GetNames(typeof(EquipmentType)).Length;
+
+        foreach (var item in defaultEquipment)
+        {
+            item.Init(item.EquipmentType.ToString());
+        }
+        _equipmentObjects.Clear();
+        _equipmentObjects.AddRange(defaultEquipment);
 
         if (data != null)
         {
