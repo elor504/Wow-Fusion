@@ -31,14 +31,14 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
 
 
-    [Networked,OnChangedRender(nameof(UpdateCharacterNicknameText))]
+    [Networked, OnChangedRender(nameof(UpdateCharacterNicknameText))]
     public string CharacterName { get; set; }
 
 
 
 
 
-  
+
 
     public PlayerAnimator GetAnimator => animator;
     public PlayerMovement GetMovement => movement;
@@ -50,7 +50,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public PlayerBrain GetBrain => _playerBrain;
 
 
-    [Networked,OnChangedRender(nameof(ChangedState))]
+    [Networked, OnChangedRender(nameof(ChangedState))]
     public int CurrentState { get; set; }
 
 
@@ -66,7 +66,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             gameObject.tag = TargetManager.MY_PLAYER_TAG;
             _myRunner = GameTest.GetMyRunner();
             UpdateCharacterNicknameText();
-            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1});
+            nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1 });
             nickNameLookAt.constraintActive = true;
         }
         else if (Object.HasStateAuthority)
@@ -80,7 +80,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             nickNameLookAt.constraintActive = true;
             //gameObject.tag = TargetManager.FRIENDLY_TAG;
         }
-     
+
     }
 
     public void InitPlayer()
@@ -97,9 +97,9 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
         if (!Object.HasStateAuthority)
             return;
-        
-          _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
-        
+
+        _playerBrain?.FixedUpdateState(_myRunner.DeltaTime);
+
     }
     private void Update()
     {
@@ -215,7 +215,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         RPC_RequestCharacterNickname(nickname);
     }
-    [Rpc(RpcSources.InputAuthority,RpcTargets.StateAuthority)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_RequestCharacterNickname(string nickname)
     {
         CharacterName = nickname;
@@ -226,7 +226,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         nickNameText.text = CharacterName;
         gameObject.name = $"Player: {CharacterName}";
     }
-    
+
 
 
     #endregion
@@ -257,10 +257,21 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
     #endregion
     #region equipment
-    public void UpdateCharacterEquipmentData(string characterData)
+    public void UpdateCharacterEquipmentData(CharacterEquipmentData characterData)
     {
-        RPC_RequestCharacterEquipmentData(characterData);
+        int equipmentTypeLength = Enum.GetNames(typeof(EquipmentType)).Length;
+
+        for (int i = 0; i < equipmentTypeLength; i++)
+        {
+            EquipmentType type = (EquipmentType)i;
+            RPC_RequestCharacterEquipmentData(JsonUtility.ToJson(characterData.GetEquipableDataByType(type)));
+        }
     }
+    public void UpdateSpecificEquipment(EquipmentType type)
+    {
+        RPC_RequestCharacterEquipmentData(JsonUtility.ToJson(_characterData.CharacterEquipmentData.GetEquipableDataByType(type)));
+    }
+
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_RequestCharacterEquipmentData(string serializedCharacterData)
     {
@@ -275,7 +286,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_UpdateCharacterEquipmentData(string serializedData)
     {
-        _characterData.DeserializeEquipment(serializedData);
+        _characterData.DeserializeSpecificEquipment(serializedData);
         equipment.InitEquipment(_characterData.CharacterEquipmentData);
         //LoadCharacterData();
     }

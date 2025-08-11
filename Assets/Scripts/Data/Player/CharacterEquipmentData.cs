@@ -40,7 +40,7 @@ public class CharacterEquipmentData
         return false;
     }
 
-    private EquipableItemData UpdateEquipment(EquipableItemData equipableItemData)
+    public EquipableItemData UpdateEquipment(EquipableItemData equipableItemData)
     {
         EquipableItemData previousEquipment = null;
         switch (equipableItemData.EquipmentType)

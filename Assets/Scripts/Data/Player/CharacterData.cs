@@ -40,6 +40,10 @@ public class CharacterData
     {
         characterEquipmentData = JsonUtility.FromJson<CharacterEquipmentData>(serializedEquipmentData);
     }
+    public void DeserializeSpecificEquipment(string serializedEquipmentData)
+    {
+        characterEquipmentData.UpdateEquipment(JsonUtility.FromJson<EquipableItemData>(serializedEquipmentData));
+    }
     public string SerializeEquipment()
     {
         return JsonUtility.ToJson(characterEquipmentData);
