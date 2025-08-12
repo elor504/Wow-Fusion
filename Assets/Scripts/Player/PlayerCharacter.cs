@@ -1,5 +1,6 @@
 using Fusion;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -303,4 +304,33 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         //TODO: Check size with collider
         return 0.5f;
     }
+
+    [ContextMenu("Force Join Party")]
+    public void JoinParty()
+    {
+        ServerHandler.JoinParty(_myRunner,this);
+    }
+
+    public void TestSwitchSession(string sessionName)
+    {
+        StartCoroutine(SwitchSession(sessionName));
+    }
+    private IEnumerator SwitchSession(string sessionName)
+    {
+        // First leave current session
+        if (GameTest.GetMyRunner() != null && GameTest.GetMyRunner())
+        {
+            yield return GameTest.GetMyRunner().Shutdown();
+        }
+        GameTest.RefreshNetworkRunner();
+        // Then join the new session
+        var args = new StartGameArgs()
+        {
+            GameMode = GameMode.Client,
+            SessionName = sessionName
+        };
+
+        yield return GameTest.GetMyRunner().StartGame(args);
+    }
+
 }
