@@ -17,11 +17,11 @@ public class PlayerEquipment : NetworkBehaviour
     [Networked]
     public int HairColor { get; set; }
 
-    [Networked]
+    [Networked,OnChangedRender(nameof(ChangedPantsHandler))]
     public string CurrentEquippedPantsID { set; get; }
-    [Networked]
+    [Networked,OnChangedRender(nameof(ChangedChestPlateHandler))]
     public string CurrentEquippedChestplateID { set; get; }
-    [Networked]
+    [Networked,OnChangedRender(nameof(ChangedShoesHandler))]
     public string CurrentEquippedShoesID { set; get; }
     [Networked]
     public string CurrentEquippedHelmetID { set; get; }
@@ -66,6 +66,7 @@ public class PlayerEquipment : NetworkBehaviour
         }
         _equipmentObjects.Clear();
         _equipmentObjects.AddRange(defaultEquipment);
+        Debug.Log("[PlayerEquipment]Init equipments");
 
         if (data != null)
         {
@@ -73,33 +74,70 @@ public class PlayerEquipment : NetworkBehaviour
             {
                 type = (EquipmentType)i;
                 equipmentData = data.GetEquipableDataByType(type);
-
-                if (equipmentData != null)
-                    UpdateVisual(type, equipmentData);
+                SetCurrentEquippedItemByType(type, equipmentData.ItemName);              
             }
         }
         else
         {
             Debug.Log("[Player Equipment] Character EquipmentData is null");
         }
+
+        #region old
+        //if (data != null)
+        //{
+        //    for (int i = 0; i < equipmentTypeLength; i++)
+        //    {
+        //        type = (EquipmentType)i;
+        //        equipmentData = data.GetEquipableDataByType(type);
+
+        //        if (equipmentData != null)
+        //            UpdateEquipmentVisual(type, equipmentData);
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.Log("[Player Equipment] Character EquipmentData is null");
+        //}
+        #endregion
+    }
+    private void ChangedChestPlateHandler()
+    {
+        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedPantsID);
+        if (equipmentData != null)
+        {
+            UpdateEquipmentVisual(EquipmentType.Chestplate, equipmentData.EquipmentName);
+        }
+    }
+    private void ChangedPantsHandler()
+    {
+        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedPantsID);
+        if (equipmentData != null) 
+        {
+            UpdateEquipmentVisual(EquipmentType.Pants,equipmentData.EquipmentName);
+        }
+
+    }
+    private void ChangedShoesHandler()
+    {
+        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedPantsID);
+        if (equipmentData != null)
+        {
+            UpdateEquipmentVisual(EquipmentType.Shoes, equipmentData.EquipmentName);
+        }
     }
 
-    public void UpdateVisual(EquipmentType type, EquipableItemData equipment)
-    {
-        UpdateEquipmentVisual(type, equipment);
-    }
-    private void UpdateEquipmentVisual(EquipmentType type, EquipableItemData equipment)
+    private void UpdateEquipmentVisual(EquipmentType type, string equipmentID)
     {
         var previousEquippedID = GetCurrentEquippedItemByType(type);
-        SetCurrentEquippedItemByType(type, equipment.ItemName);
+        SetCurrentEquippedItemByType(type, equipmentID);
         var currentEquipmentObject = _equipmentObjects.Find(equipment => equipment.EquipmentID == GetCurrentEquippedItemByType(type));
         if (!currentEquipmentObject)
         {
-            var armorPF = DataBankSO.Instance.GetEquipmentDataByID(equipment.ItemName).EquipmentObject;
+            var armorPF = DataBankSO.Instance.GetEquipmentDataByID(equipmentID).EquipmentObject;
             if (armorPF != null)
             {
                 var spawnedArmor = Instantiate(armorPF, armorParent);
-                spawnedArmor.Init(equipment.ItemName, root, bones);
+                spawnedArmor.Init(equipmentID, root, bones);
                 _equipmentObjects.Add(spawnedArmor);
             }
             else
