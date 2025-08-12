@@ -72,6 +72,7 @@ public class PlayerEquipment : NetworkBehaviour
         {
             for (int i = 0; i < data.Length; i++)
             {
+                type = (EquipmentType)i;
                 SetCurrentEquippedItemByType(type, data[i]);
             }
         }
