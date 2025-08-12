@@ -282,16 +282,13 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
     private void SetCharacterEquipmentData(string[] characterData)
     {
-        //equipment.InitEquipment(characterData);
         RPC_UpdateCharacterEquipmentData(characterData);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_UpdateCharacterEquipmentData(string[] serializedData)
     {
-        //_characterData.DeserializeSpecificEquipment(serializedData);
         equipment.InitEquipment(serializedData);
-        //LoadCharacterData();
     }
 
     #endregion
