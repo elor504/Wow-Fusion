@@ -282,8 +282,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 
     private void SetCharacterEquipmentData(string[] characterData)
     {
-        equipment.InitEquipment(characterData);
-        //RPC_UpdateCharacterEquipmentData(characterData);
+        //equipment.InitEquipment(characterData);
+        RPC_UpdateCharacterEquipmentData(characterData);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]

@@ -131,6 +131,7 @@ public class PlayerEquipment : NetworkBehaviour
     }
     private void ChangedChestPlateHandler()
     {
+        Debug.Log("Changed Chestplate");
         EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedPantsID);
         if (equipmentData != null)
         {
