@@ -42,7 +42,7 @@ public class PlayerEquipment : NetworkBehaviour
             _equipmentObjects.Clear();
             _equipmentObjects.AddRange(defaultEquipment);
 
-            ChangedChestPlateHandler();
+            //ChangedChestPlateHandler();
             ChangedPantsHandler();
             ChangedShoesHandler();
 
@@ -135,10 +135,11 @@ public class PlayerEquipment : NetworkBehaviour
         //}
         #endregion
     }
-    private void ChangedChestPlateHandler()
+    private void ChangedChestPlateHandler(NetworkBehaviour network,string old,string newValue)
     {
-        Debug.Log("Changed Chestplate");
-        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedChestplateID);
+      
+        Debug.Log($"Changed Chestplate, oldID {old}, new id: {newValue}");
+        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(newValue);
         if (equipmentData != null)
         {
             UpdateEquipmentVisual(EquipmentType.Chestplate, equipmentData.EquipmentName);
