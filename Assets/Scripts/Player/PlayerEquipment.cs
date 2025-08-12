@@ -198,6 +198,7 @@ public class PlayerEquipment : NetworkBehaviour
     }
     private void SetCurrentEquippedItemByType(EquipmentType type, string id)
     {
+        Debug.Log($"Set current equipped item by type: {type} id: {id}");
         switch (type)
         {
             case EquipmentType.Helmet:
