@@ -29,6 +29,17 @@ public class PlayerEquipment : NetworkBehaviour
     public string CurrentEquippedGlovesID { set; get; }
 
 
+    [Networked]
+    public string PreviousEquippedPantsID { set; get; }
+    [Networked]
+    public string PreviousEquippedChestplateID { set; get; }
+    [Networked]
+    public string PreviousEquippedShoesID { set; get; }
+    [Networked]
+    public string PreviousEquippedHelmetID { set; get; }
+    [Networked]
+    public string PreviousEquippedGlovesID { set; get; }
+
     public override void Spawned()
     {
         base.Spawned();
@@ -41,8 +52,9 @@ public class PlayerEquipment : NetworkBehaviour
             }
             _equipmentObjects.Clear();
             _equipmentObjects.AddRange(defaultEquipment);
+   
 
-            //ChangedChestPlateHandler();
+            ChangedChestPlateHandler();
             ChangedPantsHandler();
             ChangedShoesHandler();
 
@@ -92,6 +104,12 @@ public class PlayerEquipment : NetworkBehaviour
         {
             item.Init();
         }
+        for (int i = 0; i < equipmentTypeLength; i++)
+        {
+            type = (EquipmentType)i;
+            SetCurrentEquippedItemByType(type, type.ToString());
+        }
+
         _equipmentObjects.Clear();
         _equipmentObjects.AddRange(defaultEquipment);
         Debug.Log("[PlayerEquipment]Init equipments");
@@ -135,11 +153,9 @@ public class PlayerEquipment : NetworkBehaviour
         //}
         #endregion
     }
-    private void ChangedChestPlateHandler(NetworkBehaviour network,string old,string newValue)
+    private void ChangedChestPlateHandler()
     {
-      
-        Debug.Log($"Changed Chestplate, oldID {old}, new id: {newValue}");
-        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(newValue);
+        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedChestplateID);
         if (equipmentData != null)
         {
             UpdateEquipmentVisual(EquipmentType.Chestplate, equipmentData.EquipmentName);
@@ -182,6 +198,7 @@ public class PlayerEquipment : NetworkBehaviour
                 return;
             }
         }
+
         Debug.Log($"Changed equipment Previous: {previousEquippedID}, new {GetCurrentEquippedItemByType(type)}");
         SetEquipmentVisualActive(previousEquippedID, false);
         SetEquipmentVisualActive(GetCurrentEquippedItemByType(type), true);
