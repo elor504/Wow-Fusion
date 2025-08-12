@@ -133,7 +133,7 @@ public class PlayerEquipment : NetworkBehaviour
     private void ChangedChestPlateHandler()
     {
         Debug.Log("Changed Chestplate");
-        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedPantsID);
+        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedChestplateID);
         if (equipmentData != null)
         {
             UpdateEquipmentVisual(EquipmentType.Chestplate, equipmentData.EquipmentName);
@@ -150,7 +150,7 @@ public class PlayerEquipment : NetworkBehaviour
     }
     private void ChangedShoesHandler()
     {
-        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedPantsID);
+        EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedShoesID);
         if (equipmentData != null)
         {
             UpdateEquipmentVisual(EquipmentType.Shoes, equipmentData.EquipmentName);
