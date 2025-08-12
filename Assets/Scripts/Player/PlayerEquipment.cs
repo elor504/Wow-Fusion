@@ -62,7 +62,7 @@ public class PlayerEquipment : NetworkBehaviour
 
         foreach (var item in defaultEquipment)
         {
-            item.Init(item.EquipmentType.ToString());
+            item.Init();
         }
         _equipmentObjects.Clear();
         _equipmentObjects.AddRange(defaultEquipment);
