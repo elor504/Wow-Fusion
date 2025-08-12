@@ -54,6 +54,26 @@ public class PlayerEquipment : NetworkBehaviour
 
 
     }
+    public void InitEquipment(string[] data)
+    {
+        EquipmentType type = EquipmentType.Helmet;
+
+        foreach (var item in defaultEquipment)
+        {
+            item.Init();
+        }
+        _equipmentObjects.Clear();
+        _equipmentObjects.AddRange(defaultEquipment);
+        Debug.Log("[PlayerEquipment]Init equipments");
+
+        if (data != null)
+        {
+            for (int i = 0; i < data.Length; i++)
+            {
+                SetCurrentEquippedItemByType(type, data[i]);
+            }
+        }
+    }
     public void InitEquipment(CharacterEquipmentData data)
     {
         EquipmentType type = EquipmentType.Helmet;

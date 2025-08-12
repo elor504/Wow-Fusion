@@ -260,34 +260,36 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     public void UpdateCharacterEquipmentData(CharacterEquipmentData characterData)
     {
         int equipmentTypeLength = Enum.GetNames(typeof(EquipmentType)).Length;
-
+        string[] equipmentsID = new string[equipmentTypeLength];
         for (int i = 0; i < equipmentTypeLength; i++)
         {
             EquipmentType type = (EquipmentType)i;
-            RPC_RequestCharacterEquipmentData(JsonUtility.ToJson(characterData.GetEquipableDataByType(type)));
+            equipmentsID[i] = characterData.GetEquipableDataByType(type).ItemName;
+           // RPC_RequestCharacterEquipmentData(JsonUtility.ToJson(characterData.GetEquipableDataByType(type)));
         }
+        RPC_RequestCharacterEquipmentData(equipmentsID);
     }
     public void UpdateSpecificEquipment(EquipmentType type)
     {
-        RPC_RequestCharacterEquipmentData(JsonUtility.ToJson(_characterData.CharacterEquipmentData.GetEquipableDataByType(type)));
+        //RPC_RequestCharacterEquipmentData(JsonUtility.ToJson(_characterData.CharacterEquipmentData.GetEquipableDataByType(type)));
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_RequestCharacterEquipmentData(string serializedCharacterData)
+    public void RPC_RequestCharacterEquipmentData(string[] serializedCharacterData)
     {
         SetCharacterEquipmentData(serializedCharacterData);
     }
 
-    private void SetCharacterEquipmentData(string characterData)
+    private void SetCharacterEquipmentData(string[] characterData)
     {
         RPC_UpdateCharacterEquipmentData(characterData);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_UpdateCharacterEquipmentData(string serializedData)
+    public void RPC_UpdateCharacterEquipmentData(string[] serializedData)
     {
-        _characterData.DeserializeSpecificEquipment(serializedData);
-        equipment.InitEquipment(_characterData.CharacterEquipmentData);
+        //_characterData.DeserializeSpecificEquipment(serializedData);
+        equipment.InitEquipment(serializedData);
         //LoadCharacterData();
     }
 
