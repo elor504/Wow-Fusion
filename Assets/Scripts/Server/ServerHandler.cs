@@ -143,7 +143,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         return _sessionList[runner.SessionInfo.Name];
     }
 
-    public static void JoinParty(NetworkRunner ServerRunner,PlayerCharacter character)
+    public void JoinParty(NetworkRunner ServerRunner,PlayerCharacter character)
     {
         var server = GetServerInfo(ServerRunner);
         PlayerRef player = default;

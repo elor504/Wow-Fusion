@@ -13,7 +13,7 @@ public class DungeonsHandler : MonoBehaviour
     {
         int sessionsAmount = dungeonSessions.Count;
         //TODO: this will cause issues
-        var NewDungeonSession = new DungeonSession(ServerHandler.DUNGEON_SESSION_NAME + sessionsAmount, characters);
+        var NewDungeonSession = new DungeonSession(ServerHandler.DUNGEON_SESSION_NAME + sessionsAmount, charactersDic);
         dungeonSessions.Add(NewDungeonSession);
         NewDungeonSession.StartDungeonSession();
     }

@@ -308,7 +308,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [ContextMenu("Force Join Party")]
     public void JoinParty()
     {
-        ServerHandler.JoinParty(_myRunner,this);
+        ServerHandler.Instance.JoinParty(_myRunner,this);
     }
 
     public void TestSwitchSession(string sessionName)
