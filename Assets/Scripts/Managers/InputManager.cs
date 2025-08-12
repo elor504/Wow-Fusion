@@ -100,7 +100,17 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
             GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
         }
     }
-   
+
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        if (Object.HasInputAuthority)
+        {
+            base.Despawned(runner, hasState);
+            GameTest.RemoveCallBacks(this);
+            GameManager.Instance.TargetManager.OnTarget -= SetTargetNetworkID;
+        }
+    }
+
     private void Update()
     {
         if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
