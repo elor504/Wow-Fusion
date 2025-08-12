@@ -17,11 +17,11 @@ public class PlayerEquipment : NetworkBehaviour
     [Networked]
     public int HairColor { get; set; }
 
-    [Networked,OnChangedRender(nameof(ChangedPantsHandler))]
+    [Networked, OnChangedRender(nameof(ChangedPantsHandler))]
     public string CurrentEquippedPantsID { set; get; }
-    [Networked,OnChangedRender(nameof(ChangedChestPlateHandler))]
+    [Networked, OnChangedRender(nameof(ChangedChestPlateHandler))]
     public string CurrentEquippedChestplateID { set; get; }
-    [Networked,OnChangedRender(nameof(ChangedShoesHandler))]
+    [Networked, OnChangedRender(nameof(ChangedShoesHandler))]
     public string CurrentEquippedShoesID { set; get; }
     [Networked]
     public string CurrentEquippedHelmetID { set; get; }
@@ -74,7 +74,14 @@ public class PlayerEquipment : NetworkBehaviour
             {
                 type = (EquipmentType)i;
                 equipmentData = data.GetEquipableDataByType(type);
-                SetCurrentEquippedItemByType(type, equipmentData.ItemName);              
+                if (equipmentData != null)
+                {
+                    SetCurrentEquippedItemByType(type, equipmentData.ItemName);
+                }
+                else
+                {
+                    SetCurrentEquippedItemByType(type, type.ToString());
+                }
             }
         }
         else
@@ -111,9 +118,9 @@ public class PlayerEquipment : NetworkBehaviour
     private void ChangedPantsHandler()
     {
         EquipmentDataSO equipmentData = DataBankSO.Instance.GetEquipmentDataByID(CurrentEquippedPantsID);
-        if (equipmentData != null) 
+        if (equipmentData != null)
         {
-            UpdateEquipmentVisual(EquipmentType.Pants,equipmentData.EquipmentName);
+            UpdateEquipmentVisual(EquipmentType.Pants, equipmentData.EquipmentName);
         }
 
     }
