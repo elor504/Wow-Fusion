@@ -316,8 +316,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         ServerHandler.Instance.StartDungeon(_myRunner, "0");
     }
-
-    public void TestSwitchSession(string sessionName)
+    [Rpc(RpcSources.StateAuthority,RpcTargets.InputAuthority)]
+    public void RPC_TestSwitchSession(string sessionName)
     {
         StartCoroutine(SwitchSession(sessionName));
     }

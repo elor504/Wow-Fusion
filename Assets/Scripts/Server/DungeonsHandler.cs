@@ -59,7 +59,7 @@ public class DungeonSession
     {
         foreach (var character in characters)
         {
-            character.Value.TestSwitchSession(SessionName);
+            character.Value.RPC_TestSwitchSession(SessionName);
         }
     }
 
