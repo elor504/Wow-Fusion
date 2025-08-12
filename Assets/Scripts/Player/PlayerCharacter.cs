@@ -329,9 +329,12 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
             yield return GameTest.GetMyRunner().Shutdown();
         }
         GameTest.RefreshNetworkRunner();
+
+        yield return new WaitForSeconds(2f);
         // Then join the new session
         var args = new StartGameArgs()
         {
+            CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
             GameMode = GameMode.Client,
             SessionName = sessionName
         };

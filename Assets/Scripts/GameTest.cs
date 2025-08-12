@@ -81,8 +81,8 @@ public class GameTest
     {
         //TODO: Check if already logged in playfab
         //If logged in then login or logout to prevent bugs
-        RefreshNetworkRunner(true);
-        SceneManager.LoadScene("Login_Scene");
+       // RefreshNetworkRunner(true);
+       // SceneManager.LoadScene("Login_Scene");
     }
     #endregion
 
