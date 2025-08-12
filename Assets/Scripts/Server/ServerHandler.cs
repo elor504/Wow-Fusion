@@ -11,6 +11,10 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
     private static ServerHandler _instance;
     public static ServerHandler Instance => _instance;
 
+    [SerializeField] private DungeonsHandler dungeonsHandler;
+    [SerializeField] private PlayerCharacter characterPF;
+
+
     private static int CHANNEL_AMOUNT = 1;
     private static int PLAYER_AMOUNT = 20;
     public static string CUSTOM_LOBBY_NAME = "MAIN_LOBBY";
@@ -19,7 +23,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField]
     private Dictionary<string, SessionServerInfo> _sessionList = new Dictionary<string, SessionServerInfo>();
 
-    [SerializeField] private PlayerCharacter characterPF;
+
 
     private async void Awake()
     {
@@ -162,7 +166,11 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         server.partyList[0].playersCharacters.Add(player, character);
         Debug.Log($"[Server Handler] Joined Party {character.CharacterName}");
     }
-
+    public void StartDungeon(NetworkRunner ServerRunner, string partyID)
+    {
+        var server = GetServerInfo(ServerRunner);
+        dungeonsHandler.CreateNewSession(server.partyList[0].playersCharacters);
+    }
 
     #region unused
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)

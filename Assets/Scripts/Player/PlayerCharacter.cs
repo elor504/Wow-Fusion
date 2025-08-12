@@ -311,6 +311,12 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
         ServerHandler.Instance.JoinParty(_myRunner,this);
     }
 
+    [ContextMenu("Force Start Dungeon")]
+    public void ForceStartDungeon()
+    {
+        ServerHandler.Instance.StartDungeon(_myRunner, "0");
+    }
+
     public void TestSwitchSession(string sessionName)
     {
         StartCoroutine(SwitchSession(sessionName));
