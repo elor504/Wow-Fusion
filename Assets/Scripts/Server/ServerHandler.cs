@@ -153,6 +153,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		var server = GetServerInfo(serverRunner);
 		manager.OnPlayerJoinedSession += OnPlayerJoined;
+		manager.OnPlayerLeftSession += OnPlayerLeft;
         server.gameManager = manager;
     }
 

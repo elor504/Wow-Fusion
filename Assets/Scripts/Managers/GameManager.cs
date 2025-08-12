@@ -37,11 +37,12 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     public static event Action<GameManager> OnGameManagerSpawned;
     public static event Action<GameManager> OnGameManagerDespawned;
     public event Action<NetworkRunner, PlayerRef> OnPlayerJoinedSession;
+    public event Action<NetworkRunner, PlayerRef> OnPlayerLeftSession;
 
     public override void Spawned()
     {
-        base.Spawned();
         Init();
+        base.Spawned();
         if (!Object.HasStateAuthority)//No need for the server to see the player hud
         {
             playerHUD.SetActive(true);
@@ -90,7 +91,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-
+        OnPlayerLeftSession?.Invoke(runner, player);
     }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {

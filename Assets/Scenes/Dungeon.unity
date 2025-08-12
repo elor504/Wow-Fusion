@@ -186,6 +186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 254358543}
   - component: {fileID: 254358544}
+  - component: {fileID: 254358545}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -224,6 +225,26 @@ MonoBehaviour:
   skillManager: {fileID: 677593844}
   playerHUD: {fileID: 1275881867}
   equipmentVisualData: {fileID: 0}
+  playerCharacter: {fileID: 604495934}
+--- !u!114 &254358545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254358542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1234451265
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 254358544}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &549508715
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +288,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1375669553972253304, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
       propertyPath: SortKey
-      value: 4244232846
+      value: 1379009693
       objectReference: {fileID: 0}
     - target: {fileID: 1494308358068181615, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
       propertyPath: m_Name
@@ -322,6 +343,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+--- !u!114 &604495934 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3090110417922915932, guid: 9944e1caf1663534cbda4399736e9bd3, type: 3}
+  m_PrefabInstance: {fileID: 604495933}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43aefc5b7ec314b4e94d8473793e3b88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &615110722
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +763,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 2804078521
+  SortKey: 4233822664
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -795,7 +827,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1755805854
+  SortKey: 3185549997
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -2158,7 +2190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6919534075827677563, guid: cf296b2c0b07de54d8780fe4f3dc304e, type: 3}
       propertyPath: SortKey
-      value: 2137639053
+      value: 3567383196
       objectReference: {fileID: 0}
     - target: {fileID: 8358105044349586380, guid: cf296b2c0b07de54d8780fe4f3dc304e, type: 3}
       propertyPath: roamingTrans
