@@ -319,27 +319,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [Rpc(RpcSources.StateAuthority,RpcTargets.InputAuthority)]
     public void RPC_TestSwitchSession(string sessionName)
     {
-        StartCoroutine(SwitchSession(sessionName));
+        GameTest.FusionManager.SwitchSession(sessionName);
     }
-    private IEnumerator SwitchSession(string sessionName)
-    {
-        // First leave current session
-        if (GameTest.GetMyRunner() != null && GameTest.GetMyRunner())
-        {
-            yield return GameTest.GetMyRunner().Shutdown();
-        }
-        GameTest.RefreshNetworkRunner();
-
-        yield return new WaitForSeconds(2f);
-        // Then join the new session
-        var args = new StartGameArgs()
-        {
-            CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
-            GameMode = GameMode.Client,
-            SessionName = sessionName
-        };
-
-        yield return GameTest.GetMyRunner().StartGame(args);
-    }
+  
 
 }

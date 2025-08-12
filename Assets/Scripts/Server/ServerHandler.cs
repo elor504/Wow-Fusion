@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Unity.Collections.Unicode;
 
 public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -76,14 +77,15 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 			playersRefs = new List<PlayerRef>(),
 			playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>(),
 			dragonEntity = new Dictionary<NetworkId, DragonEnemy>(),
-			partyList = new List<PartyList>()
+			partyList = new List<PartyList>(),
+			gameManager = null
 
 		};
 		await OpenNewSession(networkRunner, sessionName);
 	}
 	private async Task OpenNewSession(NetworkRunner runner, string sessionName)
 	{
-		runner.AddCallbacks(this);
+		//runner.AddCallbacks(this);
 		int sceneIndex = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Main_City.unity");
 		var gameArg = new StartGameArgs
 		{
@@ -147,6 +149,12 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		return _sessionList[runner.SessionInfo.Name];
 	}
+	public void UpdateGameManager(NetworkRunner serverRunner,GameManager manager)
+	{
+		var server = GetServerInfo(serverRunner);
+		manager.OnPlayerJoinedSession += OnPlayerJoined;
+        server.gameManager = manager;
+    }
 
 	public void JoinParty(NetworkRunner ServerRunner, PlayerCharacter character)
 	{
@@ -266,16 +274,17 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
 
 	[Serializable]
-	private struct SessionServerInfo
+	private class SessionServerInfo
 	{
 		public NetworkRunner sessionRunner;
+		public GameManager gameManager;
 		public List<PlayerRef> playersRefs;
 		public Dictionary<PlayerRef, PlayerCharacter> playersCharacters;
 		public Dictionary<NetworkId, DragonEnemy> dragonEntity;
 		public List<PartyList> partyList;
 	}
 	[Serializable]
-	private struct PartyList
+	private class PartyList
 	{
 		public string partyID;
 		public Dictionary<PlayerRef, PlayerCharacter> playersCharacters;

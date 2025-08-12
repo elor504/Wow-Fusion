@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
+public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 {
     private static GameManager _instance;
     public static GameManager Instance => _instance;
+
+    private NetworkRunner _serverRunner;
 
     [Header("Managers")]
 
@@ -22,6 +24,8 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
     [Header("Data")]
     [SerializeField] private CharacterVisualSO equipmentVisualData;
 
+    [Header("Prefabs")]
+    [SerializeField] private PlayerCharacter playerCharacter;
 
     public TargetManager TargetManager => targetManager;
     public ClassSkillManager ClassSkillManager => skillManager;
@@ -29,12 +33,37 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public CharacterVisualSO EquipmentVisualData => equipmentVisualData;
 
-    private void Awake()
+
+    public static event Action<GameManager> OnGameManagerSpawned;
+    public static event Action<GameManager> OnGameManagerDespawned;
+    public event Action<NetworkRunner, PlayerRef> OnPlayerJoinedSession;
+
+    public override void Spawned()
     {
+        base.Spawned();
         Init();
-        playerHUD.SetActive(true);
+        if (!Object.HasStateAuthority)//No need for the server to see the player hud
+        {
+            playerHUD.SetActive(true);
+        }
+        if(Object.HasStateAuthority)
+        {
+            _serverRunner = Object.Runner;
+            _serverRunner.AddCallbacks(this);
+            ServerHandler.Instance.UpdateGameManager(_serverRunner, this);
+        }
+
     }
 
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        base.Despawned(runner, hasState);
+        if (Object.HasStateAuthority)
+        {
+            //_serverRunner.RemoveCallbacks(this);
+           // OnGameManagerDespawned?.Invoke(this);
+        }
+    }
     public void Init()
     {
         if (_instance == null)
@@ -52,6 +81,11 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
     }
 
 
+
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+    {
+        OnPlayerJoinedSession?.Invoke(runner, player);
+    }
 
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -80,14 +114,7 @@ public class GameManager : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
 
-    }
-
-   
-
-  
 
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
     {

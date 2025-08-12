@@ -1,6 +1,7 @@
 using Fusion;
 using Fusion.Sockets;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -15,6 +16,34 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
     public CharacterData SelectedCharacterData => _selectedCharacterData;
  
     public CharacterSpawnManager CharacterSpawnManager => characterSpawnManager;
+
+    public void SwitchSession(string sessionName)
+    {
+        StartCoroutine(SwitchSessionCouru(sessionName));
+    }
+    private IEnumerator SwitchSessionCouru(string sessionName)
+    {
+        // First leave current session
+        if (GameTest.GetMyRunner() != null && GameTest.GetMyRunner())
+        {
+           yield return GameTest.GetMyRunner().Shutdown();
+        }
+        yield return new WaitForSeconds(5f);
+        GameTest.RefreshNetworkRunner();
+
+
+        // Then join the new session
+        var args = new StartGameArgs()
+        {
+            CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
+            GameMode = GameMode.Client,
+            SessionName = sessionName
+        };
+
+        yield return GameTest.GetMyRunner().StartGame(args);
+    }
+
+
     private void Start()
     {
         Init();
