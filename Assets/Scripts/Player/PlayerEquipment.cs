@@ -40,7 +40,9 @@ public class PlayerEquipment : NetworkBehaviour
         _equipmentObjects.Clear();
         _equipmentObjects.AddRange(defaultEquipment);
 
-
+        ChangedChestPlateHandler();
+        ChangedPantsHandler();
+        ChangedShoesHandler();
 
         Color hairColor = DataBankSO.Instance.CharacterVisual.GetHairColorByType((HairColorType)HairColor);
         characterHairMeshes.ChangeHairMeshesColor(hairColor);
