@@ -62,7 +62,8 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (Object.HasStateAuthority)
         {
             //_serverRunner.RemoveCallbacks(this);
-           // OnGameManagerDespawned?.Invoke(this);
+            // OnGameManagerDespawned?.Invoke(this);
+            Debug.Log("[GameManager]Despawn gameManager");
         }
     }
     public void Init()

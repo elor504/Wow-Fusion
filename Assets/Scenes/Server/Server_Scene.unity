@@ -167,6 +167,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5740317561056901707, guid: 25341f93808ee934ea276e955649f76b, type: 3}
+      propertyPath: dungeonsHandler
+      value: 
+      objectReference: {fileID: 1126255257}
     - target: {fileID: 6227244822242889368, guid: 25341f93808ee934ea276e955649f76b, type: 3}
       propertyPath: m_Name
       value: Server
@@ -174,8 +178,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6227244822242889368, guid: 25341f93808ee934ea276e955649f76b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1126255257}
   m_SourcePrefab: {fileID: 100100000, guid: 25341f93808ee934ea276e955649f76b, type: 3}
+--- !u!1 &1126255254 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6227244822242889368, guid: 25341f93808ee934ea276e955649f76b, type: 3}
+  m_PrefabInstance: {fileID: 978426332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1126255257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126255254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 638d63c04fd350f40b2d5d4b86fdd96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonSessions: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
