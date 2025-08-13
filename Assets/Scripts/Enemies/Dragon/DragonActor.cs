@@ -21,8 +21,6 @@ public class DragonActor : NetworkBehaviour
         {
             _serverRunner = Object.Runner;
             dragonBrain.Init();
-            ServerHandler.Instance.AddEnemyNetworkID(enemy.GetNetworkId(), enemy, _serverRunner);
-            Debug.Log("[DragonActor] has been initialized at the server");
         }
     }
 

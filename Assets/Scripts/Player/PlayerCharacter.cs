@@ -340,7 +340,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     [Rpc(RpcSources.StateAuthority,RpcTargets.InputAuthority)]
     public void RPC_TestSwitchSession(string sessionName)
     {
-        GameTest.FusionManager.SwitchSession(sessionName);
+        LoadingScreen.Instance.LoadIntoDungeon(sessionName);
+        //GameTest.FusionManager.SwitchSession(sessionName);
     }
   
 
