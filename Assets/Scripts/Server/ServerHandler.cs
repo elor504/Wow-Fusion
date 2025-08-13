@@ -71,17 +71,9 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 		var newGO = new GameObject(sessionName + " Session");
 		var networkRunner = newGO.AddComponent<NetworkRunner>();
 
-		_sessionList[sessionName] = new SessionServerInfo
-		{
-			sessionRunner = networkRunner,
-			playersRefs = new List<PlayerRef>(),
-			playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>(),
-			dragonEntity = new Dictionary<NetworkId, DragonEnemy>(),
-			partyList = new List<PartyList>(),
-			gameManager = null
+        AddNewSession(sessionName, networkRunner);
 
-		};
-		await OpenNewSession(networkRunner, sessionName);
+        await OpenNewSession(networkRunner, sessionName);
 	}
 	private async Task OpenNewSession(NetworkRunner runner, string sessionName)
 	{
@@ -93,17 +85,32 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 			SessionName = sessionName,
 			GameMode = GameMode.Server,
 			PlayerCount = PLAYER_AMOUNT,
-			Scene = SceneRef.FromIndex(sceneIndex)
-
-		};
+			Scene = SceneRef.FromIndex(sceneIndex),
+			SceneManager = runner.gameObject.AddComponent<NetworkSceneManagerDefault>()
+    };
 		await runner.StartGame(gameArg);
 	}
 
+	public void AddNewSession(string sessionName, NetworkRunner serverRunner)
+	{
+		_sessionList[sessionName] = new SessionServerInfo
+		{
+			sessionRunner = serverRunner,
+			playersRefs = new List<PlayerRef>(),
+			playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>(),
+			dragonEntity = new Dictionary<NetworkId, DragonEnemy>(),
+			partyList = new List<PartyList>()
+
+		};
+	}
+	public void RemoveSession(string sessionName,NetworkRunner serverRunner)
+	{
+        _sessionList.Remove(sessionName);
+
+    }
 
 
-
-
-	public void OnConnectedToServer(NetworkRunner runner)
+    public void OnConnectedToServer(NetworkRunner runner)
 	{
 		Debug.Log($"[Client/Server] connected to server: {runner.name}");
 	}

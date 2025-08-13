@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Unity.Collections.Unicode;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class DungeonsHandler : MonoBehaviour
 {
@@ -39,6 +40,8 @@ public class DungeonSession
     public void StartDungeonSession()
     {
         int sceneIndex = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Dungeon.unity");
+        var newGO = new GameObject(SessionName);
+        runner = newGO.AddComponent<NetworkRunner>();
         var gameArg = new StartGameArgs
         {
             CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
@@ -46,11 +49,11 @@ public class DungeonSession
             GameMode = GameMode.Server,
             PlayerCount = 5,
             Scene = SceneRef.FromIndex(sceneIndex),
-            OnGameStarted = OnDungeonStarted
+            OnGameStarted = OnDungeonStarted,
+            SceneManager = runner.AddComponent<NetworkSceneManagerDefault>()
         };
 
-        var newGO = new GameObject(SessionName);
-        runner = newGO.AddComponent<NetworkRunner>();
+        ServerHandler.Instance.AddNewSession(SessionName,runner);
         runner.StartGame(gameArg);
 
     }
