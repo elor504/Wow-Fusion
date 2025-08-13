@@ -16,7 +16,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	[SerializeField] private PlayerCharacter characterPF;
 
 
-	private static int CHANNEL_AMOUNT = 1;
+	private static int CHANNEL_AMOUNT = 2;
 	private static int PLAYER_AMOUNT = 20;
 	public static string CUSTOM_LOBBY_NAME = "MAIN_LOBBY";
 	public static string DUNGEON_SCENE_NAME = "Dungeon";

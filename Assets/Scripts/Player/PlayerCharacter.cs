@@ -303,16 +303,37 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
     {
         //TODO: Check size with collider
         return 0.5f;
-    }
+	}
+	[ContextMenu("[Client]Force Join Party")]
+	public void JoinPartyClient()
+	{
+        RPC_JoinPartyClient();
+	}
+    [Rpc(RpcSources.InputAuthority,RpcTargets.StateAuthority)]
+    private void RPC_JoinPartyClient(RpcInfo source = default)
+    {
+        JoinPartyServer();
+	}
 
-    [ContextMenu("Force Join Party")]
-    public void JoinParty()
+	[ContextMenu("[Server]Force Join Party")]
+    public void JoinPartyServer()
     {
         ServerHandler.Instance.JoinParty(_myRunner,this);
     }
 
-    [ContextMenu("Force Start Dungeon")]
-    public void ForceStartDungeon()
+	[ContextMenu("[Client]Force Start Party")]
+	public void ForceStartDungeonClient()
+	{
+		RPC_StartPartyClient();
+	}
+	[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+	private void RPC_StartPartyClient(RpcInfo source = default)
+	{
+        ForceStartDungeonServer();
+	}
+
+	[ContextMenu("[Server]Force Start Dungeon")]
+    public void ForceStartDungeonServer()
     {
         ServerHandler.Instance.StartDungeon(_myRunner, "0");
     }

@@ -129,13 +129,9 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (GetInput(out PlayerInputStruct input))
         {
             _isHoldingRightMouseDown = input.MouseRightClick;
-            Debug.Log($"[InputManager] Movement Input: {input.MovementInput}");
-
 
             //OnMovementInput?.Invoke(input.MovementInput);
             OnMovementDirection?.Invoke(input.MovementDirection);
-
-
 
             if (input.RotationInput != 0)
                 OnRotateCharacterInput?.Invoke(input.RotationInput, Object.Runner.DeltaTime);
