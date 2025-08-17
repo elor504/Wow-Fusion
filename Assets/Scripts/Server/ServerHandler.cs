@@ -16,11 +16,9 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	[SerializeField] private PlayerCharacter characterPF;
 
 
-	private static int CHANNEL_AMOUNT = 2;
+	private static int CHANNEL_AMOUNT = 1;
 	private static int PLAYER_AMOUNT = 20;
 	public static string CUSTOM_LOBBY_NAME = "MAIN_LOBBY";
-	public static string DUNGEON_SCENE_NAME = "Dungeon";
-	public static string DUNGEON_SESSION_NAME = "DUNGEON_";
 	[SerializeField]
 	private Dictionary<string, SessionServerInfo> _sessionList = new Dictionary<string, SessionServerInfo>();
 
@@ -98,15 +96,13 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 			sessionRunner = serverRunner,
 			playersRefs = new List<PlayerRef>(),
 			playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>(),
-			dragonEntity = new Dictionary<NetworkId, DragonEnemy>(),
-			partyList = new List<PartyList>()
+			dragonEntity = new Dictionary<NetworkId, DragonEnemy>()
 
 		};
 	}
 	public void RemoveSession(string sessionName,NetworkRunner serverRunner)
 	{
         _sessionList.Remove(sessionName);
-
     }
 
 
@@ -120,9 +116,6 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 		Debug.Log($"A player joined a session: {runner.IsServer} player: {player.PlayerId}");
 		GetServerInfo(runner).playersRefs.Add(player);
 		SpawnCharacter(runner, player);
-
-		//int sceneIndex = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Main_City.unity");
-		//runner.LoadScene(SceneRef.FromIndex(sceneIndex));
 	}
 
 	private async void SpawnCharacter(NetworkRunner runner, PlayerRef player)
@@ -130,7 +123,6 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 		var spawnResult = await runner.SpawnAsync(characterPF, Vector3.zero, Quaternion.identity, player);
 		var character = spawnResult.gameObject.GetComponent<PlayerCharacter>();
 		GetServerInfo(runner).playersCharacters.Add(player, character);
-		//character.CharacterName = spawnResult.Id.ToString();
 		GetServerInfo(runner).playersCharacters[player].InitPlayer();
 	}
 
@@ -164,34 +156,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
         server.gameManager = manager;
     }
 
-	public void JoinParty(NetworkRunner ServerRunner, PlayerCharacter character)
-	{
-		var server = GetServerInfo(ServerRunner);
-		PlayerRef player = default;
 
-		foreach (var item in server.playersCharacters)
-		{
-			if (item.Value.Equals(character))
-			{
-				player = item.Key;
-				break;
-			}
-		}
-
-		if (server.partyList.Count == 0)
-			server.partyList.Add(new PartyList
-			{
-			 partyID = "0",
-			  playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>()
-			});
-		server.partyList[0].playersCharacters.Add(player, character);
-		Debug.Log($"[Server Handler] Joined Party {character.CharacterName}");
-	}
-	public void StartDungeon(NetworkRunner ServerRunner, string partyID)
-	{
-		var server = GetServerInfo(ServerRunner);
-		dungeonsHandler.CreateNewSession(server.partyList[0].playersCharacters);
-	}
 
 	#region unused
 	public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
@@ -289,13 +254,5 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 		public List<PlayerRef> playersRefs;
 		public Dictionary<PlayerRef, PlayerCharacter> playersCharacters;
 		public Dictionary<NetworkId, DragonEnemy> dragonEntity;
-		public List<PartyList> partyList;
 	}
-	[Serializable]
-	private class PartyList
-	{
-		public string partyID;
-		public Dictionary<PlayerRef, PlayerCharacter> playersCharacters;
-	}
-
 }

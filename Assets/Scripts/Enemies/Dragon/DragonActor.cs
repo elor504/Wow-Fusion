@@ -21,21 +21,23 @@ public class DragonActor : NetworkBehaviour
         {
             _serverRunner = Object.Runner;
             dragonBrain.Init();
+            ServerHandler.Instance.AddEnemyNetworkID(enemy.GetNetworkId(),enemy,_serverRunner);
         }
     }
-
-
-    public void Update()
-    {
-        
-    }
-
+    
     public override void FixedUpdateNetwork()
     {
-        if (!Object.HasStateAuthority) return;
+        /*if (!Object.HasStateAuthority) return;
         base.FixedUpdateNetwork();
+        dragonBrain.FixedUpdateState(_serverRunner.DeltaTime);*/
+    }
+
+    public void UpdateActor()
+    {
+        if (!Object.HasStateAuthority) return;
         dragonBrain.FixedUpdateState(_serverRunner.DeltaTime);
     }
+    
     public Vector3 GetWalkTargetPosition()
     {
         var position = roamingTrans.position + Random.onUnitSphere * roamingRadius;

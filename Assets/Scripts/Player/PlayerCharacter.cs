@@ -318,29 +318,29 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 	[ContextMenu("[Server]Force Join Party")]
     public void JoinPartyServer()
     {
-        ServerHandler.Instance.JoinParty(_myRunner,this);
+        //ServerHandler.Instance.JoinParty(_myRunner,this);
     }
 
 	[ContextMenu("[Client]Force Start Party")]
 	public void ForceStartDungeonClient()
 	{
-		RPC_StartPartyClient();
+		//RPC_StartPartyClient();
 	}
 	[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
 	private void RPC_StartPartyClient(RpcInfo source = default)
 	{
-        ForceStartDungeonServer();
+        //ForceStartDungeonServer();
 	}
 
 	[ContextMenu("[Server]Force Start Dungeon")]
     public void ForceStartDungeonServer()
     {
-        ServerHandler.Instance.StartDungeon(_myRunner, "0");
+        //ServerHandler.Instance.StartDungeon(_myRunner, "0");
     }
     [Rpc(RpcSources.StateAuthority,RpcTargets.InputAuthority)]
     public void RPC_TestSwitchSession(string sessionName)
     {
-        LoadingScreen.Instance.LoadIntoDungeon(sessionName);
+        //LoadingScreen.Instance.LoadIntoDungeon(sessionName);
         //GameTest.FusionManager.SwitchSession(sessionName);
     }
   

@@ -2,18 +2,19 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 public class DungeonManager : NetworkBehaviour, INetworkRunnerCallbacks
 {
-    private static DungeonManager _instance;
-    public static DungeonManager Instance => _instance;
-
-    [SerializeField] private PlayerCharacter playerPF;
-
     private NetworkRunner _serverRunner;
-
-
+    private List<PlayerCharacter> _characters = new List<PlayerCharacter>();
+    [SerializeField] private List<string> playerNicknames;
+    [SerializeField] private List<DragonActor> dragonActors = new List<DragonActor>();
+    [SerializeField] private bool isDungeonActive;
+    
+    public bool IsDungeonActive => isDungeonActive;
+    
     public override void Spawned()
     {
         base.Spawned();
@@ -28,44 +29,47 @@ public class DungeonManager : NetworkBehaviour, INetworkRunnerCallbacks
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         base.Despawned(runner, hasState);
-        if(_instance == null)
-        {
-            _instance = this;
-        }
-        else if(_instance != this)
-        {
-            Destroy(this.gameObject);
-        }
+      
         if(Object.HasStateAuthority) 
         {
             _serverRunner.RemoveCallbacks(this);
         }
     }
+
+    public override void FixedUpdateNetwork()
+    {
+        base.FixedUpdateNetwork();
+        foreach (var actor in dragonActors)
+        {
+          actor.UpdateActor();  
+        }
+    }
+
+    public void StartDungeon(List<PlayerCharacter> characters)
+    {
+        _characters = characters;
+        foreach (var character in _characters)
+        {
+            playerNicknames.Add(character.CharacterName);
+        }
+    }
+    
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if(runner.IsServer)
-        {
-            ServerHandler.Instance.OnPlayerJoined(runner, player);
-            Debug.Log("Dungeon player Joined");
-        }
+        if (!runner.IsServer) return;
+        //TODO: Handle if a player has a dungeon active
     }
-
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        if (runner.IsServer)
-        {
-            ServerHandler.Instance.OnPlayerLeft(runner, player);
-            Debug.Log("Dungeon player Joined");
-        }
+        if (!runner.IsServer) return;
     }
-
-
-
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        throw new NotImplementedException();
+   
     }
 
+    #region  unused
+    
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
         throw new NotImplementedException();
@@ -146,5 +150,5 @@ public class DungeonManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         throw new NotImplementedException();
     }
-
+    #endregion
 }

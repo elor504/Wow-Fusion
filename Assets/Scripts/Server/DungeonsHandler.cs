@@ -7,64 +7,22 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 
 public class DungeonsHandler : MonoBehaviour
-{
-    [SerializeField] private List<DungeonSession> dungeonSessions;
+{   
+    [SerializeField] private DungeonManager dungeonPrefab;
+    [SerializeField] private List<DungeonManager> dungeons;
 
-    public void CreateNewSession(Dictionary<PlayerRef, PlayerCharacter> charactersDic)
+    public void CreateNewDungeon(List<PlayerCharacter> characters)
     {
-        int sessionsAmount = dungeonSessions.Count;
-        //TODO: this will cause issues
-        var NewDungeonSession = new DungeonSession(ServerHandler.DUNGEON_SESSION_NAME + sessionsAmount, charactersDic);
-        dungeonSessions.Add(NewDungeonSession);
-        NewDungeonSession.StartDungeonSession();
-    }
-}
-[Serializable]
-public class DungeonSession
-{
-    
-    [SerializeField] private Dictionary<PlayerRef, PlayerCharacter> characters;
-    [SerializeField] private string SessionName;
-    [SerializeField] private NetworkRunner runner;
-
-    //HoldScore
-    //Handle Enemies
-
-    public DungeonSession(string sessionName, Dictionary<PlayerRef, PlayerCharacter> charactersDic)
-    {
-        SessionName = sessionName;
-        characters = charactersDic;
-    }
-
-
-    public void StartDungeonSession()
-    {
-        int sceneIndex = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Dungeon.unity");
-        var newGO = new GameObject(SessionName);
-        runner = newGO.AddComponent<NetworkRunner>();
-        var gameArg = new StartGameArgs
+        foreach (var dungeon in dungeons)
         {
-            CustomLobbyName = ServerHandler.CUSTOM_LOBBY_NAME,
-            SessionName = SessionName,
-            GameMode = GameMode.Server,
-            PlayerCount = 5,
-            Scene = SceneRef.FromIndex(sceneIndex),
-            OnGameStarted = OnDungeonStarted,
-            SceneManager = runner.AddComponent<NetworkSceneManagerDefault>()
-        };
-
-        ServerHandler.Instance.AddNewSession(SessionName,runner);
-        runner.StartGame(gameArg);
-
-    }
-
-    private void OnDungeonStarted(NetworkRunner runner)
-    {
-        foreach (var character in characters)
-        {
-            character.Value.RPC_TestSwitchSession(SessionName);
+            if (!dungeon.IsDungeonActive)
+            {
+                dungeon.StartDungeon(characters);
+            }
         }
-    }
+}
+
+
 
 }
 
