@@ -58,7 +58,7 @@ public class PartyManager : NetworkBehaviour
 	}
 
 	#region requests
-	[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
 	public void RPC_AskToJoinParty(string partyName, RpcInfo rpcSource = default)
 	{
 		//Server check if can join the party if its available to join
@@ -86,7 +86,7 @@ public class PartyManager : NetworkBehaviour
 	}
 	#endregion
 
-	[Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
+	[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
 	private void RPC_PartyMessage([RpcTarget] PlayerRef playerWhoRequested, string exception)
 	{
 		//MessageManager.Instance.SendServerMessage(exception);
