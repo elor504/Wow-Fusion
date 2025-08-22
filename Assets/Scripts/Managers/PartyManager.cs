@@ -17,6 +17,10 @@ public class PartyManager : NetworkBehaviour
 	[SerializeField] private DungeonsManager dungeonManager;
 	[SerializeField] private List<Party> partyList;
 
+
+	
+
+
 	public override void Spawned()
 	{
 		base.Spawned();
@@ -83,6 +87,12 @@ public class PartyManager : NetworkBehaviour
 
 		//ui update
 		//UIManager.PartyUI.OnReceivedRequest(playerWhoRequested);
+		if(GameTest.ComparePlayerRef(playerWhoRequested))
+		{
+			GameTest.LocalParty = partyToJoin;
+		}
+
+		partyUI.OnEnteredParty(playerWhoRequested);
 	}
 	#endregion
 

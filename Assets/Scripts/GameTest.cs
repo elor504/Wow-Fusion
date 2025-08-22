@@ -8,13 +8,17 @@ public class GameTest
     private static NetworkRunner _myRunner;
     private static List<INetworkRunnerCallbacks[]> addedCallBacks = new();
 
+    public static List<PlayerCharacter> PlayerCharacters = new List<PlayerCharacter>();
+
 
     public static PlayerCharacter LocalCharacter;
     public static FusionManager FusionManager;
 
+    public static Party LocalParty;
 
-    #region network runner
-    public static void RefreshNetworkRunner(bool destory = false)
+
+	#region network runner
+	public static void RefreshNetworkRunner(bool destory = false)
     {
         if (_myRunner != null)
         {
@@ -86,4 +90,12 @@ public class GameTest
     }
     #endregion
 
+
+    public static bool ComparePlayerRef(PlayerRef playerRef)
+    {
+        if (LocalCharacter == null)
+            return false;
+
+        return LocalCharacter.Object.InputAuthority.PlayerId == playerRef.PlayerId;
+	}
 }

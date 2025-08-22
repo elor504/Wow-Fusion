@@ -1,4 +1,4 @@
-using System;
+using Fusion;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,8 +7,8 @@ public class PartyUI : MonoBehaviour
 {
 	private enum PartyUIState
 	{
-		CreateOrParty,//Will show either create party or will show player's current party
-		PartyList
+		CreateOrPartyList,
+		InsideParty
 	}
 
 	private PartyUIState _currentUIState;
@@ -22,6 +22,7 @@ public class PartyUI : MonoBehaviour
 
 	[Header("Player party References")]
 	[SerializeField] private GameObject playerPartyWindow;
+	[SerializeField] private List<PartyMemberInfo> partyMembersInfoUI;
 
 	[Header("Party Search References")]
 	[SerializeField] private GameObject partyInfoWindow;
@@ -52,7 +53,7 @@ public class PartyUI : MonoBehaviour
 
 	public void OnClickPartyList()
 	{
-		ChangeState(PartyUIState.PartyList);
+		ChangeState(PartyUIState.CreateOrPartyList);
 	}
 
 	private void ChangeState(PartyUIState state)
@@ -66,18 +67,17 @@ public class PartyUI : MonoBehaviour
 	{
 		switch (state)
 		{
-			case PartyUIState.CreateOrParty:
+			case PartyUIState.CreateOrPartyList:
 				HandleCreateOrPartyWindow();
 				break;
-			case PartyUIState.PartyList:
-				EnterPartyList();
+			case PartyUIState.InsideParty:
 				break;
 		}
 	}
 
 	private void HandleCreateOrPartyWindow()
 	{
-		if(IsLocalCharacterIsInAParty())
+		if (IsLocalCharacterIsInAParty())
 		{
 			EnterParty();
 		}
@@ -91,27 +91,35 @@ public class PartyUI : MonoBehaviour
 	{
 		switch (state)
 		{
-			case PartyUIState.CreateOrParty:
+			case PartyUIState.CreateOrPartyList:
 				ExitCreate();
-				ExitParty();
 				break;
-			case PartyUIState.PartyList:
-				ExitPartyList();
+			case PartyUIState.InsideParty:
+				ExitParty();
 				break;
 		}
 	}
 
 	private void EnterParty()
 	{
+		//Update The party members info
+		Party myParty = GameTest.LocalParty;
+		foreach (var item in myParty.PartyMember)
+		{
+			//PlayerCharacter memberCharacter = 
+		}
+
 		playerPartyWindow.SetActive(true);
 	}
 	private void ExitParty()
 	{
 		playerPartyWindow.SetActive(false);
+		partyInfoWindow.SetActive(false);
 	}
 
 	private void EnterCreate()
 	{
+		partyInfoWindow.SetActive(true);
 		createPartyWindow.SetActive(true);
 	}
 	private void ExitCreate()
@@ -119,14 +127,7 @@ public class PartyUI : MonoBehaviour
 		createPartyWindow.SetActive(false);
 	}
 
-	private void EnterPartyList()
-	{
-		partyInfoWindow.SetActive(true);
-	}
-	private void ExitPartyList()
-	{
-		partyInfoWindow.SetActive(false);
-	}
+
 	#endregion
 	#region Open new party
 	public void OnClickCreateParty()
@@ -141,7 +142,7 @@ public class PartyUI : MonoBehaviour
 	{
 		foreach (var partyInfo in partyInfoButtons)
 		{
-			if(string.IsNullOrEmpty(partyInfo.PartyName))
+			if (string.IsNullOrEmpty(partyInfo.PartyName))
 			{
 				partyInfo.CloseButton();
 			}
@@ -194,6 +195,18 @@ public class PartyUI : MonoBehaviour
 	{
 		_isWindowOpen = true;
 		partyWindow.gameObject.SetActive(_isWindowOpen);
+		UpdateState();
+	}
+	public void UpdateState()
+	{
+		if (IsLocalCharacterIsInAParty())
+		{
+			EnterCurrentState(PartyUIState.InsideParty);
+		}
+		else
+		{
+			EnterCurrentState(PartyUIState.CreateOrPartyList);
+		}
 	}
 	public void CloseWindow()
 	{
@@ -208,4 +221,20 @@ public class PartyUI : MonoBehaviour
 	}
 
 
+	public void OnEnteredParty(PlayerRef playerRef)
+	{
+		if (!GameTest.ComparePlayerRef(playerRef))
+			return;
+
+		Debug.Log("[PartyUI] update enteredParty");
+		UpdateState();
+	}
+	public void OnExitedParty(PlayerRef playerRef)
+	{
+		if (!GameTest.ComparePlayerRef(playerRef))
+			return;
+
+		Debug.Log("[PartyUI] update enteredParty");
+		UpdateState();
+	}
 }
