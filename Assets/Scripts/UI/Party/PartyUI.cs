@@ -47,6 +47,10 @@ public class PartyUI : MonoBehaviour
 	private void Awake()
 	{
 		CloseAllEmptyPartyButtons();
+		foreach (var memberInfo in partyMembersInfoUI)
+		{
+			memberInfo.HideInfo();
+		}
 	}
 
 	#region state handler
@@ -68,24 +72,15 @@ public class PartyUI : MonoBehaviour
 		switch (state)
 		{
 			case PartyUIState.CreateOrPartyList:
-				HandleCreateOrPartyWindow();
+				EnterCreate();
 				break;
 			case PartyUIState.InsideParty:
+				EnterParty();
 				break;
 		}
 	}
 
-	private void HandleCreateOrPartyWindow()
-	{
-		if (IsLocalCharacterIsInAParty())
-		{
-			EnterParty();
-		}
-		else
-		{
-			EnterCreate();
-		}
-	}
+	
 
 	private void ExitCurrentState(PartyUIState state)
 	{
@@ -184,6 +179,7 @@ public class PartyUI : MonoBehaviour
 	}
 	#endregion
 	#region base
+	[ContextMenu("Toggle party window")]
 	public void ToggleWindow()
 	{
 		if (_isWindowOpen)
