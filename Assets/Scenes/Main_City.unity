@@ -1404,7 +1404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce8590dfe2653d04e9f6c77de09d7330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partyUI: {fileID: 0}
+  partyUI: {fileID: 1033295593}
   dungeonManager: {fileID: 141515523}
   partyList: []
 --- !u!1 &933922238
