@@ -59,6 +59,7 @@ public class PartyManager : NetworkBehaviour
 		Party newParty = new Party();
 		newParty.OpenParty(rpcInfo.Source, leaderName);
 		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
+		partyUI.OnEnteredParty(rpcInfo.Source);
 	}
 
 	#region requests
