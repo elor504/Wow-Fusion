@@ -12,7 +12,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	private static ServerHandler _instance;
 	public static ServerHandler Instance => _instance;
 
-	[SerializeField] private DungeonsHandler dungeonsHandler;
+	[SerializeField] private DungeonsManager dungeonsHandler;
 	[SerializeField] private PlayerCharacter characterPF;
 
 
@@ -56,6 +56,20 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 		return GetServerInfo(serverRunner).dragonEntity[networkID];
 	}
 
+	public PlayerCharacter GetPlayerCharacterByNickname(NetworkRunner serverRunner, string nickname)
+	{
+		Dictionary<PlayerRef, PlayerCharacter> playersCharacters = GetServerInfo(serverRunner).playersCharacters;
+
+		foreach (var characterValue in playersCharacters.Values)
+		{
+			if(characterValue.CharacterName == nickname)
+			{
+				return characterValue;
+			}
+		}
+
+		return null;
+	}
 	private async Task CreateSessions()
 	{
 		for (int i = 0; i < CHANNEL_AMOUNT; i++)

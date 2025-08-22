@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 
-public class DungeonManager : NetworkBehaviour, INetworkRunnerCallbacks
+public class DungeonInstance : NetworkBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _serverRunner;
+    private Party dungeonParty;
     private List<PlayerCharacter> _characters = new List<PlayerCharacter>();
     [SerializeField] private List<string> playerNicknames;
     [SerializeField] private List<DragonActor> dragonActors = new List<DragonActor>();
@@ -19,18 +20,15 @@ public class DungeonManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         base.Spawned();
 
-        if(Object.HasStateAuthority)
+        if (Object.HasStateAuthority)
         {
             _serverRunner = Object.Runner;
-            _serverRunner.AddCallbacks(this);
         }
-
     }
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         base.Despawned(runner, hasState);
-      
-        if(Object.HasStateAuthority) 
+        if (Object.HasStateAuthority)
         {
             _serverRunner.RemoveCallbacks(this);
         }
@@ -45,15 +43,27 @@ public class DungeonManager : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public void StartDungeon(List<PlayerCharacter> characters)
+    public void StartDungeon(Party party)
     {
-        _characters = characters;
+        dungeonParty = party;
+        if (Object.HasStateAuthority)
+        {
+            _serverRunner.AddCallbacks(this);
+        }
+        _characters = dungeonParty.GetPartyCharacters(_serverRunner);
         foreach (var character in _characters)
         {
             playerNicknames.Add(character.CharacterName);
         }
     }
-    
+    public void OnDungeonClosed()
+    {
+        if (Object.HasStateAuthority)
+        {
+            _serverRunner.RemoveCallbacks(this);
+        }
+    }
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (!runner.IsServer) return;

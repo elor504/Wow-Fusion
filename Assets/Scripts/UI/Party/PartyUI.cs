@@ -1,0 +1,196 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PartyUI : MonoBehaviour
+{
+	private enum PartyUIState
+	{
+		CreateOrParty,//Will show either create party or will show player's current party
+		PartyList
+	}
+
+	private PartyUIState _currentUIState;
+
+	[Header("References")]
+	[SerializeField] private GameObject partyWindow;
+
+	[Header("Create party References")]
+	[SerializeField] private GameObject createPartyWindow;
+	[SerializeField] private Button createPartyButton;
+
+	[Header("Player party References")]
+	[SerializeField] private GameObject playerPartyWindow;
+
+	[Header("Party Search References")]
+	[SerializeField] private GameObject partyInfoWindow;
+	[SerializeField] private Transform partyInfoContent;
+	[SerializeField] private PartyInfoButton partyInfoButtonPF;
+	[SerializeField] private List<PartyInfoButton> partyInfoButtons;
+
+
+	private bool _isWindowOpen;
+
+	private void OnEnable()
+	{
+		createPartyButton.onClick.AddListener(OnClickCreateParty);
+		createPartyButton.interactable = true;
+	}
+	private void OnDisable()
+	{
+		createPartyButton.onClick.RemoveListener(OnClickCreateParty);
+		createPartyButton.interactable = false;
+	}
+
+	#region state handler
+
+	public void OnClickPartyList()
+	{
+		ChangeState(PartyUIState.PartyList);
+	}
+
+	private void ChangeState(PartyUIState state)
+	{
+		ExitCurrentState(state);
+		_currentUIState = state;
+		EnterCurrentState(state);
+	}
+
+	private void EnterCurrentState(PartyUIState state)
+	{
+		switch (state)
+		{
+			case PartyUIState.CreateOrParty:
+				HandleCreateOrPartyWindow();
+				break;
+			case PartyUIState.PartyList:
+				EnterPartyList();
+				break;
+		}
+	}
+
+	private void HandleCreateOrPartyWindow()
+	{
+		if(IsLocalCharacterIsInAParty())
+		{
+			EnterParty();
+		}
+		else
+		{
+			EnterCreate();
+		}
+	}
+
+	private void ExitCurrentState(PartyUIState state)
+	{
+		switch (state)
+		{
+			case PartyUIState.CreateOrParty:
+				ExitCreate();
+				ExitParty();
+				break;
+			case PartyUIState.PartyList:
+				ExitPartyList();
+				break;
+		}
+	}
+
+	private void EnterParty()
+	{
+		playerPartyWindow.SetActive(true);
+	}
+	private void ExitParty()
+	{
+		playerPartyWindow.SetActive(false);
+	}
+
+	private void EnterCreate()
+	{
+		createPartyWindow.SetActive(true);
+	}
+	private void ExitCreate()
+	{
+		createPartyWindow.SetActive(false);
+	}
+
+	private void EnterPartyList()
+	{
+		partyInfoWindow.SetActive(true);
+	}
+	private void ExitPartyList()
+	{
+		partyInfoWindow.SetActive(false);
+	}
+	#endregion
+	#region Open new party
+	public void OnClickCreateParty()
+	{
+		createPartyButton.interactable = false;
+		PartyManager.Instance.RPC_RequestToOpenNewParty(GameTest.LocalCharacter.CharacterName);
+	}
+
+
+	#endregion
+	#region Party Search
+	public void AddPartyInfo(string partyLeader, int currentPartyAmount, int maxPartyAmount)
+	{
+		string amount = $"{currentPartyAmount}/{maxPartyAmount}";
+		if (partyInfoButtons.Count == 0)
+		{
+			PartyInfoButton newPartyInfo = Instantiate(partyInfoButtonPF, partyInfoContent);
+			partyInfoButtons.Add(newPartyInfo);
+			newPartyInfo.UpdateInfo(partyLeader, amount);
+			newPartyInfo.OpenButton();
+			return;
+		}
+
+		PartyInfoButton existedButton = GetPartyInfoByPartyLeaderName(partyLeader);
+		if (existedButton)
+		{
+			existedButton.UpdateInfo(partyLeader, amount);
+			return;
+		}
+
+		PartyInfoButton newParty = Instantiate(partyInfoButtonPF, partyInfoContent);
+		partyInfoButtons.Add(newParty);
+		newParty.UpdateInfo(partyLeader, amount);
+		newParty.OpenButton();
+	}
+	public void ClosePartyInfo(string partyLeader)
+	{
+
+	}
+
+	private PartyInfoButton GetPartyInfoByPartyLeaderName(string partyLeaderName)
+	{
+		return partyInfoButtons.Find(p => p.PartyName == partyLeaderName);
+	}
+	#endregion
+	#region base
+	public void ToggleWindow()
+	{
+		if (_isWindowOpen)
+			CloseWindow();
+		else
+			OpenWindow();
+	}
+	public void OpenWindow()
+	{
+		_isWindowOpen = true;
+		partyWindow.gameObject.SetActive(_isWindowOpen);
+	}
+	public void CloseWindow()
+	{
+		_isWindowOpen = false;
+		partyWindow.gameObject.SetActive(_isWindowOpen);
+	}
+	#endregion
+
+	private bool IsLocalCharacterIsInAParty()
+	{
+		return PartyManager.Instance.IsPlayerInsideAParty(GameTest.LocalCharacter.CharacterName);
+	}
+
+
+}
