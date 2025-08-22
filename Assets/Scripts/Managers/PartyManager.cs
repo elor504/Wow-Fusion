@@ -47,14 +47,15 @@ public class PartyManager : NetworkBehaviour
 			RPC_PartyMessage(rpcInfo.Source, "[PartyManager] HOW THE FUCK DID YOU ASK TO OPEN NEW PARTY WHILE YOU ARE IN A PARTY?! CHEATER! (or bugged, i just love to blame people)");
 			return;
 		}
-		RPC_AcceptRequestToCreateNewParty(leaderName, rpcInfo);
+
+		RPC_AcceptRequestToCreateNewParty(leaderName);
 	}
 	[Rpc(RpcSources.StateAuthority,RpcTargets.All)]
-	public void RPC_AcceptRequestToCreateNewParty(string leaderName,RpcInfo rpcInfo)
+	public void RPC_AcceptRequestToCreateNewParty(string leaderName)
 	{
-		Party newParty = new Party();
-		newParty.OpenParty(rpcInfo.Source, leaderName);
-		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
+		//Party newParty = new Party();
+		//newParty.OpenParty(rpcInfo.Source, leaderName);
+		//partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
 	}
 
 	#region requests
