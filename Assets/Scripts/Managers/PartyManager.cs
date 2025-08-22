@@ -38,7 +38,7 @@ public class PartyManager : NetworkBehaviour
 		base.Despawned(runner, hasState);
 	}
 
-	[Rpc(RpcSources.InputAuthority,RpcTargets.StateAuthority)]
+	[Rpc(RpcSources.All,RpcTargets.StateAuthority)]
 	public void RPC_RequestToOpenNewParty(string leaderName,RpcInfo rpcInfo = default)
 	{
 		if(IsPlayerInsideAParty(leaderName))
@@ -47,15 +47,14 @@ public class PartyManager : NetworkBehaviour
 			RPC_PartyMessage(rpcInfo.Source, "[PartyManager] HOW THE FUCK DID YOU ASK TO OPEN NEW PARTY WHILE YOU ARE IN A PARTY?! CHEATER! (or bugged, i just love to blame people)");
 			return;
 		}
-
-		RPC_AcceptRequestToCreateNewParty(leaderName);
+		RPC_AcceptRequestToCreateNewParty(leaderName, rpcInfo);
 	}
 	[Rpc(RpcSources.StateAuthority,RpcTargets.All)]
-	public void RPC_AcceptRequestToCreateNewParty(string leaderName)
+	public void RPC_AcceptRequestToCreateNewParty(string leaderName,RpcInfo rpcInfo)
 	{
-		//Party newParty = new Party();
-		//newParty.OpenParty(rpcInfo.Source, leaderName);
-		//partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
+		Party newParty = new Party();
+		newParty.OpenParty(rpcInfo.Source, leaderName);
+		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
 	}
 
 	#region requests
