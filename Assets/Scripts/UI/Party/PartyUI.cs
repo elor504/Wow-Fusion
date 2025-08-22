@@ -219,6 +219,7 @@ public class PartyUI : MonoBehaviour
 
 	public void OnEnteredParty(PlayerRef playerRef)
 	{
+
 		if (!GameTest.ComparePlayerRef(playerRef))
 			return;
 

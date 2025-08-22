@@ -96,6 +96,6 @@ public class GameTest
         if (LocalCharacter == null)
             return false;
 
-        return LocalCharacter.Object.InputAuthority.PlayerId == playerRef.PlayerId;
+        return LocalCharacter.Object.InputAuthority == playerRef;
 	}
 }
