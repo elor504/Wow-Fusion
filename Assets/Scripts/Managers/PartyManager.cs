@@ -51,15 +51,16 @@ public class PartyManager : NetworkBehaviour
 			RPC_PartyMessage(rpcInfo.Source, "[PartyManager] HOW THE FUCK DID YOU ASK TO OPEN NEW PARTY WHILE YOU ARE IN A PARTY?! CHEATER! (or bugged, i just love to blame people)");
 			return;
 		}
-		RPC_AcceptRequestToCreateNewParty(leaderName, rpcInfo);
+		Debug.Log($"[Server] Accepted to create new party for {leaderName} with the playerRef: {rpcInfo.Source}");
+		RPC_AcceptRequestToCreateNewParty(leaderName, rpcInfo.Source);
 	}
 	[Rpc(RpcSources.StateAuthority,RpcTargets.All)]
-	public void RPC_AcceptRequestToCreateNewParty(string leaderName,RpcInfo rpcInfo)
+	public void RPC_AcceptRequestToCreateNewParty(string leaderName, PlayerRef playerRef)
 	{
 		Party newParty = new Party();
-		newParty.OpenParty(rpcInfo.Source, leaderName);
+		newParty.OpenParty(playerRef, leaderName);
 		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
-		partyUI.OnEnteredParty(rpcInfo.Source);
+		partyUI.OnEnteredParty(playerRef);
 	}
 
 	#region requests
