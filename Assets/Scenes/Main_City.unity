@@ -1557,7 +1557,8 @@ MonoBehaviour:
   partyInfoWindow: {fileID: 156295176}
   partyInfoContent: {fileID: 955497596}
   partyInfoButtonPF: {fileID: 2399190285907231818, guid: db5429d33c9dcb6408bfe0f6a7b2d2cf, type: 3}
-  partyInfoButtons: []
+  partyInfoButtons:
+  - {fileID: 7795893507123131318}
 --- !u!1001 &1060909347
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3208,6 +3209,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8275174882090982091, guid: db5429d33c9dcb6408bfe0f6a7b2d2cf, type: 3}
   m_PrefabInstance: {fileID: 7795893507123131316}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7795893507123131318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2399190285907231818, guid: db5429d33c9dcb6408bfe0f6a7b2d2cf, type: 3}
+  m_PrefabInstance: {fileID: 7795893507123131316}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3894b4fed7157984eac4fad3c87adde2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

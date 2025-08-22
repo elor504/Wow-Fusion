@@ -132,8 +132,8 @@ public class PartyManager : NetworkBehaviour
 [Serializable]
 public class Party
 {
-	public List<PlayerRef> PartyMember;
-	public List<string> PlayerCharacterNicknames;
+	public List<PlayerRef> PartyMember = new List<PlayerRef>();
+	public List<string> PlayerCharacterNicknames = new List<string>();
 	public string LeaderName;
 
 	public List<PlayerRef> JoinRequests;

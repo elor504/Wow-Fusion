@@ -43,6 +43,11 @@ public class PartyUI : MonoBehaviour
 		createPartyButton.interactable = false;
 	}
 
+	private void Awake()
+	{
+		CloseAllEmptyPartyButtons();
+	}
+
 	#region state handler
 
 	public void OnClickPartyList()
@@ -129,10 +134,20 @@ public class PartyUI : MonoBehaviour
 		createPartyButton.interactable = false;
 		PartyManager.Instance.RPC_RequestToOpenNewParty(GameTest.LocalCharacter.CharacterName);
 	}
-
-
 	#endregion
 	#region Party Search
+
+	private void CloseAllEmptyPartyButtons()
+	{
+		foreach (var partyInfo in partyInfoButtons)
+		{
+			if(string.IsNullOrEmpty(partyInfo.PartyName))
+			{
+				partyInfo.CloseButton();
+			}
+		}
+	}
+
 	public void AddPartyInfo(string partyLeader, int currentPartyAmount, int maxPartyAmount)
 	{
 		string amount = $"{currentPartyAmount}/{maxPartyAmount}";
@@ -159,7 +174,7 @@ public class PartyUI : MonoBehaviour
 	}
 	public void ClosePartyInfo(string partyLeader)
 	{
-
+		GetPartyInfoByPartyLeaderName(partyLeader).CloseButton();
 	}
 
 	private PartyInfoButton GetPartyInfoByPartyLeaderName(string partyLeaderName)
