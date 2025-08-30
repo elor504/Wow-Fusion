@@ -59,6 +59,7 @@ public class PartyManager : NetworkBehaviour
 	{
 		Party newParty = new Party();
 		newParty.OpenParty(playerRef, leaderName);
+		partyList.Add(newParty);
 		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
 		partyUI.OnEnteredParty(playerRef);
 	}
