@@ -18,15 +18,16 @@ public class PartyManager : NetworkBehaviour
 	[SerializeField] private List<Party> partyList;
 
 
-	
-
-
 	public override void Spawned()
 	{
 		base.Spawned();
 		if (Object.HasStateAuthority)
 		{
 			_serverRunner = Object.Runner;
+		}
+		else
+		{
+			//Request Fully info Party list
 		}
 		if (_instance == null)
 		{
@@ -41,6 +42,14 @@ public class PartyManager : NetworkBehaviour
 	{
 		base.Despawned(runner, hasState);
 	}
+
+	[Rpc(RpcSources.All,RpcTargets.StateAuthority)]
+	public void RPC_RequestAllPartyInfo(string partyInfo, RpcInfo rpcInfo = default)
+	{
+
+	}
+
+
 
 	[Rpc(RpcSources.All,RpcTargets.StateAuthority)]
 	public void RPC_RequestToOpenNewParty(string leaderName,RpcInfo rpcInfo = default)
@@ -59,6 +68,7 @@ public class PartyManager : NetworkBehaviour
 	{
 		Party newParty = new Party();
 		newParty.OpenParty(playerRef, leaderName);
+		GameTest.LocalParty = newParty;
 		partyList.Add(newParty);
 		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
 		partyUI.OnEnteredParty(playerRef);
@@ -121,9 +131,6 @@ public class PartyManager : NetworkBehaviour
 		}
 		dungeonManager.CreateNewDungeon(dungeonParty);
 	}
-
-
-
 	public bool IsPlayerInsideAParty(string playerName)
 	{
 		foreach (var party in partyList)
@@ -161,6 +168,10 @@ public class Party
 		PartyMember.Add(memberRef);
 		PlayerCharacterNicknames.Add(memberName);
 	}
+	public void AbandonParty(PlayerRef playerWhoLeft, string memberName)
+	{
+		
+	}
 
 	public bool IsPartyFull() => PlayerCharacterNicknames.Count == PartyManager.PARTY_MAX_MEMBERS;
 	public PlayerCharacter GetLeaderCharacter(NetworkRunner serverRunner)
@@ -178,7 +189,6 @@ public class Party
 
 		return characters;
 	}
-
 	public bool IsEveryMemberOnline(NetworkRunner serverRunner)
 	{
 		List<PlayerCharacter> partyCharacters = GetPartyCharacters(serverRunner);
