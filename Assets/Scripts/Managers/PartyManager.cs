@@ -156,7 +156,7 @@ public class Party
 	public List<string> PlayerCharacterNicknames = new List<string>();
 	public string LeaderName;
 
-	public List<PlayerRef> JoinRequests;
+	public List<PlayerRef> JoinRequests = new List<PlayerRef>();
 
 	public void OpenParty(PlayerRef leaderRef, string leaderCharacterName)
 	{
