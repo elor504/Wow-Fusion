@@ -51,6 +51,7 @@ public class PartyUI : MonoBehaviour
 		{
 			memberInfo.HideInfo();
 		}
+		InputManager.OnPressedUIKeyCode += ToggleWindow;
 	}
 
 	#region state handler
@@ -179,6 +180,12 @@ public class PartyUI : MonoBehaviour
 	}
 	#endregion
 	#region base
+	private void ToggleWindow(KeyCode key)
+	{
+		if (KeyCode.P != key)
+			return;
+		ToggleWindow();
+	}
 	[ContextMenu("Toggle party window")]
 	public void ToggleWindow()
 	{

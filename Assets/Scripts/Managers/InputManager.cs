@@ -15,6 +15,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public PlayerControls playerControls;
 
 
+
     //Networking
     [Networked,OnChangedRender(nameof(DebugTarget))]
     public NetworkId targetID { get; set; }
@@ -40,6 +41,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public event Action<Vector2> OnMovementInput;
     public event Action<Vector3> OnMovementDirection;
     public event Action<Vector2> OnStartedMovingInput;
+    public static event Action<KeyCode> OnPressedUIKeyCode;
 
     private bool _pressedHotKeyOne;
     private bool _pressedHotKeyTwo;
@@ -119,9 +121,19 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
         HandleMouseRightClick();
         HandleMouseLeftClick();
         HandleCharacterRotationInput();
+        HandlePlayerUIInput();
     }
 
-    public override void FixedUpdateNetwork()
+	private void HandlePlayerUIInput()
+	{
+		if(Input.GetKeyDown(KeyCode.P))
+        {
+            OnPressedUIKeyCode?.Invoke(KeyCode.P);
+
+        }
+	}
+
+	public override void FixedUpdateNetwork()
     {
         if (!Object.HasStateAuthority)
             return;
@@ -156,8 +168,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-
-
         var clientInput = new PlayerInputStruct();
         Vector3 movementInput = Vector3.zero;
 
@@ -493,7 +503,6 @@ public struct PlayerInputStruct : INetworkInput
 
     public bool PressedHotKeyOne;
     public bool PressedHotKeyTwo;
-
 }
 
 public class HotKey
