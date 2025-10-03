@@ -2,11 +2,9 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Unity.Collections.Unicode;
 
 public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -16,8 +14,6 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	[SerializeField] private DungeonsManager dungeonsHandler;
 	[SerializeField] private PlayerCharacter characterPF;
 
-
-	private static int CHANNEL_AMOUNT = 1;
 	private static int PLAYER_AMOUNT = 20;
 	public static string CUSTOM_LOBBY_NAME = "MAIN_LOBBY";
 	[SerializeField]
@@ -63,7 +59,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
 		foreach (var characterValue in playersCharacters.Values)
 		{
-			if(characterValue.CharacterName == nickname)
+			if (characterValue.CharacterName == nickname)
 			{
 				return characterValue;
 			}
@@ -73,20 +69,16 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	}
 	private async Task CreateSessions()
 	{
-		for (int i = 0; i < CHANNEL_AMOUNT; i++)
-		{
-			await CreateNewSession($"Lobby_{i}");
-			Debug.Log($"Created new session: {"Lobby_" + i}");
-		}
+		await CreateNewSession($"Lobby_0");
 	}
 	private async Task CreateNewSession(string sessionName)
 	{
 		var newGO = new GameObject(sessionName + " Session");
 		var networkRunner = newGO.AddComponent<NetworkRunner>();
 
-        AddNewSession(sessionName, networkRunner);
+		AddNewSession(sessionName, networkRunner);
 
-        await OpenNewSession(networkRunner, sessionName);
+		await OpenNewSession(networkRunner, sessionName);
 	}
 	private async Task OpenNewSession(NetworkRunner runner, string sessionName)
 	{
@@ -100,7 +92,7 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 			PlayerCount = PLAYER_AMOUNT,
 			Scene = SceneRef.FromIndex(sceneIndex),
 			SceneManager = runner.gameObject.AddComponent<NetworkSceneManagerDefault>()
-    };
+		};
 		await runner.StartGame(gameArg);
 	}
 
@@ -115,13 +107,13 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
 		};
 	}
-	public void RemoveSession(string sessionName,NetworkRunner serverRunner)
+	public void RemoveSession(string sessionName, NetworkRunner serverRunner)
 	{
-        _sessionList.Remove(sessionName);
-    }
+		_sessionList.Remove(sessionName);
+	}
 
 
-    public void OnConnectedToServer(NetworkRunner runner)
+	public void OnConnectedToServer(NetworkRunner runner)
 	{
 		Debug.Log($"[Client/Server] connected to server: {runner.name}");
 	}
@@ -129,7 +121,6 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
 	{
 		Debug.Log($"A player joined a session: {runner.IsServer} player: {player.PlayerId}");
-		GetServerInfo(runner).playersRefs.Add(player);
 		SpawnCharacter(runner, player);
 	}
 
@@ -137,39 +128,24 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		var spawnResult = await runner.SpawnAsync(characterPF, Vector3.zero, Quaternion.identity, player);
 		var character = spawnResult.gameObject.GetComponent<PlayerCharacter>();
-		GetServerInfo(runner).playersCharacters.Add(player, character);
-		GetServerInfo(runner).playersCharacters[player].InitPlayer();
 	}
 
 	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
 	{
-		GetServerInfo(runner).playersRefs.Remove(player);
-		Debug.Log($"A player left on the session: {runner.name} player: {player.PlayerId}");
 
-		Debug.Log($"[Server] Attempting to destroy character: {GetServerInfo(runner).playersCharacters[player]}");
-		var character = GetServerInfo(runner).playersCharacters[player];
-		try
-		{
+		Debug.Log($"A player left on the session: {runner.name} player: {player.PlayerId}");
+		GameManager.Instance.TryGetCharacterByPlayerRef(player, out var character);
+		if (character)
 			runner.Despawn(character.NetworkObject);
-		}
-		catch (Exception e)
-		{
-			Debug.Log($"[Depsawn failed: ] {e.Message}");
-		}
-		GetServerInfo(runner).playersCharacters.Remove(player);
+
 	}
 	#endregion
-	private SessionServerInfo GetServerInfo(NetworkRunner runner)
+
+	public void UpdateGameManager(NetworkRunner serverRunner, GameManager manager)
 	{
-		return _sessionList[runner.SessionInfo.Name];
-	}
-	public void UpdateGameManager(NetworkRunner serverRunner,GameManager manager)
-	{
-		var server = GetServerInfo(serverRunner);
 		manager.OnPlayerJoinedSession += OnPlayerJoined;
 		manager.OnPlayerLeftSession += OnPlayerLeft;
-        server.gameManager = manager;
-    }
+	}
 
 
 
@@ -261,47 +237,4 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	#endregion
 
 
-	[Serializable]
-	private class SessionServerInfo
-	{
-		public NetworkRunner sessionRunner;
-		public GameManager gameManager;
-		public List<PlayerRef> playersRefs;
-		public Dictionary<PlayerRef, PlayerCharacter> playersCharacters;
-		public Dictionary<NetworkId, DragonEnemy> dragonEntity;
-
-
-		public bool TryGetPlayerRef(PlayerCharacter character,out PlayerRef playerRef)
-		{
-			playerRef = default;
-
-			if(playersCharacters.ContainsValue(character))
-			{
-				foreach (var charac in playersCharacters)
-				{
-					if(charac.Value == character)
-					{
-						playerRef = charac.Key;
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-		public bool TryGetPlayerRef(string characterName, out PlayerRef playerRef)
-		{
-			playerRef = default;
-
-			List<PlayerCharacter> playerCharacters = playersCharacters.Values.ToList();
-			foreach (var character in playerCharacters)
-			{
-				if(character.CharacterName == characterName)
-				{
-					return TryGetPlayerRef(character,out playerRef);
-				}
-			}
-
-			return false;
-		}
-	}
 }

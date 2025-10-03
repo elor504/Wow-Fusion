@@ -95,7 +95,10 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         return charactersList.TryGetCharacterByName(characterName, out requestedCharacter);
     }
-
+    public bool TryGetCharacterByPlayerRef(PlayerRef characterRef, out PlayerCharacter requestedCharacter)
+    {
+        return charactersList.TryGetCharacterByPlayerRef(characterRef, out requestedCharacter);
+    }
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         OnPlayerJoinedSession?.Invoke(runner, player);
@@ -226,4 +229,19 @@ public class CharactersList
 
         return false;
 	}
+    public bool TryGetCharacterByPlayerRef(PlayerRef characterRef, out PlayerCharacter requestedCharacter)
+    {
+        requestedCharacter = null;
+
+        foreach (var character in playerCharacters)
+        {
+            if (character.NetworkObject.InputAuthority == characterRef)
+            {
+                requestedCharacter = character;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
