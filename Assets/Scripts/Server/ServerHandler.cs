@@ -16,8 +16,6 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
 	private static int PLAYER_AMOUNT = 20;
 	public static string CUSTOM_LOBBY_NAME = "MAIN_LOBBY";
-	[SerializeField]
-	private Dictionary<string, SessionServerInfo> _sessionList = new Dictionary<string, SessionServerInfo>();
 
 
 
@@ -40,33 +38,16 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void AddEnemyNetworkID(NetworkId networkID, DragonEnemy enemy, NetworkRunner serverRunner)
 	{
-		GetServerInfo(serverRunner).dragonEntity[networkID] = enemy;
-		Debug.Log($"[Server Handler] Registered enemy entity: {enemy.transform.name} into the server enemy dictionary, Server name: {serverRunner.SessionInfo.Name}");
+	
+		//Debug.Log($"[Server Handler] Registered enemy entity: {enemy.transform.name} into the server enemy dictionary, Server name: {serverRunner.SessionInfo.Name}");
 	}
 	public void RemoveEnemyNetworkID(NetworkId networkID, NetworkRunner serverRunner)
 	{
-		GetServerInfo(serverRunner).dragonEntity.Remove(networkID);
+	
 	}
 
-	public DragonEnemy GetEnemyByNetworkID(NetworkId networkID, NetworkRunner serverRunner)
-	{
-		return GetServerInfo(serverRunner).dragonEntity[networkID];
-	}
 
-	public PlayerCharacter GetPlayerCharacterByNickname(NetworkRunner serverRunner, string nickname)
-	{
-		Dictionary<PlayerRef, PlayerCharacter> playersCharacters = GetServerInfo(serverRunner).playersCharacters;
 
-		foreach (var characterValue in playersCharacters.Values)
-		{
-			if (characterValue.CharacterName == nickname)
-			{
-				return characterValue;
-			}
-		}
-
-		return null;
-	}
 	private async Task CreateSessions()
 	{
 		await CreateNewSession($"Lobby_0");
@@ -75,9 +56,6 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		var newGO = new GameObject(sessionName + " Session");
 		var networkRunner = newGO.AddComponent<NetworkRunner>();
-
-		AddNewSession(sessionName, networkRunner);
-
 		await OpenNewSession(networkRunner, sessionName);
 	}
 	private async Task OpenNewSession(NetworkRunner runner, string sessionName)
@@ -96,21 +74,8 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 		await runner.StartGame(gameArg);
 	}
 
-	public void AddNewSession(string sessionName, NetworkRunner serverRunner)
-	{
-		_sessionList[sessionName] = new SessionServerInfo
-		{
-			sessionRunner = serverRunner,
-			playersRefs = new List<PlayerRef>(),
-			playersCharacters = new Dictionary<PlayerRef, PlayerCharacter>(),
-			dragonEntity = new Dictionary<NetworkId, DragonEnemy>()
 
-		};
-	}
-	public void RemoveSession(string sessionName, NetworkRunner serverRunner)
-	{
-		_sessionList.Remove(sessionName);
-	}
+
 
 
 	public void OnConnectedToServer(NetworkRunner runner)

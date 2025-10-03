@@ -178,7 +178,7 @@ public class Party
 	public bool IsPartyFull() => PlayerCharacterNicknames.Count == PartyManager.PARTY_MAX_MEMBERS;
 	public PlayerCharacter GetLeaderCharacter(NetworkRunner serverRunner)
 	{
-		return ServerHandler.Instance.GetPlayerCharacterByNickname(serverRunner, LeaderName);
+		return null;
 	}
 	public List<PlayerCharacter> GetPartyCharacters(NetworkRunner serverRunner)
 	{
@@ -186,7 +186,7 @@ public class Party
 
 		for (int i = 0; i < characters.Count; i++)
 		{
-			characters[i] = ServerHandler.Instance.GetPlayerCharacterByNickname(serverRunner, PlayerCharacterNicknames[i]);
+			characters[i] = null;
 		}
 
 		return characters;

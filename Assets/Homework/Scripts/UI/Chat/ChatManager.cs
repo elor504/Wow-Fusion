@@ -47,26 +47,26 @@ public class ChatManager : MonoBehaviour
 
             var targetName = split[1];
             var message = split[2];
-            var senderName = CharactersList.Instance.GetLocalPlayerName();
+            //var senderName = CharactersList.Instance.GetLocalPlayerName();
             string hexColor = UnityEngine.ColorUtility.ToHtmlStringRGB(whisperColor);
             var messageToSend = $"<color=#{hexColor}>[Whisper]</color> " + message;
-            GameManagerHW.Instance.RPC_SendPrivateMessage(senderName, messageToSend, defaultColor, targetName);
+           // GameManagerHW.Instance.RPC_SendPrivateMessage(senderName, messageToSend, defaultColor, targetName);
 
             var localMessage = $"<color=#{hexColor}>[{targetName}]</color> " + message;
             MessageInfo info;
             info.Message = localMessage;
-            info.SenderName = senderName;
+            //info.SenderName = senderName;
             info.TextColor = defaultColor;
-            AddMessage(info);
+          //  AddMessage(info);
         }
         else
         {
             MessageInfo info;
-            info.SenderName = CharactersList.Instance.GetLocalPlayerName();
+           // info.SenderName = CharactersList.Instance.GetLocalPlayerName();
             info.Message = _message;
             info.TextColor = Color.black;
             Debug.Log($"[Client] attempting to send a message to all");
-            GameManagerHW.Instance.RPC_SendMessageToAll(info.SenderName, info.Message, defaultColor);
+          //  GameManagerHW.Instance.RPC_SendMessageToAll(info.SenderName, info.Message, defaultColor);
         }
         messageInput.text = "";
     }

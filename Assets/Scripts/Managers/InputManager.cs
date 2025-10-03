@@ -2,538 +2,536 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.TextCore.Text;
 
 
 public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 {
-    [SerializeField] private PlayerCharacter character;
-    public PlayerMovement playerMovement;
-    public PlayerControls playerControls;
+	[SerializeField] private PlayerCharacter character;
+	public PlayerMovement playerMovement;
+	public PlayerControls playerControls;
 
 
 
-    //Networking
-    [Networked,OnChangedRender(nameof(DebugTarget))]
-    public NetworkId targetID { get; set; }
-    [Networked,OnChangedRender(nameof(UpdateKeyOneID))]
-    public string UsedHotkeyOneID { get; set; }
-    [Networked]
-    public float CastCounter { get; set; }
+	//Networking
+	[Networked, OnChangedRender(nameof(DebugTarget))]
+	public NetworkId targetID { get; set; }
+	[Networked, OnChangedRender(nameof(UpdateKeyOneID))]
+	public string UsedHotkeyOneID { get; set; }
+	[Networked]
+	public float CastCounter { get; set; }
 
 
 
 
-   
-
-
-    //Client based events
-    public static event Action OnHoldingRightMouse;
-    public static event Action OnHoldingLeftMouseOnEmpty;
-    public static event Action OnClickLeftMouse;
-    public static event Action<float> OnScroll;
-
-    //Server based Events
-    public event Action<int, float> OnRotateCharacterInput;
-    public event Action<Vector2> OnMovementInput;
-    public event Action<Vector3> OnMovementDirection;
-    public event Action<Vector2> OnStartedMovingInput;
-
-    private bool _pressedHotKeyOne;
-    private bool _pressedHotKeyTwo;
-
-    private bool _isHoldingRightMouseDown;
-    private bool _isHoldingLeftMouseDown;
-    private float _scroll;
-    private int _characterRotationInput;
 
 
 
-    private List<HotKey> _hotKeysList = new List<HotKey>();
+	//Client based events
+	public static event Action OnHoldingRightMouse;
+	public static event Action OnHoldingLeftMouseOnEmpty;
+	public static event Action OnClickLeftMouse;
+	public static event Action<float> OnScroll;
 
-    public InputAction Movement;
-    public InputAction MouseWheel;
-    public InputAction HotKeys;
+	//Server based Events
+	public event Action<int, float> OnRotateCharacterInput;
+	public event Action<Vector2> OnMovementInput;
+	public event Action<Vector3> OnMovementDirection;
+	public event Action<Vector2> OnStartedMovingInput;
 
-    private bool _isMouseOverUI;
-    public bool IsMouseOverUI => _isMouseOverUI;
-    public bool PressedHotKeyOne => _pressedHotKeyOne;
-    public bool PressedHotKeyTwo => _pressedHotKeyTwo;
+	private bool _pressedHotKeyOne;
+	private bool _pressedHotKeyTwo;
 
-    private bool _denyInput;
-
-
-
-    [Header("Testing")]
-    [SerializeField] private ProjectileSpellData spellToTest;
-    //TODO: move into the combat class
-    private ProjectileSpell projectileToTest;
-    public ProjectileSpell ProjectileToTest => projectileToTest;
-    [SerializeField] private StatBuffData selfBuffDataToTest;
-    [SerializeField] private SelfBuffSpell selfBuffToTest;
+	private bool _isHoldingRightMouseDown;
+	private bool _isHoldingLeftMouseDown;
+	private float _scroll;
+	private int _characterRotationInput;
 
 
-    private BaseSpell spellOnKeyOne;
 
-    public override void Spawned()
-    {
-        base.Spawned();
-        // Everyone
-        projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
-        selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
-        if (Object.HasStateAuthority)
-        {
-            // Server
-            _hotKeysList.Add(new HotKey("1"));
-            _hotKeysList[0].AddHotkeyable(projectileToTest.SpellID, Attack);
-            _hotKeysList.Add(new HotKey("2"));
-            _hotKeysList[1].AddHotkeyable(projectileToTest.SpellID, SelfCast);
-        }
-        else if (Object.HasInputAuthority)
-        {
-            // Client
-            playerControls = new PlayerControls();
-            Debug.Log("Spawned input manager");
-            GameTest.AddCallBacks(this);
-            GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
-        }
-    }
+	private List<HotKey> _hotKeysList = new List<HotKey>();
 
-    public override void Despawned(NetworkRunner runner, bool hasState)
-    {
-        if (Object.HasInputAuthority)
-        {
-            base.Despawned(runner, hasState);
-            GameTest.RemoveCallBacks(this);
-            GameManager.Instance.TargetManager.OnTarget -= SetTargetNetworkID;
-        }
-    }
+	public InputAction Movement;
+	public InputAction MouseWheel;
+	public InputAction HotKeys;
 
-    private void Update()
-    {
-        if (GameTest.LocalCharacter == null || !Object.HasInputAuthority || _denyInput)
-            return;
+	private bool _isMouseOverUI;
+	public bool IsMouseOverUI => _isMouseOverUI;
+	public bool PressedHotKeyOne => _pressedHotKeyOne;
+	public bool PressedHotKeyTwo => _pressedHotKeyTwo;
 
-        HandleMouseRightClick();
-        HandleMouseLeftClick();
-        HandleCharacterRotationInput();
-        HandlePlayerUIInput();
-    }
+	private bool _denyInput;
+
+
+
+	[Header("Testing")]
+	[SerializeField] private ProjectileSpellData spellToTest;
+	//TODO: move into the combat class
+	private ProjectileSpell projectileToTest;
+	public ProjectileSpell ProjectileToTest => projectileToTest;
+	[SerializeField] private StatBuffData selfBuffDataToTest;
+	[SerializeField] private SelfBuffSpell selfBuffToTest;
+
+
+	private BaseSpell spellOnKeyOne;
+
+	public override void Spawned()
+	{
+		base.Spawned();
+		// Everyone
+		projectileToTest = spellToTest.GetSpell() as ProjectileSpell;
+		selfBuffToTest = selfBuffDataToTest.GetSpell() as SelfBuffSpell;
+		if (Object.HasStateAuthority)
+		{
+			// Server
+			_hotKeysList.Add(new HotKey("1"));
+			_hotKeysList[0].AddHotkeyable(projectileToTest.SpellID, Attack);
+			_hotKeysList.Add(new HotKey("2"));
+			_hotKeysList[1].AddHotkeyable(projectileToTest.SpellID, SelfCast);
+		}
+		else if (Object.HasInputAuthority)
+		{
+			// Client
+			playerControls = new PlayerControls();
+			Debug.Log("Spawned input manager");
+			GameTest.AddCallBacks(this);
+			GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
+		}
+	}
+
+	public override void Despawned(NetworkRunner runner, bool hasState)
+	{
+		if (Object.HasInputAuthority)
+		{
+			base.Despawned(runner, hasState);
+			GameTest.RemoveCallBacks(this);
+			GameManager.Instance.TargetManager.OnTarget -= SetTargetNetworkID;
+		}
+	}
+
+	private void Update()
+	{
+		if (GameTest.LocalCharacter == null || !Object.HasInputAuthority || _denyInput)
+			return;
+
+		HandleMouseRightClick();
+		HandleMouseLeftClick();
+		HandleCharacterRotationInput();
+		HandlePlayerUIInput();
+	}
 
 	private void HandlePlayerUIInput()
 	{
-		if(Input.GetKeyDown(KeyCode.P))
-        {
-            GameManager.Instance.PartyUI.ToggleWindow();
-            Debug.Log("[InputManager] clicked party");
-        }
+		if (Input.GetKeyDown(KeyCode.P))
+		{
+			GameManager.Instance.PartyUI.ToggleWindow();
+			Debug.Log("[InputManager] clicked party");
+		}
 	}
 
 	public override void FixedUpdateNetwork()
-    {
-        if (!Object.HasStateAuthority)
-            return;
-
-        if (GetInput(out PlayerInputStruct input))
-        {
-            _isHoldingRightMouseDown = input.MouseRightClick;
-
-            //OnMovementInput?.Invoke(input.MovementInput);
-            OnMovementDirection?.Invoke(input.MovementDirection);
-
-            if (input.RotationInput != 0)
-                OnRotateCharacterInput?.Invoke(input.RotationInput, Object.Runner.DeltaTime);
-
-            if (_isHoldingRightMouseDown)
-                playerMovement.Rotate(input.CharacterFoward);
-
-
-            _pressedHotKeyOne = input.PressedHotKeyOne;
-            _pressedHotKeyTwo = input.PressedHotKeyTwo;
-            //if (input.PressedHotKeyOne)
-            //{
-            //    GetHotKey("1")?.Press();
-            //    Debug.Log($"[Server] {gameObject.name} Pressed Hotkey One");
-            //}
-            //if (input.PressedHotKeyTwo)
-            //{
-            //    GetHotKey("2")?.Press();
-            //    Debug.Log($"[Server] {gameObject.name} Pressed Hotkey Two");
-            //}
-        }
-    }
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-        var clientInput = new PlayerInputStruct();
-        Vector3 movementInput = Vector3.zero;
-
-        movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
-
-        clientInput.MovementInput = Movement.ReadValue<Vector2>();
-        clientInput.MovementDirection = movementInput;
-
-        clientInput.MouseRightClick = _isHoldingRightMouseDown;
-        var foward = PlayerCamera.Instance.Foward;
-        foward.y = 0;
-        clientInput.CharacterFoward = foward;
-
-        clientInput.RotationInput = _characterRotationInput;
-
-        clientInput.PressedHotKeyOne = _pressedHotKeyOne;
-        clientInput.PressedHotKeyTwo = _pressedHotKeyTwo;
-
-
-
-        input.Set(clientInput);
-
-        _isHoldingRightMouseDown = false;
-        _pressedHotKeyOne = false;
-        _pressedHotKeyTwo = false;
-    }
-
-
-    private void HandleCharacterRotationInput()
-    {
-        //Think of a better way ><
-        if (Input.GetKey(KeyCode.E))
-        {
-            _characterRotationInput = 1;
-        }
-        else if (Input.GetKey(KeyCode.Q))
-        {
-            _characterRotationInput = -1;
-        }
-        else if (_characterRotationInput != 0)
-        {
-            _characterRotationInput = 0;
-        }
-    }
-
-    public Vector3 TranslatePlayerInputRelatedToPlayer(Vector2 playerInput)
-    {
-        float verticalInput = playerInput.y;
-        float horizontalInput = playerInput.x;
-
-        Vector3 fwd = transform.forward;
-        Vector3 right = transform.right;
-        Vector3 move = fwd * verticalInput + right * horizontalInput;
-
-        return move.normalized;
-    }
-
-
- 
-    private void HandleMouseLeftClick()
-    {
-        //TODO: make a way to skip a frame check to prevent holding if i only want to click
-        _isHoldingLeftMouseDown = Input.GetMouseButton(0);
-        if (_isHoldingLeftMouseDown && !_isMouseOverUI)
-        {
-            OnHoldingLeftMouseOnEmpty.Invoke();
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            OnClickLeftMouse?.Invoke();
-        }
-    }
-    private void HandleMouseRightClick()
-    {
-        _isHoldingRightMouseDown = Input.GetMouseButton(1);
-        if (_isHoldingRightMouseDown)
-        {
-            OnHoldingRightMouse?.Invoke();
-        }
-    }
-
-
-    private void OnClickedHotKey(InputAction.CallbackContext context)
-    {
-        var key = context.control.name;
-        //_targetObjectNetworkID = GameManager.Instance.TargetManager.CurrentTarget.GetNetworkID();
-        switch (key)
-        {
-            case "1":
-                _pressedHotKeyOne = true;
-                //GetHotKey("1")?.Press();
-                break;
-            case "2":
-                _pressedHotKeyTwo = true;
-                //GetHotKey("2")?.Press();
-                break;
-            case "3":
-                break;
-            case "4":
-                break;
-        }
-    }
-
-    public void DebugTarget()
-    {
-        Debug.Log($"[InputManager] {gameObject.name} Successfully updated current targetID: {targetID}");
-    }
-    #region Spells
-    private void UpdateKeyOneID()
-    {
-        Debug.Log($"[Client] updated spell id on keyone");
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_UpdateKeyOneID()
-    {
-        spellOnKeyOne = DataBankSO.Instance.GetSkillData(UsedHotkeyOneID).GetSpell();
-        var castState = (PlayerCastState)character.GetBrain.GetStateByID((int)PlayerStates.Cast);
-
-        castState.SetSpellToCast(spellOnKeyOne, character, GameManager.Instance.TargetManager.CurrentTarget);
-    }
-
-    public void Attack()
-    {
-        if (targetID != default)
-        {
-            //RPC_Attack(GameManager.Instance.TargetManager.CurrentTarget.GetNetworkId());
-            RPC_UpdateKeyOneID();
-            var targetGO = ServerHandler.Instance.GetEnemyByNetworkID(targetID, Object.Runner);
-            UsedHotkeyOneID = projectileToTest.SpellID;
-            character.CastSpell(projectileToTest, targetGO);
-        }
-        else
-        {
-            Debug.Log("No target");
-        }
-    }
-    public void SelfCast()
-    {
-        GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
-    }
-
-    #endregion
-    public HotKey GetHotKey(string key)
-    {
-        return _hotKeysList.Find(hotKey => hotKey.HotKeyID == key);
-    }
-    public void SetTargetNetworkID(ITargetableEntity target)
-    {
-        
-        if (target != default)
-        {
-            RPC_SetTarget(target.GetNetworkId());
-            //targetID = target.GetNetworkId();
-            Debug.Log($"[InputManager] Succesfully found a target: {targetID} ");
-        }
-        else
-        {
-            RPC_SetTarget(default);
-            //targetID = default;
-            Debug.Log($"[InputManager] target is null");
-        }
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_SetTarget(NetworkId targetId)
-    {
-        targetID = targetId;
-    }
-
-
-    private void OnMouseWheelScroll(InputAction.CallbackContext context)
-    {
-        Vector2 scroll = context.action.ReadValue<Vector2>();
-        OnScroll?.Invoke(scroll.y);
-    }
-    private void DetectMovementInput(InputAction.CallbackContext context)
-    {
-        Vector2 movementInput = context.ReadValue<Vector2>();
-        OnStartedMovingInput?.Invoke(movementInput);
-    }
-
-    private void OnEnable()
-    {
-        if (playerControls == null)
-            playerControls = new PlayerControls();
-        Movement = playerControls.Player.Move;
-        MouseWheel = playerControls.Player.MouseWheel;
-        HotKeys = playerControls.Player.NumKeys;
-
-        playerControls.Enable();
-        Movement.Enable();
-        MouseWheel.Enable();
-
-        Movement.performed += DetectMovementInput;
-        MouseWheel.performed += OnMouseWheelScroll;
-        HotKeys.performed += OnClickedHotKey;
-
-    }
-    private void OnDisable()
-    {
-        playerControls.Disable();
-        MouseWheel.Disable();
-        HotKeys.Disable();
-
-        Movement.performed -= DetectMovementInput;
-        MouseWheel.performed -= OnMouseWheelScroll;
-        HotKeys.performed -= OnClickedHotKey;
-    }
-
-    public void OnOnMouseOnUI(bool value)
-    {
-        _isMouseOverUI = value;
-    }
-    /// <summary>
-    /// Incase we want to disable the player moving in the map and doing stuff example for loading scenes and ETC
-    /// </summary>
-    public void EnableDenyInput()
-    {
-        _denyInput = true;
-    }
-    public void DisableDenyInput()
-    {
-        _denyInput = false;
-    }
-
-
-
-
-
-
-    #region unused
-    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
-    {
-
-    }
-
-    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
-    {
-
-    }
-
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
-
-    }
-
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
-    {
-
-    }
-
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-    {
-
-    }
-
-    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
-    {
-
-    }
-
-    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
-    {
-
-    }
-
-    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
-    {
-
-    }
-
-    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
-    {
-
-    }
-
-    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
-    {
-
-    }
-
-    public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
-    {
-
-    }
-
-    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
-    {
-
-    }
-
-    public void OnConnectedToServer(NetworkRunner runner)
-    {
-
-    }
-
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
-    {
-
-    }
-
-    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
-    {
-
-    }
-
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
-    {
-
-    }
-
-    public void OnSceneLoadDone(NetworkRunner runner)
-    {
-
-    }
-
-    public void OnSceneLoadStart(NetworkRunner runner)
-    {
-
-    }
-    #endregion
+	{
+		if (!Object.HasStateAuthority)
+			return;
+
+		if (GetInput(out PlayerInputStruct input))
+		{
+			_isHoldingRightMouseDown = input.MouseRightClick;
+
+			//OnMovementInput?.Invoke(input.MovementInput);
+			OnMovementDirection?.Invoke(input.MovementDirection);
+
+			if (input.RotationInput != 0)
+				OnRotateCharacterInput?.Invoke(input.RotationInput, Object.Runner.DeltaTime);
+
+			if (_isHoldingRightMouseDown)
+				playerMovement.Rotate(input.CharacterFoward);
+
+
+			_pressedHotKeyOne = input.PressedHotKeyOne;
+			_pressedHotKeyTwo = input.PressedHotKeyTwo;
+			//if (input.PressedHotKeyOne)
+			//{
+			//    GetHotKey("1")?.Press();
+			//    Debug.Log($"[Server] {gameObject.name} Pressed Hotkey One");
+			//}
+			//if (input.PressedHotKeyTwo)
+			//{
+			//    GetHotKey("2")?.Press();
+			//    Debug.Log($"[Server] {gameObject.name} Pressed Hotkey Two");
+			//}
+		}
+	}
+	public void OnInput(NetworkRunner runner, NetworkInput input)
+	{
+		var clientInput = new PlayerInputStruct();
+		Vector3 movementInput = Vector3.zero;
+
+		movementInput = TranslatePlayerInputRelatedToPlayer(Movement.ReadValue<Vector2>());
+
+		clientInput.MovementInput = Movement.ReadValue<Vector2>();
+		clientInput.MovementDirection = movementInput;
+
+		clientInput.MouseRightClick = _isHoldingRightMouseDown;
+		var foward = PlayerCamera.Instance.Foward;
+		foward.y = 0;
+		clientInput.CharacterFoward = foward;
+
+		clientInput.RotationInput = _characterRotationInput;
+
+		clientInput.PressedHotKeyOne = _pressedHotKeyOne;
+		clientInput.PressedHotKeyTwo = _pressedHotKeyTwo;
+
+
+
+		input.Set(clientInput);
+
+		_isHoldingRightMouseDown = false;
+		_pressedHotKeyOne = false;
+		_pressedHotKeyTwo = false;
+	}
+
+
+	private void HandleCharacterRotationInput()
+	{
+		//Think of a better way ><
+		if (Input.GetKey(KeyCode.E))
+		{
+			_characterRotationInput = 1;
+		}
+		else if (Input.GetKey(KeyCode.Q))
+		{
+			_characterRotationInput = -1;
+		}
+		else if (_characterRotationInput != 0)
+		{
+			_characterRotationInput = 0;
+		}
+	}
+
+	public Vector3 TranslatePlayerInputRelatedToPlayer(Vector2 playerInput)
+	{
+		float verticalInput = playerInput.y;
+		float horizontalInput = playerInput.x;
+
+		Vector3 fwd = transform.forward;
+		Vector3 right = transform.right;
+		Vector3 move = fwd * verticalInput + right * horizontalInput;
+
+		return move.normalized;
+	}
+
+
+
+	private void HandleMouseLeftClick()
+	{
+		//TODO: make a way to skip a frame check to prevent holding if i only want to click
+		_isHoldingLeftMouseDown = Input.GetMouseButton(0);
+		if (_isHoldingLeftMouseDown && !_isMouseOverUI)
+		{
+			OnHoldingLeftMouseOnEmpty.Invoke();
+		}
+
+		if (Input.GetMouseButtonDown(0))
+		{
+			OnClickLeftMouse?.Invoke();
+		}
+	}
+	private void HandleMouseRightClick()
+	{
+		_isHoldingRightMouseDown = Input.GetMouseButton(1);
+		if (_isHoldingRightMouseDown)
+		{
+			OnHoldingRightMouse?.Invoke();
+		}
+	}
+
+
+	private void OnClickedHotKey(InputAction.CallbackContext context)
+	{
+		var key = context.control.name;
+		//_targetObjectNetworkID = GameManager.Instance.TargetManager.CurrentTarget.GetNetworkID();
+		switch (key)
+		{
+			case "1":
+				_pressedHotKeyOne = true;
+				//GetHotKey("1")?.Press();
+				break;
+			case "2":
+				_pressedHotKeyTwo = true;
+				//GetHotKey("2")?.Press();
+				break;
+			case "3":
+				break;
+			case "4":
+				break;
+		}
+	}
+
+	public void DebugTarget()
+	{
+		Debug.Log($"[InputManager] {gameObject.name} Successfully updated current targetID: {targetID}");
+	}
+	#region Spells
+	private void UpdateKeyOneID()
+	{
+		Debug.Log($"[Client] updated spell id on keyone");
+	}
+
+	[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+	private void RPC_UpdateKeyOneID()
+	{
+		spellOnKeyOne = DataBankSO.Instance.GetSkillData(UsedHotkeyOneID).GetSpell();
+		var castState = (PlayerCastState)character.GetBrain.GetStateByID((int)PlayerStates.Cast);
+
+		castState.SetSpellToCast(spellOnKeyOne, character, GameManager.Instance.TargetManager.CurrentTarget);
+	}
+
+	public void Attack()
+	{
+		if (targetID != default)
+		{
+			//TODO: fix
+			RPC_UpdateKeyOneID();
+			// var targetGO = ServerHandler.Instance.GetEnemyByNetworkID(targetID, Object.Runner);
+			// UsedHotkeyOneID = projectileToTest.SpellID;
+			//character.CastSpell(projectileToTest, targetGO);
+		}
+		else
+		{
+			Debug.Log("No target");
+		}
+	}
+	public void SelfCast()
+	{
+		GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
+	}
+
+	#endregion
+	public HotKey GetHotKey(string key)
+	{
+		return _hotKeysList.Find(hotKey => hotKey.HotKeyID == key);
+	}
+	public void SetTargetNetworkID(ITargetableEntity target)
+	{
+
+		if (target != default)
+		{
+			RPC_SetTarget(target.GetNetworkId());
+			//targetID = target.GetNetworkId();
+			Debug.Log($"[InputManager] Succesfully found a target: {targetID} ");
+		}
+		else
+		{
+			RPC_SetTarget(default);
+			//targetID = default;
+			Debug.Log($"[InputManager] target is null");
+		}
+	}
+
+	[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+	public void RPC_SetTarget(NetworkId targetId)
+	{
+		targetID = targetId;
+	}
+
+
+	private void OnMouseWheelScroll(InputAction.CallbackContext context)
+	{
+		Vector2 scroll = context.action.ReadValue<Vector2>();
+		OnScroll?.Invoke(scroll.y);
+	}
+	private void DetectMovementInput(InputAction.CallbackContext context)
+	{
+		Vector2 movementInput = context.ReadValue<Vector2>();
+		OnStartedMovingInput?.Invoke(movementInput);
+	}
+
+	private void OnEnable()
+	{
+		if (playerControls == null)
+			playerControls = new PlayerControls();
+		Movement = playerControls.Player.Move;
+		MouseWheel = playerControls.Player.MouseWheel;
+		HotKeys = playerControls.Player.NumKeys;
+
+		playerControls.Enable();
+		Movement.Enable();
+		MouseWheel.Enable();
+
+		Movement.performed += DetectMovementInput;
+		MouseWheel.performed += OnMouseWheelScroll;
+		HotKeys.performed += OnClickedHotKey;
+
+	}
+	private void OnDisable()
+	{
+		playerControls.Disable();
+		MouseWheel.Disable();
+		HotKeys.Disable();
+
+		Movement.performed -= DetectMovementInput;
+		MouseWheel.performed -= OnMouseWheelScroll;
+		HotKeys.performed -= OnClickedHotKey;
+	}
+
+	public void OnOnMouseOnUI(bool value)
+	{
+		_isMouseOverUI = value;
+	}
+	/// <summary>
+	/// Incase we want to disable the player moving in the map and doing stuff example for loading scenes and ETC
+	/// </summary>
+	public void EnableDenyInput()
+	{
+		_denyInput = true;
+	}
+	public void DisableDenyInput()
+	{
+		_denyInput = false;
+	}
+
+
+
+
+
+
+	#region unused
+	public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+	{
+
+	}
+
+	public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+	{
+
+	}
+
+	public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+	{
+
+	}
+
+	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+	{
+
+	}
+
+	public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+	{
+
+	}
+
+	public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+	{
+
+	}
+
+	public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
+	{
+
+	}
+
+	public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
+	{
+
+	}
+
+	public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
+	{
+
+	}
+
+	public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
+	{
+
+	}
+
+	public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
+	{
+
+	}
+
+	public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
+	{
+
+	}
+
+	public void OnConnectedToServer(NetworkRunner runner)
+	{
+
+	}
+
+	public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+	{
+
+	}
+
+	public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
+	{
+
+	}
+
+	public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+	{
+
+	}
+
+	public void OnSceneLoadDone(NetworkRunner runner)
+	{
+
+	}
+
+	public void OnSceneLoadStart(NetworkRunner runner)
+	{
+
+	}
+	#endregion
 
 }
 public struct PlayerInputStruct : INetworkInput
 {
-    public Vector2 MovementInput;
-    public Vector3 MovementDirection;
-    public int RotationInput;
-    public bool MouseRightClick;
-    public Vector3 CharacterFoward;
+	public Vector2 MovementInput;
+	public Vector3 MovementDirection;
+	public int RotationInput;
+	public bool MouseRightClick;
+	public Vector3 CharacterFoward;
 
-    public bool PressedHotKeyOne;
-    public bool PressedHotKeyTwo;
+	public bool PressedHotKeyOne;
+	public bool PressedHotKeyTwo;
 }
 
 public class HotKey
 {
-    private string _hotKeyID;
-    public string HotKeyID => _hotKeyID;
-    public event Action OnPressed;
+	private string _hotKeyID;
+	public string HotKeyID => _hotKeyID;
+	public event Action OnPressed;
 
-    private string _hotKeyableID;
-
-
-    public HotKey(string hotKeyID)
-    {
-        _hotKeyID = hotKeyID;
-    }
-
-    public void Press()
-    {
-        OnPressed?.Invoke();
-    }
+	private string _hotKeyableID;
 
 
-    public void AddHotkeyable(string hotKeyableID, Action action)
-    {
-        _hotKeyableID = hotKeyableID;
-        OnPressed += action;
-    }
+	public HotKey(string hotKeyID)
+	{
+		_hotKeyID = hotKeyID;
+	}
 
-    public void ClearHotkeyable()
-    {
-        _hotKeyableID = "";
-        OnPressed = null;
-    }
+	public void Press()
+	{
+		OnPressed?.Invoke();
+	}
+
+
+	public void AddHotkeyable(string hotKeyableID, Action action)
+	{
+		_hotKeyableID = hotKeyableID;
+		OnPressed += action;
+	}
+
+	public void ClearHotkeyable()
+	{
+		_hotKeyableID = "";
+		OnPressed = null;
+	}
 
 }
