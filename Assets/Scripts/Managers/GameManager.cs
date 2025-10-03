@@ -33,6 +33,21 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public CharacterVisualSO EquipmentVisualData => equipmentVisualData;
 
+    [Header("Debug")]
+    [SerializeField] private string characterToCheck;
+
+    public void TestCharacterName()
+    {
+        var character = charactersList.TryGetCharacterByName(characterToCheck, out var requestedCharacter);
+        if (requestedCharacter)
+        {
+            Debug.Log($"[GameManager] Testing charatcter {characterToCheck}: \n name: {requestedCharacter.CharacterName} \n gameobject: {requestedCharacter.GetEntityGO()}");
+        }
+        else
+        {
+            Debug.Log("Failed to find a character which such name");
+        }
+    }
 
     public static event Action<GameManager> OnGameManagerSpawned;
     public static event Action<GameManager> OnGameManagerDespawned;
