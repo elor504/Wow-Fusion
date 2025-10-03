@@ -37,21 +37,25 @@ public class PartyUI : MonoBehaviour
 	{
 		createPartyButton.onClick.AddListener(OnClickCreateParty);
 		createPartyButton.interactable = true;
+		Debug.Log("[PartyUI] Enabled");
 	}
 	private void OnDisable()
 	{
 		createPartyButton.onClick.RemoveListener(OnClickCreateParty);
 		createPartyButton.interactable = false;
+
+		Debug.Log("[PartyUI] Disabled");
 	}
 
 	private void Awake()
 	{
+		CloseWindow();
 		CloseAllEmptyPartyButtons();
 		foreach (var memberInfo in partyMembersInfoUI)
 		{
 			memberInfo.HideInfo();
 		}
-		InputManager.OnPressedUIKeyCode += ToggleWindow;
+
 	}
 
 	#region state handler
@@ -180,12 +184,7 @@ public class PartyUI : MonoBehaviour
 	}
 	#endregion
 	#region base
-	private void ToggleWindow(KeyCode key)
-	{
-		if (KeyCode.P != key)
-			return;
-		ToggleWindow();
-	}
+	
 	[ContextMenu("Toggle party window")]
 	public void ToggleWindow()
 	{

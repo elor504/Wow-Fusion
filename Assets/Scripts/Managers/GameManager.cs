@@ -13,13 +13,13 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _serverRunner;
 
     [Header("Managers")]
-
     [SerializeField] private TargetManager targetManager;
     [SerializeField] private ClassSkillManager skillManager;
-   
-
+    [Header("Characters")]
+    [SerializeField] private CharactersList charactersList;
     [Header("UI")]
     [SerializeField] private GameObject playerHUD;
+    [SerializeField] private PartyUI partyUI;
 
     [Header("Data")]
     [SerializeField] private CharacterVisualSO equipmentVisualData;
@@ -29,7 +29,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public TargetManager TargetManager => targetManager;
     public ClassSkillManager ClassSkillManager => skillManager;
-
+    public PartyUI PartyUI => partyUI;
 
     public CharacterVisualSO EquipmentVisualData => equipmentVisualData;
 
@@ -53,6 +53,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
             _serverRunner.AddCallbacks(this);
             ServerHandler.Instance.UpdateGameManager(_serverRunner, this);
         }
+
 
     }
 
@@ -82,14 +83,23 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         GameTest.AddCallBacks(this);
     }
 
-
+    public void AddCharacterToList(PlayerCharacter character)
+    {
+        charactersList.AddCharacterToList(character);
+    }
+    public void RemoveCharacterFromList(PlayerCharacter character)
+    {
+        charactersList.RemoveCharacterFromList(character);
+    }
+    public bool TryGetCharacterByName(string characterName, out PlayerCharacter requestedCharacter)
+    {
+        return charactersList.TryGetCharacterByName(characterName, out requestedCharacter);
+    }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         OnPlayerJoinedSession?.Invoke(runner, player);
     }
-
-
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         OnPlayerLeftSession?.Invoke(runner, player);
@@ -105,8 +115,8 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
 
 
-
-    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+	#region unused
+	public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
 
     }
@@ -182,4 +192,38 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
        
     }
+	#endregion
+}
+
+
+[Serializable] 
+public class CharactersList
+{
+    [SerializeField]private List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
+
+
+    public void AddCharacterToList(PlayerCharacter character)
+    {
+        playerCharacters.Add(character);
+	}
+    public void RemoveCharacterFromList(PlayerCharacter character)
+    {
+        playerCharacters.Remove(character);
+    }
+
+    public bool TryGetCharacterByName(string characterName,out PlayerCharacter requestedCharacter)
+    {
+        requestedCharacter = null;
+
+        foreach (var character in playerCharacters)
+		{
+            if(character.CharacterName == characterName)
+            {
+                requestedCharacter = character;
+                return true;
+			}
+		}
+
+        return false;
+	}
 }

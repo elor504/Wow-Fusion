@@ -74,13 +74,12 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 			_myRunner = Object.Runner;
 		}
 		else
-		{
-			GameTest.PlayerCharacters.Add(this);
+		{	
 			nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1 });
 			nickNameLookAt.constraintActive = true;
 			//gameObject.tag = TargetManager.FRIENDLY_TAG;
 		}
-
+		GameManager.Instance.AddCharacterToList(this);
 	}
 
 	public override void Despawned(NetworkRunner runner, bool hasState)
@@ -95,11 +94,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 		{
 
 		}
-		else
-		{
-			GameTest.PlayerCharacters.Remove(this);
-		}
-
+		GameManager.Instance.AddCharacterToList(this);
 	}
 
 	public void InitPlayer()

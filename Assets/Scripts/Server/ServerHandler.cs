@@ -2,6 +2,7 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -268,5 +269,39 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 		public List<PlayerRef> playersRefs;
 		public Dictionary<PlayerRef, PlayerCharacter> playersCharacters;
 		public Dictionary<NetworkId, DragonEnemy> dragonEntity;
+
+
+		public bool TryGetPlayerRef(PlayerCharacter character,out PlayerRef playerRef)
+		{
+			playerRef = default;
+
+			if(playersCharacters.ContainsValue(character))
+			{
+				foreach (var charac in playersCharacters)
+				{
+					if(charac.Value == character)
+					{
+						playerRef = charac.Key;
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		public bool TryGetPlayerRef(string characterName, out PlayerRef playerRef)
+		{
+			playerRef = default;
+
+			List<PlayerCharacter> playerCharacters = playersCharacters.Values.ToList();
+			foreach (var character in playerCharacters)
+			{
+				if(character.CharacterName == characterName)
+				{
+					return TryGetPlayerRef(character,out playerRef);
+				}
+			}
+
+			return false;
+		}
 	}
 }

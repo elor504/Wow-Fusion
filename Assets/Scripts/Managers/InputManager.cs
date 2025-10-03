@@ -41,7 +41,6 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     public event Action<Vector2> OnMovementInput;
     public event Action<Vector3> OnMovementDirection;
     public event Action<Vector2> OnStartedMovingInput;
-    public static event Action<KeyCode> OnPressedUIKeyCode;
 
     private bool _pressedHotKeyOne;
     private bool _pressedHotKeyTwo;
@@ -115,7 +114,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     private void Update()
     {
-        if (GameTest.LocalCharacter == null || !GameTest.LocalCharacter.HasInputAuthority || _denyInput)
+        if (GameTest.LocalCharacter == null || !Object.HasInputAuthority || _denyInput)
             return;
 
         HandleMouseRightClick();
@@ -128,8 +127,8 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 	{
 		if(Input.GetKeyDown(KeyCode.P))
         {
-            OnPressedUIKeyCode?.Invoke(KeyCode.P);
-
+            GameManager.Instance.PartyUI.ToggleWindow();
+            Debug.Log("[InputManager] clicked party");
         }
 	}
 
