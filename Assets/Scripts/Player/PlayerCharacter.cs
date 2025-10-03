@@ -99,7 +99,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 		{
 
 		}
-		GameManager.Instance.AddCharacterToList(this);
+		GameManager.Instance.RemoveCharacterFromList(this);
 	}
 
 	public void InitPlayer()
