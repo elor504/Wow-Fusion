@@ -1,5 +1,6 @@
 using Fusion;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -79,9 +80,13 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 			nickNameLookAt.constraintActive = true;
 			//gameObject.tag = TargetManager.FRIENDLY_TAG;
 		}
+		StartCoroutine(WaitUntillGameManagerRoutine());
+	}
+	private IEnumerator WaitUntillGameManagerRoutine()
+	{
+		yield return new WaitUntil(() => GameManager.Instance);
 		GameManager.Instance.AddCharacterToList(this);
 	}
-
 	public override void Despawned(NetworkRunner runner, bool hasState)
 	{
 		base.Despawned(runner, hasState);

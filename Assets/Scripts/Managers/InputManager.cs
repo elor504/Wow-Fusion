@@ -1,6 +1,7 @@
 using Fusion;
 using Fusion.Sockets;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -96,8 +97,14 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 			playerControls = new PlayerControls();
 			Debug.Log("Spawned input manager");
 			GameTest.AddCallBacks(this);
-			GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
+			StartCoroutine(WaitUntillGameManagerRoutine());
 		}
+	}
+
+	private IEnumerator WaitUntillGameManagerRoutine()
+	{
+		yield return new WaitUntil(() => GameManager.Instance);
+		GameManager.Instance.TargetManager.OnTarget += SetTargetNetworkID;
 	}
 
 	public override void Despawned(NetworkRunner runner, bool hasState)
