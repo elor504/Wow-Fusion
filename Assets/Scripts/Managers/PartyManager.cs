@@ -54,14 +54,17 @@ public class PartyManager : NetworkBehaviour
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
 	public void RPC_RequestToOpenNewParty(string leaderName, RpcInfo rpcInfo = default)
 	{
-		if (IsPlayerInsideAParty(leaderName))
+		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(rpcInfo.Source, out PlayerCharacter player))
 		{
-			//How the fuck did he even succeded in doing that?
-			RPC_PartyMessage(rpcInfo.Source, "[PartyManager] HOW THE FUCK DID YOU ASK TO OPEN NEW PARTY WHILE YOU ARE IN A PARTY?! CHEATER! (or bugged, i just love to blame people)");
-			return;
+			if (IsPlayerInsideAParty(player))
+			{
+				//How the fuck did he even succeded in doing that?
+				RPC_PartyMessage(rpcInfo.Source, "[PartyManager] HOW THE FUCK DID YOU ASK TO OPEN NEW PARTY WHILE YOU ARE IN A PARTY?! CHEATER! (or bugged, i just love to blame people)");
+				return;
+			}
+			Debug.Log($"[Server] Accepted to create new party for {leaderName} with the playerRef: {rpcInfo.Source}");
+			RPC_AcceptRequestToCreateNewParty(leaderName, rpcInfo.Source);
 		}
-		Debug.Log($"[Server] Accepted to create new party for {leaderName} with the playerRef: {rpcInfo.Source}");
-		RPC_AcceptRequestToCreateNewParty(leaderName, rpcInfo.Source);
 	}
 	[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
 	public void RPC_AcceptRequestToCreateNewParty(string leaderName, PlayerRef playerRef)
@@ -70,10 +73,15 @@ public class PartyManager : NetworkBehaviour
 		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(playerRef, out PlayerCharacter player))
 		{
 			newParty.OpenParty(player, leaderName);
-			RuntimeSessionManager.LocalParty = newParty;
+
 			partyList.Add(newParty);
 			partyUI.AddPartyInfo(leaderName, newParty.GetPartyCharacters().Count, PARTY_MAX_MEMBERS);
-			partyUI.OnEnteredParty(playerRef);
+
+			if (RuntimeSessionManager.ComparePlayerCharacter(player))
+			{
+				RuntimeSessionManager.LocalParty = newParty;
+				partyUI.OnEnteredParty(playerRef);
+			}
 		}
 	}
 	#region requests
@@ -135,13 +143,13 @@ public class PartyManager : NetworkBehaviour
 		}
 		dungeonManager.CreateNewDungeon(dungeonParty);
 	}
-	public bool IsPlayerInsideAParty(string playerName)
+	public bool IsPlayerInsideAParty(PlayerCharacter character)
 	{
 		foreach (var party in partyList)
 		{
-			foreach (var character in party.GetPartyCharacters())
+			foreach (var partyMember in party.GetPartyCharacters())
 			{
-				if (character.CharacterName == playerName)
+				if (partyMember.CharacterName == character.CharacterName)
 					return true;
 			}
 		}
@@ -181,7 +189,7 @@ public class Party
 		return null;
 	}
 	public List<PlayerCharacter> GetPartyCharacters()
-	{		
+	{
 		return partyMembers.GetPlayerCharacters;
 	}
 	public bool IsEveryMemberOnline()

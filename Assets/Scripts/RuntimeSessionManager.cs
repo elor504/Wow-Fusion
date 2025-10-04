@@ -95,6 +95,7 @@ public class RuntimeSessionManager
 
 		return LocalCharacter.Object.InputAuthority == playerRef;
 	}
+	public static bool ComparePlayerCharacter(PlayerCharacter characterToCompare) => characterToCompare.CharacterName.Equals(LocalCharacter.CharacterName);
 }
 
 [Serializable]

@@ -219,7 +219,7 @@ public class PartyUI : MonoBehaviour
 
 	private bool IsLocalCharacterIsInAParty()
 	{
-		return PartyManager.Instance.IsPlayerInsideAParty(RuntimeSessionManager.LocalCharacter.CharacterName);
+		return PartyManager.Instance.IsPlayerInsideAParty(RuntimeSessionManager.LocalCharacter);
 	}
 
 
