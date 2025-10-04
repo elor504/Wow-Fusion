@@ -9,7 +9,7 @@ public class RuntimeSessionManager
 	private static List<INetworkRunnerCallbacks[]> addedCallBacks = new();
 	public static CharactersList CharactersList;
 	public static PlayerCharacter LocalCharacter;
-	public static EntityManager EntityManager;
+	public static EntityManager EntityManager = new EntityManager();
 	public static FusionManager FusionManager;
 
 	public static Party LocalParty;
