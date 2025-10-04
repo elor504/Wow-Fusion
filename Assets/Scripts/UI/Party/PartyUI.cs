@@ -104,10 +104,10 @@ public class PartyUI : MonoBehaviour
 	{
 		//Update The party members info
 		Party myParty = RuntimeSessionManager.LocalParty;
-		foreach (var item in myParty.PartyMember)
-		{
-			//PlayerCharacter memberCharacter = 
-		}
+		//foreach (var item in myParty.GetPartyCharacters())
+		//{
+			
+		//}
 
 		playerPartyWindow.SetActive(true);
 	}

@@ -6,8 +6,8 @@ using UnityEngine;
 [Serializable] 
 public class CharactersList
 {
-    [SerializeField]private List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
-
+    [SerializeField] private List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
+    public List<PlayerCharacter> GetPlayerCharacters => playerCharacters;
 
     public void AddCharacterToList(PlayerCharacter character)
     {

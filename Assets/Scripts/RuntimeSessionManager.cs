@@ -7,7 +7,7 @@ public class RuntimeSessionManager
 {
 	private static NetworkRunner _myRunner;
 	private static List<INetworkRunnerCallbacks[]> addedCallBacks = new();
-	public static CharactersList CharactersList;
+	public static CharactersList CharactersList = new CharactersList();
 	public static PlayerCharacter LocalCharacter;
 	public static EntityManager EntityManager = new EntityManager();
 	public static FusionManager FusionManager;

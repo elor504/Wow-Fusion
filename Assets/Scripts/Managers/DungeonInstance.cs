@@ -50,7 +50,7 @@ public class DungeonInstance : NetworkBehaviour, INetworkRunnerCallbacks
         {
             _serverRunner.AddCallbacks(this);
         }
-        _characters = dungeonParty.GetPartyCharacters(_serverRunner);
+        _characters = dungeonParty.GetPartyCharacters();
         foreach (var character in _characters)
         {
             playerNicknames.Add(character.CharacterName);

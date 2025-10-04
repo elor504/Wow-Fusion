@@ -67,13 +67,15 @@ public class PartyManager : NetworkBehaviour
 	public void RPC_AcceptRequestToCreateNewParty(string leaderName, PlayerRef playerRef)
 	{
 		Party newParty = new Party();
-		newParty.OpenParty(playerRef, leaderName);
-		RuntimeSessionManager.LocalParty = newParty;
-		partyList.Add(newParty);
-		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
-		partyUI.OnEnteredParty(playerRef);
+		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(playerRef, out PlayerCharacter player))
+		{
+			newParty.OpenParty(player, leaderName);
+			RuntimeSessionManager.LocalParty = newParty;
+			partyList.Add(newParty);
+			partyUI.AddPartyInfo(leaderName, newParty.GetPartyCharacters().Count, PARTY_MAX_MEMBERS);
+			partyUI.OnEnteredParty(playerRef);
+		}
 	}
-
 	#region requests
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
 	public void RPC_AskToJoinParty(string partyName, RpcInfo rpcSource = default)
@@ -126,7 +128,7 @@ public class PartyManager : NetworkBehaviour
 			Debug.LogError($"[PartyManager] Failed to start a dungeon because there is no party existed with a leader called: {leaderNickname}");
 			return;
 		}
-		if (dungeonParty.IsEveryMemberOnline(_serverRunner))
+		if (dungeonParty.IsEveryMemberOnline())
 		{
 			Debug.LogError($"[PartyManager] Failed to start a dungeon because there are members that are not online, Party: {leaderNickname}");
 			return;
@@ -137,9 +139,9 @@ public class PartyManager : NetworkBehaviour
 	{
 		foreach (var party in partyList)
 		{
-			foreach (var characterNickname in party.PlayerCharacterNicknames)
+			foreach (var character in party.GetPartyCharacters())
 			{
-				if (characterNickname == playerName)
+				if (character.CharacterName == playerName)
 					return true;
 			}
 		}
@@ -154,46 +156,37 @@ public class PartyManager : NetworkBehaviour
 [Serializable]
 public class Party
 {
-	public List<PlayerRef> PartyMember = new List<PlayerRef>();
-	public List<string> PlayerCharacterNicknames = new List<string>();
+	public CharactersList partyMembers = new CharactersList();
 	public string LeaderName;
 
 	public List<PlayerRef> JoinRequests = new List<PlayerRef>();
 
-	public void OpenParty(PlayerRef leaderRef, string leaderCharacterName)
+	public void OpenParty(PlayerCharacter member, string leaderCharacterName)
 	{
 		LeaderName = leaderCharacterName;
-		AddNewMember(leaderRef, leaderCharacterName);
+		AddNewMember(member);
 	}
-	public void AddNewMember(PlayerRef memberRef, string memberName)
+	public void AddNewMember(PlayerCharacter member)
 	{
-		PartyMember.Add(memberRef);
-		PlayerCharacterNicknames.Add(memberName);
+		partyMembers.AddCharacterToList(member);
 	}
-	public void AbandonParty(PlayerRef playerWhoLeft, string memberName)
+	public void AbandonParty(PlayerCharacter playerWhoLeft, string memberName)
 	{
-
+		partyMembers.RemoveCharacterFromList(playerWhoLeft);
 	}
 
-	public bool IsPartyFull() => PlayerCharacterNicknames.Count == PartyManager.PARTY_MAX_MEMBERS;
+	public bool IsPartyFull() => partyMembers.GetPlayerCharacters.Count == PartyManager.PARTY_MAX_MEMBERS;
 	public PlayerCharacter GetLeaderCharacter(NetworkRunner serverRunner)
 	{
 		return null;
 	}
-	public List<PlayerCharacter> GetPartyCharacters(NetworkRunner serverRunner)
-	{
-		List<PlayerCharacter> characters = new List<PlayerCharacter>(PlayerCharacterNicknames.Count);
-
-		for (int i = 0; i < characters.Count; i++)
-		{
-			characters[i] = null;
-		}
-
-		return characters;
+	public List<PlayerCharacter> GetPartyCharacters()
+	{		
+		return partyMembers.GetPlayerCharacters;
 	}
-	public bool IsEveryMemberOnline(NetworkRunner serverRunner)
+	public bool IsEveryMemberOnline()
 	{
-		List<PlayerCharacter> partyCharacters = GetPartyCharacters(serverRunner);
+		List<PlayerCharacter> partyCharacters = GetPartyCharacters();
 
 		foreach (var character in partyCharacters)
 		{
