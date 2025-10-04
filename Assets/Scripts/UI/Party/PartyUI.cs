@@ -51,20 +51,12 @@ public class PartyUI : MonoBehaviour
 	{
 		CloseWindow();
 		CloseAllEmptyPartyButtons();
-		foreach (var memberInfo in partyMembersInfoUI)
-		{
-			memberInfo.HideInfo();
-		}
-
+		//need to check before we load but for now we will leave the party
+		_currentUIState = PartyUIState.CreateOrPartyList;
+		ChangeState(_currentUIState);
 	}
 
 	#region state handler
-
-	public void OnClickPartyList()
-	{
-		ChangeState(PartyUIState.CreateOrPartyList);
-	}
-
 	private void ChangeState(PartyUIState state)
 	{
 		ExitCurrentState(state);
@@ -84,9 +76,6 @@ public class PartyUI : MonoBehaviour
 				break;
 		}
 	}
-
-	
-
 	private void ExitCurrentState(PartyUIState state)
 	{
 		switch (state)
@@ -102,13 +91,7 @@ public class PartyUI : MonoBehaviour
 
 	private void EnterParty()
 	{
-		//Update The party members info
-		Party myParty = RuntimeSessionManager.LocalParty;
-		//foreach (var item in myParty.GetPartyCharacters())
-		//{
-			
-		//}
-
+		RefreshPartyMembers();
 		playerPartyWindow.SetActive(true);
 	}
 	private void ExitParty()
@@ -125,6 +108,24 @@ public class PartyUI : MonoBehaviour
 	private void ExitCreate()
 	{
 		createPartyWindow.SetActive(false);
+	}
+
+
+	private void RefreshPartyMembers()
+	{
+		var partyMembers = RuntimeSessionManager.LocalParty.GetPartyCharacters();
+		for (int i = 0; i < partyMembersInfoUI.Count; i++)
+		{
+			if (partyMembers.Count > i)
+			{
+				partyMembersInfoUI[i].UpdateMemberInfo(partyMembers[i].CharacterName, "ClassNameTEMP", i == 0);
+				partyMembersInfoUI[i].ShowInfo();
+			}
+			else
+			{
+				partyMembersInfoUI[i].HideInfo();
+			}
+		}
 	}
 
 
