@@ -100,7 +100,7 @@ public class RuntimeSessionManager
 [Serializable]
 public class EntityManager
 {
-	public static List<ITargetableEntity> TargetableEntities = new();
+	public List<ITargetableEntity> TargetableEntities = new();
 
 	public bool TryGetEnemyByNetworkID(NetworkId networkID, out ITargetableEntity enemyResult)
 	{
