@@ -299,11 +299,12 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 	{
 		if (targetID != default)
 		{
-			//TODO: fix
 			RPC_UpdateKeyOneID();
-			// var targetGO = ServerHandler.Instance.GetEnemyByNetworkID(targetID, Object.Runner);
-			// UsedHotkeyOneID = projectileToTest.SpellID;
-			//character.CastSpell(projectileToTest, targetGO);
+			if (RuntimeSessionManager.EntityManager.TryGetEnemyByNetworkID(targetID, out ITargetableEntity targetGO))
+			{
+				UsedHotkeyOneID = projectileToTest.SpellID;
+				character.CastSpell(projectileToTest, targetGO);
+			}
 		}
 		else
 		{
@@ -326,13 +327,13 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 		if (target != default)
 		{
 			RPC_SetTarget(target.GetNetworkId());
-			//targetID = target.GetNetworkId();
+			targetID = target.GetNetworkId();
 			Debug.Log($"[InputManager] Succesfully found a target: {targetID} ");
 		}
 		else
 		{
 			RPC_SetTarget(default);
-			//targetID = default;
+			targetID = default;
 			Debug.Log($"[InputManager] target is null");
 		}
 	}

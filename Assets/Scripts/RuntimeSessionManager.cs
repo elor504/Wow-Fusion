@@ -100,13 +100,12 @@ public class RuntimeSessionManager
 [Serializable]
 public class EntityManager
 {
-	public static List<DragonEnemy> Enemies = new();
 	public static List<ITargetableEntity> TargetableEntities = new();
 
-	public bool TryGetEnemyByNetworkID(NetworkId networkID, out DragonEnemy enemyResult)
+	public bool TryGetEnemyByNetworkID(NetworkId networkID, out ITargetableEntity enemyResult)
 	{
 		enemyResult = null;
-		foreach (var enemy in Enemies)
+		foreach (var enemy in TargetableEntities)
 		{
 			if (enemy.GetNetworkId() == networkID)
 			{
@@ -116,13 +115,13 @@ public class EntityManager
 		}
 		return false;
 	}
-	public void AddEnemyToList(DragonEnemy enemy)
+	public void AddEnemyToList(ITargetableEntity enemy)
 	{
-		Enemies.Add(enemy);
+		TargetableEntities.Add(enemy);
 	}
-	public void RemoveEnemyFromList(DragonEnemy enemy)
+	public void RemoveEnemyFromList(ITargetableEntity enemy)
 	{
-		Enemies.Remove(enemy);
+		TargetableEntities.Remove(enemy);
 	}
 
 }
