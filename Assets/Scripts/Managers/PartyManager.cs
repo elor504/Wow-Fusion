@@ -77,7 +77,7 @@ public class PartyManager : NetworkBehaviour
 			partyList.Add(newParty);
 			partyUI.AddPartyInfo(leaderName, newParty.GetPartyCharacters().Count, PARTY_MAX_MEMBERS);
 
-			if (RuntimeSessionManager.ComparePlayerCharacter(player))
+			if (Object.HasInputAuthority && RuntimeSessionManager.ComparePlayerCharacter(player))
 			{
 				RuntimeSessionManager.LocalParty = newParty;
 				partyUI.OnEnteredParty(playerRef);

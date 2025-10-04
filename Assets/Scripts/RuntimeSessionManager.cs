@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Client related class
+/// </summary>
 public class RuntimeSessionManager
 {
 	private static NetworkRunner _myRunner;
