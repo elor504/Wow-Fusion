@@ -9,11 +9,11 @@ public class UIDetector : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-       GameTest.LocalCharacter.InputManager.OnOnMouseOnUI(true);
+       RuntimeSessionManager.LocalCharacter.InputManager.OnOnMouseOnUI(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        GameTest.LocalCharacter.InputManager.OnOnMouseOnUI(false);
+        RuntimeSessionManager.LocalCharacter.InputManager.OnOnMouseOnUI(false);
     }
 }

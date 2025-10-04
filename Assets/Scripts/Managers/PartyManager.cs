@@ -68,7 +68,7 @@ public class PartyManager : NetworkBehaviour
 	{
 		Party newParty = new Party();
 		newParty.OpenParty(playerRef, leaderName);
-		GameTest.LocalParty = newParty;
+		RuntimeSessionManager.LocalParty = newParty;
 		partyList.Add(newParty);
 		partyUI.AddPartyInfo(leaderName, newParty.PartyMember.Count, PARTY_MAX_MEMBERS);
 		partyUI.OnEnteredParty(playerRef);
@@ -102,9 +102,9 @@ public class PartyManager : NetworkBehaviour
 
 		//ui update
 		//UIManager.PartyUI.OnReceivedRequest(playerWhoRequested);
-		if (GameTest.ComparePlayerRef(playerWhoRequested))
+		if (RuntimeSessionManager.ComparePlayerRef(playerWhoRequested))
 		{
-			GameTest.LocalParty = partyToJoin;
+			RuntimeSessionManager.LocalParty = partyToJoin;
 		}
 
 		partyUI.OnEnteredParty(playerWhoRequested);

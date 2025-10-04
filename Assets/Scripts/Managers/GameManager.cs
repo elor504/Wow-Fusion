@@ -15,8 +15,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [Header("Managers")]
     [SerializeField] private TargetManager targetManager;
     [SerializeField] private ClassSkillManager skillManager;
-    [Header("Characters")]
-    [SerializeField] private CharactersList charactersList;
+
     [Header("UI")]
     [SerializeField] private GameObject playerHUD;
     [SerializeField] private PartyUI partyUI;
@@ -35,10 +34,10 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     [Header("Debug")]
     [SerializeField] private string characterToCheck;
-
+    [ContextMenu("CheckName")]
     public void TestCharacterName()
     {
-        var character = charactersList.TryGetCharacterByName(characterToCheck, out var requestedCharacter);
+        var character = RuntimeSessionManager.CharactersList.TryGetCharacterByName(characterToCheck, out var requestedCharacter);
         if (requestedCharacter)
         {
             Debug.Log($"[GameManager] Testing charatcter {characterToCheck}: \n name: {requestedCharacter.CharacterName} \n gameobject: {requestedCharacter.GetEntityGO()}");
@@ -77,8 +76,6 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         base.Despawned(runner, hasState);
         if (Object.HasStateAuthority)
         {
-            //_serverRunner.RemoveCallbacks(this);
-            // OnGameManagerDespawned?.Invoke(this);
             Debug.Log("[GameManager]Despawn gameManager");
         }
     }
@@ -95,25 +92,9 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         //targetManager.Init();
         skillManager.Init();
-        GameTest.AddCallBacks(this);
+        RuntimeSessionManager.AddCallBacks(this);
     }
 
-    public void AddCharacterToList(PlayerCharacter character)
-    {
-        charactersList.AddCharacterToList(character);
-    }
-    public void RemoveCharacterFromList(PlayerCharacter character)
-    {
-        charactersList.RemoveCharacterFromList(character);
-    }
-    public bool TryGetCharacterByName(string characterName, out PlayerCharacter requestedCharacter)
-    {
-        return charactersList.TryGetCharacterByName(characterName, out requestedCharacter);
-    }
-    public bool TryGetCharacterByPlayerRef(PlayerRef characterRef, out PlayerCharacter requestedCharacter)
-    {
-        return charactersList.TryGetCharacterByPlayerRef(characterRef, out requestedCharacter);
-    }
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         OnPlayerJoinedSession?.Invoke(runner, player);
@@ -211,52 +192,4 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
        
     }
 	#endregion
-}
-
-
-[Serializable] 
-public class CharactersList
-{
-    [SerializeField]private List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
-
-
-    public void AddCharacterToList(PlayerCharacter character)
-    {
-        playerCharacters.Add(character);
-	}
-    public void RemoveCharacterFromList(PlayerCharacter character)
-    {
-        playerCharacters.Remove(character);
-    }
-
-    public bool TryGetCharacterByName(string characterName,out PlayerCharacter requestedCharacter)
-    {
-        requestedCharacter = null;
-
-        foreach (var character in playerCharacters)
-		{
-            if(character.CharacterName == characterName)
-            {
-                requestedCharacter = character;
-                return true;
-			}
-		}
-
-        return false;
-	}
-    public bool TryGetCharacterByPlayerRef(PlayerRef characterRef, out PlayerCharacter requestedCharacter)
-    {
-        requestedCharacter = null;
-
-        foreach (var character in playerCharacters)
-        {
-            if (character.NetworkObject.InputAuthority == characterRef)
-            {
-                requestedCharacter = character;
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

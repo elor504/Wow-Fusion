@@ -8,20 +8,19 @@ using UnityEngine.Serialization;
 
 public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("References")] [SerializeField]
-    private GameObject hoveringVisual;
+    [Header("Settings")]
+    [SerializeField] private string id;
+    [Header("References")] 
+    [SerializeField] private GameObject hoveringVisual;
     [SerializeField] private NetworkObject networkObj;
-
     [SerializeField] private GameObject beingTargetedVisual;
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private Transform hitPosition;
 
     //Hold ref to base stats
-    [Header("Temp Base Stats")] [SerializeField]
-    private int baseHealth;
-
+    [Header("Temp Base Stats")] 
+    [SerializeField] private int baseHealth;
     [SerializeField] private int baseMana;
-
 
     //hold runtime stat variables
     private int _currentHealth;
@@ -35,8 +34,6 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
             ///Death
         }
     }
-
-
     public void Heal(ITargetableEntity caster)
     {
         _currentHealth += 0;
@@ -45,12 +42,10 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
             _currentHealth = baseHealth;
         }
     }
-
     public int GetHealth()
     {
         return baseHealth;
     }
-
     public int GetMana()
     {
         return baseMana;
@@ -77,7 +72,6 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
         entityStat = null;
         return false;
     }
-
     public bool TryGetEntityVisualPosition(out CharacterVFXVisual vfxVisual)
     {
         vfxVisual = null;
@@ -158,5 +152,10 @@ public class BasicEnemy : MonoBehaviour, ITargetableEntity, IPointerEnterHandler
     public float ColliderSize()
     {
         return 1f;
+    }
+
+	public string GetEntityID()
+	{
+        return id;
     }
 }

@@ -97,11 +97,18 @@ public class ServerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
 	{
+		if(runner.IsServer)
+		{
+		}
 
 		Debug.Log($"A player left on the session: {runner.name} player: {player.PlayerId}");
-		GameManager.Instance.TryGetCharacterByPlayerRef(player, out var character);
+		RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(player, out var character);
+
 		if (character)
+		{
+			Debug.Log($"[Server] A player has left the server: {character.CharacterName}");
 			runner.Despawn(character.NetworkObject);
+		}
 
 	}
 	#endregion

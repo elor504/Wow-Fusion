@@ -39,7 +39,7 @@ public class CharacterInputHW : NetworkBehaviour
             //For some reason if i try to move my character even after Spawned() being called it resets its position
             //So i added Delay
             StartCoroutine(DelayedInitialization());
-            _myRunner = GameTest.GetMyRunner();
+            _myRunner = RuntimeSessionManager.GetMyRunner();
         }
     }
     private IEnumerator DelayedInitialization()

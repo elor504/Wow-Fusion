@@ -63,9 +63,9 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 		nickNameText.text = CharacterName;
 		if (Object.HasInputAuthority)
 		{
-			GameTest.LocalCharacter = this;
+			RuntimeSessionManager.LocalCharacter = this;
 			gameObject.tag = TargetManager.MY_PLAYER_TAG;
-			_myRunner = GameTest.GetMyRunner();
+			_myRunner = RuntimeSessionManager.GetMyRunner();
 			UpdateCharacterNicknameText();
 			nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1 });
 			nickNameLookAt.constraintActive = true;
@@ -80,13 +80,9 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 			nickNameLookAt.constraintActive = true;
 			//gameObject.tag = TargetManager.FRIENDLY_TAG;
 		}
-		StartCoroutine(WaitUntillGameManagerRoutine());
+		RuntimeSessionManager.CharactersList.AddCharacterToList(this);
 	}
-	private IEnumerator WaitUntillGameManagerRoutine()
-	{
-		yield return new WaitUntil(() => GameManager.Instance);
-		GameManager.Instance.AddCharacterToList(this);
-	}
+
 	public override void Despawned(NetworkRunner runner, bool hasState)
 	{
 		base.Despawned(runner, hasState);
@@ -99,7 +95,7 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 		{
 
 		}
-		GameManager.Instance.RemoveCharacterFromList(this);
+		RuntimeSessionManager.CharactersList.RemoveCharacterFromList(this);
 	}
 
 	public void InitPlayer()
@@ -362,5 +358,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 		//GameTest.FusionManager.SwitchSession(sessionName);
 	}
 
-
+	public string GetEntityID()
+	{
+		return CharacterName;
+	}
 }

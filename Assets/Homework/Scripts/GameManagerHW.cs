@@ -44,7 +44,7 @@ namespace Homework
                 return;
             }
             
-            runner = GameTest.GetMyRunner();
+            runner = RuntimeSessionManager.GetMyRunner();
             runner.AddCallbacks(this);
         }
         public void CloseGame()

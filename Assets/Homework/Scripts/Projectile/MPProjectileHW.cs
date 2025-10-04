@@ -120,7 +120,7 @@ namespace Homework
                     //RPC_SpawnHitVFX();
                     if (HasStateAuthority)
                     {
-                        characterHeatlth.RPC_DealDamage(1, GameManagerHW.CharacterSelectionManager.GetCharacterSelectionIndexByPlayerRef(GameTest.GetMyRunner().LocalPlayer));
+                        characterHeatlth.RPC_DealDamage(1, GameManagerHW.CharacterSelectionManager.GetCharacterSelectionIndexByPlayerRef(RuntimeSessionManager.GetMyRunner().LocalPlayer));
                         StartCoroutine(HandleHitDelay());
                        // Runner.Despawn(obj);
                     }

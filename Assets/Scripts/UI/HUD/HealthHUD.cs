@@ -16,12 +16,12 @@ public class HealthHUD : MonoBehaviour
 
     private void OnEnable()
     {
-        if (GameTest.LocalCharacter)
-            GameTest.LocalCharacter.CharacterStat.OnHealthChanged += UpdateHealth;
+        if (RuntimeSessionManager.LocalCharacter)
+            RuntimeSessionManager.LocalCharacter.CharacterStat.OnHealthChanged += UpdateHealth;
     }
     private void OnDisable()
     {
-        if (GameTest.LocalCharacter)
-            GameTest.LocalCharacter.CharacterStat.OnHealthChanged -= UpdateHealth;
+        if (RuntimeSessionManager.LocalCharacter)
+            RuntimeSessionManager.LocalCharacter.CharacterStat.OnHealthChanged -= UpdateHealth;
     }
 }

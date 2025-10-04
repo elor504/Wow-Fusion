@@ -111,8 +111,8 @@ public class CharacterSelectionMenu : MonoBehaviour
 
     private void PlayAsCharacter()
     {
-        GameTest.FusionManager.SetSelectedCharacterData(_currentSelectedCharacter);
-        GameTest.FusionManager.ConnectToMainCity();
+        RuntimeSessionManager.FusionManager.SetSelectedCharacterData(_currentSelectedCharacter);
+        RuntimeSessionManager.FusionManager.ConnectToMainCity();
     }
 
     private void GetCharacterDataResult(GetCharacterDataResult result)

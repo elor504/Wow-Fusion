@@ -32,10 +32,10 @@ public class TargetManager : MonoBehaviour
 
     public void ClickOnEntity()
     {
-        if (GameTest.LocalCharacter == null)
+        if (RuntimeSessionManager.LocalCharacter == null)
             return;
 
-        if (GameTest.LocalCharacter.InputManager.IsMouseOverUI)
+        if (RuntimeSessionManager.LocalCharacter.InputManager.IsMouseOverUI)
         {
             return;
         }

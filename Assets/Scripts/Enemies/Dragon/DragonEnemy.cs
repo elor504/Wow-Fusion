@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class DragonEnemy : NetworkBehaviour, ITargetableEntity, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("References")]
+    [SerializeField] private string id = "Dragon";
     [SerializeField] private EnemyHealth health;
     [SerializeField] private NetworkObject networkObject;
     [SerializeField] private SphereCollider sphereCollider;
@@ -20,9 +21,14 @@ public class DragonEnemy : NetworkBehaviour, ITargetableEntity, IPointerEnterHan
     public override void Spawned()
     {
         base.Spawned();
+        RuntimeSessionManager.EntityManager.AddEnemyToList(this);
     }
-
-    public bool CanBeTargeted()
+	public override void Despawned(NetworkRunner runner, bool hasState)
+	{
+		base.Despawned(runner, hasState);
+        RuntimeSessionManager.EntityManager.RemoveEnemyFromList(this);
+    }
+	public bool CanBeTargeted()
     {
         return false;
     }
@@ -125,5 +131,11 @@ public class DragonEnemy : NetworkBehaviour, ITargetableEntity, IPointerEnterHan
     public float ColliderSize()
     {
         return sphereCollider.radius;
+    }
+
+	public string GetEntityID()
+	{
+        return id;
+
     }
 }

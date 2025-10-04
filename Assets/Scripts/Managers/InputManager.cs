@@ -96,7 +96,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 			// Client
 			playerControls = new PlayerControls();
 			Debug.Log("Spawned input manager");
-			GameTest.AddCallBacks(this);
+			RuntimeSessionManager.AddCallBacks(this);
 			StartCoroutine(WaitUntillGameManagerRoutine());
 		}
 	}
@@ -112,14 +112,14 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 		if (Object.HasInputAuthority)
 		{
 			base.Despawned(runner, hasState);
-			GameTest.RemoveCallBacks(this);
+			RuntimeSessionManager.RemoveCallBacks(this);
 			GameManager.Instance.TargetManager.OnTarget -= SetTargetNetworkID;
 		}
 	}
 
 	private void Update()
 	{
-		if (GameTest.LocalCharacter == null || !Object.HasInputAuthority || _denyInput)
+		if (RuntimeSessionManager.LocalCharacter == null || !Object.HasInputAuthority || _denyInput)
 			return;
 
 		HandleMouseRightClick();
@@ -312,7 +312,7 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 	}
 	public void SelfCast()
 	{
-		GameTest.LocalCharacter.CastSpell(selfBuffToTest, null);
+		RuntimeSessionManager.LocalCharacter.CastSpell(selfBuffToTest, null);
 	}
 
 	#endregion
@@ -390,11 +390,11 @@ public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
 	/// <summary>
 	/// Incase we want to disable the player moving in the map and doing stuff example for loading scenes and ETC
 	/// </summary>
-	public void EnableDenyInput()
+	public void DenyInput()
 	{
 		_denyInput = true;
 	}
-	public void DisableDenyInput()
+	public void AllowInput()
 	{
 		_denyInput = false;
 	}

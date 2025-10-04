@@ -103,7 +103,7 @@ public class PartyUI : MonoBehaviour
 	private void EnterParty()
 	{
 		//Update The party members info
-		Party myParty = GameTest.LocalParty;
+		Party myParty = RuntimeSessionManager.LocalParty;
 		foreach (var item in myParty.PartyMember)
 		{
 			//PlayerCharacter memberCharacter = 
@@ -133,7 +133,7 @@ public class PartyUI : MonoBehaviour
 	public void OnClickCreateParty()
 	{
 		createPartyButton.interactable = false;
-		PartyManager.Instance.RPC_RequestToOpenNewParty(GameTest.LocalCharacter.CharacterName);
+		PartyManager.Instance.RPC_RequestToOpenNewParty(RuntimeSessionManager.LocalCharacter.CharacterName);
 	}
 	#endregion
 	#region Party Search
@@ -219,14 +219,14 @@ public class PartyUI : MonoBehaviour
 
 	private bool IsLocalCharacterIsInAParty()
 	{
-		return PartyManager.Instance.IsPlayerInsideAParty(GameTest.LocalCharacter.CharacterName);
+		return PartyManager.Instance.IsPlayerInsideAParty(RuntimeSessionManager.LocalCharacter.CharacterName);
 	}
 
 
 	public void OnEnteredParty(PlayerRef playerRef)
 	{
 
-		if (!GameTest.ComparePlayerRef(playerRef))
+		if (!RuntimeSessionManager.ComparePlayerRef(playerRef))
 			return;
 
 		Debug.Log("[PartyUI] update enteredParty");
@@ -234,7 +234,7 @@ public class PartyUI : MonoBehaviour
 	}
 	public void OnExitedParty(PlayerRef playerRef)
 	{
-		if (!GameTest.ComparePlayerRef(playerRef))
+		if (!RuntimeSessionManager.ComparePlayerRef(playerRef))
 			return;
 
 		Debug.Log("[PartyUI] update enteredParty");

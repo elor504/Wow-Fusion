@@ -29,4 +29,5 @@ public interface ITargetableEntity : ITargetable
     public float ColliderSize();
 
     public NetworkId GetNetworkId();
+    public string GetEntityID();
 }

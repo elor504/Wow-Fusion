@@ -61,8 +61,8 @@ namespace Homework
             {
                 Destroy(_instance);
             }
-            GameTest.RefreshNetworkRunner();
-            GameTest.AddCallBacks(this);
+            RuntimeSessionManager.RefreshNetworkRunner();
+            RuntimeSessionManager.AddCallBacks(this);
             uiManager.ChangeToLobbySelection();
         }
         private void OnEnable()
@@ -85,7 +85,7 @@ namespace Homework
         {
             _lobbyID = lobbyID;
             OnStartLoadingLobby.Invoke();
-            await Task.Run(() => JoinLobby(GameTest.GetMyRunner(), _lobbyID));
+            await Task.Run(() => JoinLobby(RuntimeSessionManager.GetMyRunner(), _lobbyID));
             OnFinishedLoadingLobby?.Invoke(_lobbyID);
         }
 
@@ -94,7 +94,7 @@ namespace Homework
         {
             try
             {
-                var result = await GameTest.GetMyRunner().JoinSessionLobby(sessionLobby, lobbyID);
+                var result = await RuntimeSessionManager.GetMyRunner().JoinSessionLobby(sessionLobby, lobbyID);
 
                 if (result.Ok)
                 {
@@ -116,7 +116,7 @@ namespace Homework
         [ContextMenu("Start Game")]
         public void EnterSessionHandler(string sessionName, int maxPlayers)
         {
-            GameTest.GetMyRunner().StartGame(new StartGameArgs
+            RuntimeSessionManager.GetMyRunner().StartGame(new StartGameArgs
             {
                 GameMode = gamemode,
                 SessionName = sessionName,
@@ -127,10 +127,10 @@ namespace Homework
         }
         public void StartGame()
         {
-            if (GameTest.GetMyRunner().IsSceneAuthority)
+            if (RuntimeSessionManager.GetMyRunner().IsSceneAuthority)
             {
-                GameTest.GetMyRunner().LoadScene(GAME_SCENE_NAME);
-                GameTest.GetMyRunner().SessionInfo.IsOpen = false;
+                RuntimeSessionManager.GetMyRunner().LoadScene(GAME_SCENE_NAME);
+                RuntimeSessionManager.GetMyRunner().SessionInfo.IsOpen = false;
             }
         }
         private void GameStarted(NetworkRunner runner)
@@ -140,7 +140,7 @@ namespace Homework
 
             if (runner.IsSharedModeMasterClient)
             {
-                GameTest.GetMyRunner().SpawnAsync(PlayerListPF);
+                RuntimeSessionManager.GetMyRunner().SpawnAsync(PlayerListPF);
             }
         }
 
@@ -182,13 +182,13 @@ namespace Homework
         }
         public void OnSceneLoadDone(NetworkRunner runner)
         {
-            GameTest.GetMyRunner().RemoveCallbacks(this);
+            RuntimeSessionManager.GetMyRunner().RemoveCallbacks(this);
         }
 
         public void ShutDownHandler()
         {
-            GameTest.RefreshNetworkRunner();
-            GameTest.AddCallBacks(this);
+            RuntimeSessionManager.RefreshNetworkRunner();
+            RuntimeSessionManager.AddCallBacks(this);
             uiManager.ChangeToLobbySelection();
         }
 

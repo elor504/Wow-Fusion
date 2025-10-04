@@ -24,12 +24,12 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
     private IEnumerator SwitchSessionCouru(string sessionName)
     {
         // First leave current session
-        if (GameTest.GetMyRunner() != null && GameTest.GetMyRunner())
+        if (RuntimeSessionManager.GetMyRunner() != null && RuntimeSessionManager.GetMyRunner())
         {
-           yield return GameTest.GetMyRunner().Shutdown();
+           yield return RuntimeSessionManager.GetMyRunner().Shutdown();
         }
         yield return new WaitForSeconds(5f);
-        GameTest.RefreshNetworkRunner();
+        RuntimeSessionManager.RefreshNetworkRunner();
 
 
         // Then join the new session
@@ -40,7 +40,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
             SessionName = sessionName
         };
 
-        yield return GameTest.GetMyRunner().StartGame(args);
+        yield return RuntimeSessionManager.GetMyRunner().StartGame(args);
     }
 
 
@@ -51,16 +51,16 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void Init()
     {
-        if (GameTest.FusionManager == null)
+        if (RuntimeSessionManager.FusionManager == null)
         {
-            GameTest.FusionManager = this;
+            RuntimeSessionManager.FusionManager = this;
         }
-        else if (GameTest.FusionManager != this)
+        else if (RuntimeSessionManager.FusionManager != this)
         {
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
-        GameTest.AddCallBacks(this);
+        RuntimeSessionManager.AddCallBacks(this);
     }
 
     public void ConnectToMainCity()
@@ -76,12 +76,12 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
    
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-        GameTest.ReturnToLoginMenu();
+        RuntimeSessionManager.ReturnToLoginMenu();
         Debug.Log($"Shutdown: {shutdownReason}");
     }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
-        GameTest.ReturnToLoginMenu();
+        RuntimeSessionManager.ReturnToLoginMenu();
         Debug.LogError($"[Fusion Manager] failed to connect : {reason}");
     }
 
@@ -129,7 +129,7 @@ public class FusionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
-        GameTest.ReturnToLoginMenu();
+        RuntimeSessionManager.ReturnToLoginMenu();
         Debug.Log($"Shutdown: {reason}");
     }
 

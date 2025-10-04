@@ -16,7 +16,7 @@ public class CharacterSpawnManager : MonoBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SpawnCharacter([RpcTarget] PlayerRef playerref, Vector3 spawnPos)
     {
-        GameTest.GetMyRunner().Spawn(playerPF, spawnPos, quaternion.identity, playerref);
+        RuntimeSessionManager.GetMyRunner().Spawn(playerPF, spawnPos, quaternion.identity, playerref);
     }
 
 }
