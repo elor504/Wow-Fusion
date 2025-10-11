@@ -93,12 +93,18 @@ public class RuntimeSessionManager
 	#endregion
 	public static bool CompareLocalPlayerRef(PlayerRef playerRef)
 	{
-		if (LocalCharacter == null)
+		if (LocalCharacter == null || playerRef == null)
 			return false;
 
 		return LocalCharacter.Object.InputAuthority == playerRef;
 	}
-	public static bool CompareLocalCharacter(PlayerCharacter characterToCompare) => characterToCompare.CharacterName.Equals(LocalCharacter.CharacterName);
+	public static bool CompareLocalCharacter(PlayerCharacter characterToCompare)
+	{
+		if (LocalCharacter == null)
+			return false;
+
+		return characterToCompare.CharacterName.Equals(LocalCharacter.CharacterName);
+	}
 }
 
 [Serializable]

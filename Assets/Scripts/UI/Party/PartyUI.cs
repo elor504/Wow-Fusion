@@ -57,6 +57,8 @@ public class PartyUI : MonoBehaviour
 	{
 		CloseWindow();
 		CloseAllEmptyPartyButtons();
+		ExitParty();
+		ExitCreate();
 		//need to check before we load but for now we will leave the party
 		_currentUIState = PartyUIState.CreateOrPartyList;
 		ChangeState(_currentUIState);
@@ -235,7 +237,7 @@ public class PartyUI : MonoBehaviour
 
 	private bool IsLocalCharacterIsInAParty()
 	{
-		return PartyManager.Instance.IsPlayerInsideAParty(RuntimeSessionManager.LocalCharacter);
+		return RuntimeSessionManager.LocalParty != null;
 	}
 
 

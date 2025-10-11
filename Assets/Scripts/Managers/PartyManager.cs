@@ -208,7 +208,7 @@ public class Party
 {
 	public CharactersList partyMembers = new CharactersList();
 	public string LeaderName;
-
+	public List<string> MembersNames;
 	public List<PlayerRef> JoinRequests = new List<PlayerRef>();
 
 	public void OpenParty(PlayerCharacter member, string leaderCharacterName)
@@ -220,18 +220,18 @@ public class Party
 	public void CloseParty()
 	{
 		//Send to everyone that they left the party
-
-
-
+		LeaderName = string.Empty;
 		PartyManager.Instance.RemoveParty(this);
 	}
 	public void AddNewMember(PlayerCharacter member)
 	{
 		partyMembers.AddCharacterToList(member);
+		MembersNames.Add(member.CharacterName);
 	}
-	public void RemoveMember(PlayerCharacter playerWhoLeft, string memberName)
+	public void RemoveMember(PlayerCharacter playerWhoLeft)
 	{
 		partyMembers.RemoveCharacterFromList(playerWhoLeft);
+		MembersNames.Remove(playerWhoLeft.CharacterName);
 	}
 	public bool IsPartyFull() => partyMembers.GetPlayerCharacters.Count == PartyManager.PARTY_MAX_MEMBERS;
 
