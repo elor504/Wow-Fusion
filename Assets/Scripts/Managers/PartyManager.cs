@@ -77,8 +77,9 @@ public class PartyManager : NetworkBehaviour
 			partyList.Add(newParty);
 			partyUI.AddPartyInfo(leaderName, newParty.GetPartyCharacters().Count, PARTY_MAX_MEMBERS);
 
-			if (Object.HasInputAuthority && RuntimeSessionManager.ComparePlayerCharacter(player))
+			if (RuntimeSessionManager.CompareLocalCharacter(player))
 			{
+				Debug.Log("[PartyManager] [Local] Local Player has created a new party");
 				RuntimeSessionManager.LocalParty = newParty;
 				partyUI.OnEnteredParty(playerRef);
 			}
@@ -112,7 +113,7 @@ public class PartyManager : NetworkBehaviour
 
 		//ui update
 		//UIManager.PartyUI.OnReceivedRequest(playerWhoRequested);
-		if (RuntimeSessionManager.ComparePlayerRef(playerWhoRequested))
+		if (RuntimeSessionManager.CompareLocalPlayerRef(playerWhoRequested))
 		{
 			RuntimeSessionManager.LocalParty = partyToJoin;
 		}

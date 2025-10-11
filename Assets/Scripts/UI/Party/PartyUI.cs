@@ -227,7 +227,7 @@ public class PartyUI : MonoBehaviour
 	public void OnEnteredParty(PlayerRef playerRef)
 	{
 
-		if (!RuntimeSessionManager.ComparePlayerRef(playerRef))
+		if (!RuntimeSessionManager.CompareLocalPlayerRef(playerRef))
 			return;
 
 		Debug.Log("[PartyUI] update enteredParty");
@@ -235,7 +235,7 @@ public class PartyUI : MonoBehaviour
 	}
 	public void OnExitedParty(PlayerRef playerRef)
 	{
-		if (!RuntimeSessionManager.ComparePlayerRef(playerRef))
+		if (!RuntimeSessionManager.CompareLocalPlayerRef(playerRef))
 			return;
 
 		Debug.Log("[PartyUI] update enteredParty");

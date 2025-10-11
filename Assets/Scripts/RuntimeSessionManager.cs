@@ -91,14 +91,14 @@ public class RuntimeSessionManager
 		Debug.Log("[RuntimeSessionManager] Return to login menu is not implemented");
 	}
 	#endregion
-	public static bool ComparePlayerRef(PlayerRef playerRef)
+	public static bool CompareLocalPlayerRef(PlayerRef playerRef)
 	{
 		if (LocalCharacter == null)
 			return false;
 
 		return LocalCharacter.Object.InputAuthority == playerRef;
 	}
-	public static bool ComparePlayerCharacter(PlayerCharacter characterToCompare) => characterToCompare.CharacterName.Equals(LocalCharacter.CharacterName);
+	public static bool CompareLocalCharacter(PlayerCharacter characterToCompare) => characterToCompare.CharacterName.Equals(LocalCharacter.CharacterName);
 }
 
 [Serializable]
