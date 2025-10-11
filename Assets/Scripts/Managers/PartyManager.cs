@@ -110,7 +110,7 @@ public class PartyManager : NetworkBehaviour
 			}
 		}
 	}
-
+	#endregion
 	#region requests
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
 	public void RPC_AskToJoinParty(string partyName, RpcInfo rpcSource = default)
