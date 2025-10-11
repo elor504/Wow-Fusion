@@ -208,7 +208,7 @@ public class Party
 {
 	public CharactersList partyMembers = new CharactersList();
 	public string LeaderName;
-	public List<string> MembersNames;
+	public List<string> MembersNames = new List<string>();
 	public List<PlayerRef> JoinRequests = new List<PlayerRef>();
 
 	public void OpenParty(PlayerCharacter member, string leaderCharacterName)
