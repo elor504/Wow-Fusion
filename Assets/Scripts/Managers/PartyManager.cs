@@ -88,8 +88,12 @@ public class PartyManager : NetworkBehaviour
 		{
 			string leaderName = player.CharacterName;
 			Party partyToAbandon = GetPartyByLeaderName(leaderName);
+
 			if (partyToAbandon != null)
+			{
+				Debug.Log($"[PartyManager] [Server] Requested to abandon a party: {leaderName}");
 				RPC_AcceptedToAbandonParty(rpcInfo);
+			}
 		}
 	}
 
@@ -98,15 +102,17 @@ public class PartyManager : NetworkBehaviour
 	{
 		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(rpcInfo.Source, out PlayerCharacter player))
 		{
+			Debug.Log("[PartyManager] [Local] attempting to abandon the party");
 			string leaderName = player.CharacterName;
-			Party partyToAbandon = GetPartyByLeaderName(leaderName);
 
+			Party partyToAbandon = GetPartyByLeaderName(leaderName);
 			partyToAbandon.CloseParty();
 
 			if (RuntimeSessionManager.CompareLocalCharacter(player))
 			{
 				RuntimeSessionManager.LocalParty = null;
 				partyUI.OnExitedParty(rpcInfo.Source);
+				Debug.Log("[PartyManager] [Local] Local Player has abandoned the party");
 			}
 		}
 	}

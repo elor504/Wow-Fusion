@@ -147,6 +147,7 @@ public class PartyUI : MonoBehaviour
 
 	private void OnClickAbandonParty()
 	{
+		Debug.Log("Request to abandon party");
 		abandonPartyButton.interactable = false;
 		PartyManager.Instance.RPC_RequestToAbandonParty();
 	}
