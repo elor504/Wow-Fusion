@@ -18,6 +18,18 @@ public class CharactersList
         playerCharacters.Remove(character);
     }
 
+    public void AddCharactersToList(List<PlayerCharacter> characters)
+    {
+        playerCharacters.AddRange(characters);
+    }
+    public void RemoveCharacters(List<PlayerCharacter> characters)
+    {
+		foreach (var character in characters)
+		{
+            playerCharacters.Remove(character);
+        }
+	}
+
     public bool TryGetCharacterByName(string characterName,out PlayerCharacter requestedCharacter)
     {
         requestedCharacter = null;

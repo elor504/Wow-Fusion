@@ -105,6 +105,18 @@ public class RuntimeSessionManager
 
 		return characterToCompare.CharacterName.Equals(LocalCharacter.CharacterName);
 	}
+
+	public static List<PlayerCharacter> GetPlayersByName(List<string> membersNames)
+	{
+		List<PlayerCharacter> characters = new List<PlayerCharacter>();
+
+		for (int i = 0; i < membersNames.Count; i++)
+		{
+			characters.Add(CharactersList.GetPlayerCharacters.Find(x => x.CharacterName == membersNames[i]));
+		}
+
+		return characters;
+	}
 }
 
 [Serializable]

@@ -28,6 +28,7 @@ public class PartyManager : NetworkBehaviour
 		}
 		else
 		{
+			RPC_RequestPartyDataFromServer();
 			//Request Fully info Party list
 		}
 		if (_instance == null)
@@ -44,8 +45,31 @@ public class PartyManager : NetworkBehaviour
 		base.Despawned(runner, hasState);
 	}
 
+	#region load existed data from server
+	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+	private void RPC_RequestPartyDataFromServer(RpcInfo rpcInfo = default)
+	{
+		foreach (var party in partyList)
+		{
+			RPC_GetPartyDataFromServer(rpcInfo.Source, party.MembersNames);
+		}
+	}
 
 
+	private void RPC_GetPartyDataFromServer([RpcTarget] PlayerRef target,List<string> partyMembersName)
+	{
+		Debug.Log("[PartyManager] [Local] Requested from the server to update the party list");
+		OrganizePartyByMemberNames(partyMembersName);
+	}
+
+	private void OrganizePartyByMemberNames(List<string> partyMembersName)
+	{
+		Party party = new Party();
+		party.UpdateParty(partyMembersName);
+		AddParty(party);
+	}
+
+	#endregion
 	#region Open/Close party
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
 	public void RPC_RequestToOpenNewParty(RpcInfo rpcInfo = default)
@@ -250,5 +274,12 @@ public class Party
 		}
 
 		return true;
+	}
+
+	public void UpdateParty(List<string> members)
+	{
+		MembersNames = members;
+		LeaderName = members[0];
+		partyMembers.AddCharactersToList(RuntimeSessionManager.GetPlayersByName(MembersNames));
 	}
 }
