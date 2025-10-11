@@ -11,7 +11,7 @@ public class PartyMemberInfo : MonoBehaviour
     {
         memberNameText.text = name;
         memberClassText.text = className;
-        isLeaderImage.gameObject.SetActive(isLeader);
+        isLeaderImage?.SetActive(isLeader);
     }
 
     public void ShowInfo()
