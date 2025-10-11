@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: (idea) could change this also into a static class for easier management but i want for debug to see it on inspector
 public class PartyManager : NetworkBehaviour
 {
 	public const int PARTY_MAX_MEMBERS = 5;
@@ -43,19 +44,15 @@ public class PartyManager : NetworkBehaviour
 		base.Despawned(runner, hasState);
 	}
 
+
+
+	#region Open/Close party
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-	public void RPC_RequestAllPartyInfo(string partyInfo, RpcInfo rpcInfo = default)
-	{
-
-	}
-
-
-
-	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-	public void RPC_RequestToOpenNewParty(string leaderName, RpcInfo rpcInfo = default)
+	public void RPC_RequestToOpenNewParty(RpcInfo rpcInfo = default)
 	{
 		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(rpcInfo.Source, out PlayerCharacter player))
 		{
+			string leaderName = player.CharacterName;
 			if (IsPlayerInsideAParty(player))
 			{
 				//How the fuck did he even succeded in doing that?
@@ -73,8 +70,6 @@ public class PartyManager : NetworkBehaviour
 		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(playerRef, out PlayerCharacter player))
 		{
 			newParty.OpenParty(player, leaderName);
-
-			partyList.Add(newParty);
 			partyUI.AddPartyInfo(leaderName, newParty.GetPartyCharacters().Count, PARTY_MAX_MEMBERS);
 
 			if (RuntimeSessionManager.CompareLocalCharacter(player))
@@ -85,6 +80,37 @@ public class PartyManager : NetworkBehaviour
 			}
 		}
 	}
+
+	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+	public void RPC_RequestToAbandonParty(RpcInfo rpcInfo = default)
+	{
+		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(rpcInfo.Source, out PlayerCharacter player))
+		{
+			string leaderName = player.CharacterName;
+			Party partyToAbandon = GetPartyByLeaderName(leaderName);
+			if (partyToAbandon != null)
+				RPC_AcceptedToAbandonParty(rpcInfo);
+		}
+	}
+
+	[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+	public void RPC_AcceptedToAbandonParty(RpcInfo rpcInfo = default)
+	{
+		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(rpcInfo.Source, out PlayerCharacter player))
+		{
+			string leaderName = player.CharacterName;
+			Party partyToAbandon = GetPartyByLeaderName(leaderName);
+
+			partyToAbandon.CloseParty();
+
+			if (RuntimeSessionManager.CompareLocalCharacter(player))
+			{
+				RuntimeSessionManager.LocalParty = null;
+				partyUI.OnExitedParty(rpcInfo.Source);
+			}
+		}
+	}
+
 	#region requests
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
 	public void RPC_AskToJoinParty(string partyName, RpcInfo rpcSource = default)
@@ -111,14 +137,14 @@ public class PartyManager : NetworkBehaviour
 		Party partyToJoin = GetPartyByLeaderName(partyName);
 		partyToJoin.JoinRequests.Add(playerWhoRequested);
 
-		//ui update
-		//UIManager.PartyUI.OnReceivedRequest(playerWhoRequested);
-		if (RuntimeSessionManager.CompareLocalPlayerRef(playerWhoRequested))
-		{
-			RuntimeSessionManager.LocalParty = partyToJoin;
-		}
+		////ui update
+		////UIManager.PartyUI.OnReceivedRequest(playerWhoRequested);
+		//if (RuntimeSessionManager.CompareLocalPlayerRef(playerWhoRequested))
+		//{
+		//	RuntimeSessionManager.LocalParty = partyToJoin;
+		//}
 
-		partyUI.OnEnteredParty(playerWhoRequested);
+		//partyUI.OnEnteredParty(playerWhoRequested);
 	}
 	#endregion
 
@@ -161,6 +187,15 @@ public class PartyManager : NetworkBehaviour
 	{
 		return partyList.Find(p => p.LeaderName == leaderName);
 	}
+
+	public void AddParty(Party party)
+	{
+		partyList.Add(party);
+	}
+	public void RemoveParty(Party party)
+	{
+		partyList.Remove(party);
+	}
 }
 [Serializable]
 public class Party
@@ -174,21 +209,26 @@ public class Party
 	{
 		LeaderName = leaderCharacterName;
 		AddNewMember(member);
+		PartyManager.Instance.AddParty(this);
+	}
+	public void CloseParty()
+	{
+		//Send to everyone that they left the party
+
+
+
+		PartyManager.Instance.RemoveParty(this);
 	}
 	public void AddNewMember(PlayerCharacter member)
 	{
 		partyMembers.AddCharacterToList(member);
 	}
-	public void AbandonParty(PlayerCharacter playerWhoLeft, string memberName)
+	public void RemoveMember(PlayerCharacter playerWhoLeft, string memberName)
 	{
 		partyMembers.RemoveCharacterFromList(playerWhoLeft);
 	}
-
 	public bool IsPartyFull() => partyMembers.GetPlayerCharacters.Count == PartyManager.PARTY_MAX_MEMBERS;
-	public PlayerCharacter GetLeaderCharacter(NetworkRunner serverRunner)
-	{
-		return null;
-	}
+
 	public List<PlayerCharacter> GetPartyCharacters()
 	{
 		return partyMembers.GetPlayerCharacters;

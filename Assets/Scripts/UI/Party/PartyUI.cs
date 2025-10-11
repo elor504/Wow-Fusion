@@ -1,4 +1,5 @@
 using Fusion;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ public class PartyUI : MonoBehaviour
 	[Header("Player party References")]
 	[SerializeField] private GameObject playerPartyWindow;
 	[SerializeField] private List<PartyMemberInfo> partyMembersInfoUI;
-
+	[SerializeField] private Button abandonPartyButton;
 	[Header("Party Search References")]
 	[SerializeField] private GameObject partyInfoWindow;
 	[SerializeField] private Transform partyInfoContent;
@@ -36,12 +37,17 @@ public class PartyUI : MonoBehaviour
 	private void OnEnable()
 	{
 		createPartyButton.onClick.AddListener(OnClickCreateParty);
+		abandonPartyButton.onClick.AddListener(OnClickAbandonParty);
 		createPartyButton.interactable = true;
 		Debug.Log("[PartyUI] Enabled");
 	}
+
+
+
 	private void OnDisable()
 	{
 		createPartyButton.onClick.RemoveListener(OnClickCreateParty);
+		abandonPartyButton.onClick.RemoveListener(OnClickAbandonParty);
 		createPartyButton.interactable = false;
 
 		Debug.Log("[PartyUI] Disabled");
@@ -91,6 +97,7 @@ public class PartyUI : MonoBehaviour
 
 	private void EnterParty()
 	{
+		ExitCreate();
 		RefreshPartyMembers();
 		playerPartyWindow.SetActive(true);
 	}
@@ -134,9 +141,16 @@ public class PartyUI : MonoBehaviour
 	public void OnClickCreateParty()
 	{
 		createPartyButton.interactable = false;
-		PartyManager.Instance.RPC_RequestToOpenNewParty(RuntimeSessionManager.LocalCharacter.CharacterName);
+		PartyManager.Instance.RPC_RequestToOpenNewParty();
 	}
 	#endregion
+
+	private void OnClickAbandonParty()
+	{
+		abandonPartyButton.interactable = false;
+		PartyManager.Instance.RPC_RequestToAbandonParty();
+	}
+
 	#region Party Search
 
 	private void CloseAllEmptyPartyButtons()
