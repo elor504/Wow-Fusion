@@ -2306,6 +2306,7 @@ MonoBehaviour:
   - {fileID: 676320377}
   - {fileID: 133634945}
   - {fileID: 754947234}
+  abandonPartyButton: {fileID: 452966890}
   partyInfoWindow: {fileID: 156295176}
   partyInfoContent: {fileID: 955497596}
   partyInfoButtonPF: {fileID: 2399190285907231818, guid: db5429d33c9dcb6408bfe0f6a7b2d2cf, type: 3}
