@@ -218,11 +218,11 @@ public class PartyUI : MonoBehaviour
 	{
 		if (IsLocalCharacterIsInAParty())
 		{
-			EnterCurrentState(PartyUIState.InsideParty);
+			ChangeState(PartyUIState.InsideParty);
 		}
 		else
 		{
-			EnterCurrentState(PartyUIState.CreateOrPartyList);
+			ChangeState(PartyUIState.CreateOrPartyList);
 		}
 	}
 	public void CloseWindow()
@@ -244,7 +244,7 @@ public class PartyUI : MonoBehaviour
 		if (!RuntimeSessionManager.CompareLocalPlayerRef(playerRef))
 			return;
 
-		Debug.Log("[PartyUI] update enteredParty");
+		Debug.Log("[PartyUI] update entered Party");
 		UpdateState();
 	}
 	public void OnExitedParty(PlayerRef playerRef)
@@ -252,7 +252,7 @@ public class PartyUI : MonoBehaviour
 		if (!RuntimeSessionManager.CompareLocalPlayerRef(playerRef))
 			return;
 
-		Debug.Log("[PartyUI] update enteredParty");
+		Debug.Log("[PartyUI] update exited Party");
 		UpdateState();
 	}
 }
