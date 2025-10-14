@@ -49,6 +49,7 @@ public class PartyManager : NetworkBehaviour
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
 	private void RPC_RequestPartyDataFromServer(RpcInfo rpcInfo = default)
 	{
+		Debug.Log("[PartyManager] [Server] Requested from a player to load the party data");
 		foreach (var party in partyList)
 		{
 			RPC_GetPartyDataFromServer(rpcInfo.Source, party.MembersNames);
@@ -58,7 +59,7 @@ public class PartyManager : NetworkBehaviour
 
 	private void RPC_GetPartyDataFromServer([RpcTarget] PlayerRef target,List<string> partyMembersName)
 	{
-		Debug.Log("[PartyManager] [Local] Requested from the server to update the party list");
+		Debug.Log("[PartyManager] [Client] Requested from the server to update the party list");
 		OrganizePartyByMemberNames(partyMembersName);
 	}
 
