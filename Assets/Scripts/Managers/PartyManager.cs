@@ -56,7 +56,7 @@ public class PartyManager : NetworkBehaviour
 		}
 	}
 
-
+	[Rpc(RpcSources.StateAuthority,RpcTargets.All)]
 	private void RPC_GetPartyDataFromServer([RpcTarget] PlayerRef target,List<string> partyMembersName)
 	{
 		Debug.Log("[PartyManager] [Client] Requested from the server to update the party list");
