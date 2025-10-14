@@ -128,6 +128,7 @@ public class PartyManager : NetworkBehaviour
 
 			Party partyToAbandon = GetPartyByLeaderName(leaderName);
 			partyToAbandon.CloseParty();
+
 			if (RuntimeSessionManager.CompareLocalCharacter(player))
 			{
 				RuntimeSessionManager.LocalParty = null;
@@ -241,6 +242,7 @@ public class Party
 	public void CloseParty()
 	{
 		//Send to everyone that they left the party
+		GameManager.Instance.PartyUI.RemovePartyInfo(LeaderName);
 		LeaderName = string.Empty;
 		GameManager.Instance.PartyManager.RemoveParty(this);
 	}
