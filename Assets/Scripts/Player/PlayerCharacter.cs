@@ -30,16 +30,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 	private PlayerBrain _playerBrain;
 	private CharacterData _characterData;
 
-
-
 	[Networked, OnChangedRender(nameof(UpdateCharacterNicknameText))]
 	public string CharacterName { get; set; }
-
-
-
-
-
-
 
 	public PlayerAnimator GetAnimator => animator;
 	public PlayerMovement GetMovement => movement;
@@ -69,8 +61,6 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 			UpdateCharacterNicknameText();
 			nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1 });
 			nickNameLookAt.constraintActive = true;
-
-			GameManager.Instance.LoadDataFromServer();
 		}
 		else if (Object.HasStateAuthority)
 		{

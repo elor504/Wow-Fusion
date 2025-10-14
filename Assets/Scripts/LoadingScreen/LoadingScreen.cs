@@ -67,6 +67,7 @@ public class LoadingScreen : NetworkBehaviour
 		}
 		yield return null;
 
+		GameManager.Instance.LoadDataFromServer();
 
 		while (RuntimeSessionManager.LocalCharacter == null)
 		{
