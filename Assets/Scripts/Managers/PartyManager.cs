@@ -69,6 +69,11 @@ public class PartyManager : NetworkBehaviour
 		Party party = new Party();
 		party.UpdateParty(partyMembersName);
 		AddParty(party);
+		var memberList = partyMembersName.ToList();
+		if(memberList.Contains(RuntimeSessionManager.LocalCharacter.CharacterName))
+		{
+			RuntimeSessionManager.LocalParty = party; 
+		}
 	}
 
 	#endregion
