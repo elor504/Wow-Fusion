@@ -69,6 +69,8 @@ public class PlayerCharacter : NetworkBehaviour, ITargetableEntity
 			UpdateCharacterNicknameText();
 			nickNameLookAt.AddSource(new ConstraintSource { sourceTransform = PlayerCamera.Instance.GetCamera.transform, weight = 1 });
 			nickNameLookAt.constraintActive = true;
+
+			GameManager.Instance.LoadDataFromServer();
 		}
 		else if (Object.HasStateAuthority)
 		{

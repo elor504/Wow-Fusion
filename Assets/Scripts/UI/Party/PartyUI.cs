@@ -143,7 +143,7 @@ public class PartyUI : MonoBehaviour
 	public void OnClickCreateParty()
 	{
 		createPartyButton.interactable = false;
-		PartyManager.Instance.RPC_RequestToOpenNewParty();
+		GameManager.Instance.PartyManager.RPC_RequestToOpenNewParty();
 	}
 	#endregion
 
@@ -151,7 +151,7 @@ public class PartyUI : MonoBehaviour
 	{
 		Debug.Log("Request to abandon party");
 		abandonPartyButton.interactable = false;
-		PartyManager.Instance.RPC_RequestToAbandonParty();
+		GameManager.Instance.PartyManager.RPC_RequestToAbandonParty();
 	}
 
 	#region Party Search

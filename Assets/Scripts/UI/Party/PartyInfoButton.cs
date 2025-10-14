@@ -20,7 +20,7 @@ public class PartyInfoButton : MonoBehaviour
 
 	public void OnClickButton()
 	{
-		PartyManager.Instance.RPC_AskToJoinParty(_partyName);
+		GameManager.Instance.PartyManager.RPC_AskToJoinParty(_partyName);
 		OnClickedRequestToJoinParty();
 	}
 

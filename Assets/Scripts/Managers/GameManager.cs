@@ -15,6 +15,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [Header("Managers")]
     [SerializeField] private TargetManager targetManager;
     [SerializeField] private ClassSkillManager skillManager;
+    [SerializeField] private PartyManager partyManager;
 
     [Header("UI")]
     [SerializeField] private GameObject playerHUD;
@@ -28,6 +29,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public TargetManager TargetManager => targetManager;
     public ClassSkillManager ClassSkillManager => skillManager;
+    public PartyManager PartyManager => partyManager;
     public PartyUI PartyUI => partyUI;
 
     public CharacterVisualSO EquipmentVisualData => equipmentVisualData;
@@ -66,11 +68,15 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
             _serverRunner = Object.Runner;
             _serverRunner.AddCallbacks(this);
             ServerHandler.Instance.UpdateGameManager(_serverRunner, this);
+
         }
 
 
     }
-
+    public void LoadDataFromServer()
+    {
+        partyManager.RPC_RequestPartyDataFromServer();
+    }
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         base.Despawned(runner, hasState);

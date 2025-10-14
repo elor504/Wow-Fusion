@@ -10,8 +10,7 @@ public class PartyManager : NetworkBehaviour
 	public const int PARTY_MAX_MEMBERS = 5;
 
 
-	private static PartyManager _instance;
-	public static PartyManager Instance => _instance;
+
 	private NetworkRunner _serverRunner;
 
 
@@ -29,16 +28,7 @@ public class PartyManager : NetworkBehaviour
 		}
 		else
 		{
-			RPC_RequestPartyDataFromServer();
 			//Request Fully info Party list
-		}
-		if (_instance == null)
-		{
-			_instance = this;
-		}
-		else if (_instance != this)
-		{
-			Destroy(gameObject);
 		}
 	}
 	public override void Despawned(NetworkRunner runner, bool hasState)
@@ -48,7 +38,7 @@ public class PartyManager : NetworkBehaviour
 
 	#region load existed data from server
 	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-	private void RPC_RequestPartyDataFromServer(RpcInfo rpcInfo = default)
+	public void RPC_RequestPartyDataFromServer(RpcInfo rpcInfo = default)
 	{
 		Debug.Log("[PartyManager] [Server] Requested from a player to load the party data");
 		foreach (var party in partyList)
@@ -246,13 +236,13 @@ public class Party
 	{
 		LeaderName = leaderCharacterName;
 		AddNewMember(member);
-		PartyManager.Instance.AddParty(this);
+		GameManager.Instance.PartyManager.AddParty(this);
 	}
 	public void CloseParty()
 	{
 		//Send to everyone that they left the party
 		LeaderName = string.Empty;
-		PartyManager.Instance.RemoveParty(this);
+		GameManager.Instance.PartyManager.RemoveParty(this);
 	}
 	public void AddNewMember(PlayerCharacter member)
 	{
