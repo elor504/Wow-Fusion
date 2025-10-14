@@ -106,12 +106,10 @@ public class PartyUI : MonoBehaviour
 	private void ExitParty()
 	{
 		playerPartyWindow.SetActive(false);
-		partyInfoWindow.SetActive(false);
 	}
 
 	private void EnterCreate()
 	{
-		partyInfoWindow.SetActive(true);
 		createPartyWindow.SetActive(true);
 	}
 	private void ExitCreate()
@@ -214,8 +212,8 @@ public class PartyUI : MonoBehaviour
 	public void OpenWindow()
 	{
 		_isWindowOpen = true;
-		partyWindow.gameObject.SetActive(_isWindowOpen);
 		UpdateState();
+		partyWindow.gameObject.SetActive(_isWindowOpen);
 	}
 	public void UpdateState()
 	{

@@ -128,13 +128,13 @@ public class PartyManager : NetworkBehaviour
 
 			Party partyToAbandon = GetPartyByLeaderName(leaderName);
 			partyToAbandon.CloseParty();
-
 			if (RuntimeSessionManager.CompareLocalCharacter(player))
 			{
 				RuntimeSessionManager.LocalParty = null;
 				partyUI.OnExitedParty(playerRef);
 				Debug.Log("[PartyManager] [Local] Local Player has abandoned the party");
 			}
+			//TODO: Need to check for other members also to let them know that their party does not exists anymore
 		}
 	}
 	#endregion
