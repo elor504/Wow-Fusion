@@ -113,7 +113,7 @@ public class PartyManager : NetworkBehaviour
 			if (partyToAbandon != null)
 			{
 				Debug.Log($"[PartyManager] [Server] Requested to abandon a party: {leaderName}");
-				RPC_AcceptedToAbandonParty(player.Object.InputAuthority);
+				RPC_AcceptedToAbandonParty(rpcInfo.Source);
 			}
 		}
 	}
