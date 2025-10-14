@@ -110,6 +110,7 @@ public class PartyUI : MonoBehaviour
 
 	private void EnterCreate()
 	{
+		GameManager.Instance.PartyUI.RefreshPartyList();
 		createPartyWindow.SetActive(true);
 	}
 	private void ExitCreate()
@@ -164,7 +165,23 @@ public class PartyUI : MonoBehaviour
 			}
 		}
 	}
+	private void CloseAllPartyButtons()
+	{
+		foreach (var button in partyInfoButtons)
+		{
+			button.CloseButton();
+		}
+	}
+	public void RefreshPartyList()
+	{
+		CloseAllPartyButtons();
 
+		var partyList = GameManager.Instance.PartyManager.GetPartyList;
+		foreach (var party in partyList)
+		{
+			AddPartyInfo(party.LeaderName, party.MembersNames.Count, PartyManager.PARTY_MAX_MEMBERS);
+		}
+	}
 	public void AddPartyInfo(string partyLeader, int currentPartyAmount, int maxPartyAmount)
 	{
 		string amount = $"{currentPartyAmount}/{maxPartyAmount}";

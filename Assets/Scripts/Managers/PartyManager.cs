@@ -18,6 +18,7 @@ public class PartyManager : NetworkBehaviour
 	[SerializeField] private DungeonsManager dungeonManager;
 	[SerializeField] private List<Party> partyList;
 
+	public List<Party> GetPartyList => partyList;
 
 	public override void Spawned()
 	{
@@ -91,7 +92,7 @@ public class PartyManager : NetworkBehaviour
 		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(playerRef, out PlayerCharacter player))
 		{
 			newParty.OpenParty(player, leaderName);
-			partyUI.AddPartyInfo(leaderName, newParty.GetPartyCharacters().Count, PARTY_MAX_MEMBERS);
+			GameManager.Instance.PartyUI.RefreshPartyList();
 
 			if (RuntimeSessionManager.CompareLocalCharacter(player))
 			{
@@ -128,7 +129,7 @@ public class PartyManager : NetworkBehaviour
 
 			Party partyToAbandon = GetPartyByLeaderName(leaderName);
 			partyToAbandon.CloseParty();
-
+			GameManager.Instance.PartyUI.RefreshPartyList();
 			if (RuntimeSessionManager.CompareLocalCharacter(player))
 			{
 				RuntimeSessionManager.LocalParty = null;
