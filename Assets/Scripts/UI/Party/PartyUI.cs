@@ -110,7 +110,7 @@ public class PartyUI : MonoBehaviour
 
 	private void EnterCreate()
 	{
-		GameManager.Instance.PartyUI.RefreshPartyList();
+		GameManager.Instance?.PartyUI.RefreshPartyList();
 		createPartyWindow.SetActive(true);
 	}
 	private void ExitCreate()
