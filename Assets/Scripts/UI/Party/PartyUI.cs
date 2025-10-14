@@ -189,6 +189,12 @@ public class PartyUI : MonoBehaviour
 		newParty.UpdateInfo(partyLeader, amount);
 		newParty.OpenButton();
 	}
+	public void RemovePartyInfo(string partyLeader)
+	{
+		int index = partyInfoButtons.FindIndex(x => x.PartyName == partyLeader);
+		partyInfoButtons.RemoveAt(index);
+		CloseAllEmptyPartyButtons();
+	}
 	public void ClosePartyInfo(string partyLeader)
 	{
 		GetPartyInfoByPartyLeaderName(partyLeader).CloseButton();
