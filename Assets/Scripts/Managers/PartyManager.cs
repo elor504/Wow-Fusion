@@ -1,6 +1,7 @@
 using Fusion;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 //TODO: (idea) could change this also into a static class for easier management but i want for debug to see it on inspector
@@ -52,18 +53,18 @@ public class PartyManager : NetworkBehaviour
 		Debug.Log("[PartyManager] [Server] Requested from a player to load the party data");
 		foreach (var party in partyList)
 		{
-			RPC_GetPartyDataFromServer(rpcInfo.Source, party.MembersNames);
+			RPC_GetPartyDataFromServer(rpcInfo.Source, party.MembersNames.ToArray());
 		}
 	}
 
 	[Rpc(RpcSources.StateAuthority,RpcTargets.All)]
-	private void RPC_GetPartyDataFromServer([RpcTarget] PlayerRef target,List<string> partyMembersName)
+	private void RPC_GetPartyDataFromServer([RpcTarget] PlayerRef target,string[] partyMembersName)
 	{
 		Debug.Log("[PartyManager] [Client] Requested from the server to update the party list");
 		OrganizePartyByMemberNames(partyMembersName);
 	}
 
-	private void OrganizePartyByMemberNames(List<string> partyMembersName)
+	private void OrganizePartyByMemberNames(string[] partyMembersName)
 	{
 		Party party = new Party();
 		party.UpdateParty(partyMembersName);
@@ -277,9 +278,9 @@ public class Party
 		return true;
 	}
 
-	public void UpdateParty(List<string> members)
+	public void UpdateParty(string[] members)
 	{
-		MembersNames = members;
+		MembersNames = members.ToList();
 		LeaderName = members[0];
 		partyMembers.AddCharactersToList(RuntimeSessionManager.GetPlayersByName(MembersNames));
 	}
