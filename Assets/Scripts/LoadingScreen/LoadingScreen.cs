@@ -67,8 +67,6 @@ public class LoadingScreen : NetworkBehaviour
 		}
 		yield return null;
 
-		GameManager.Instance.LoadDataFromServer();
-
 		while (RuntimeSessionManager.LocalCharacter == null)
 		{
 			yield return null;
@@ -97,6 +95,8 @@ public class LoadingScreen : NetworkBehaviour
 			Debug.LogError("Player camera does not exists in this scene");
 		}
 
+		GameManager.Instance.LoadDataFromServer();
+		yield return null;
 
 		//wait untill the multiplayer stuff loads
 		yield return new WaitForSeconds(1f);
