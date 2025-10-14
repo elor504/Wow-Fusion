@@ -681,6 +681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetManager: {fileID: 1683405676}
   skillManager: {fileID: 677593844}
+  partyManager: {fileID: 901023722}
   playerHUD: {fileID: 1275881867}
   partyUI: {fileID: 1033295593}
   equipmentVisualData: {fileID: 0}
