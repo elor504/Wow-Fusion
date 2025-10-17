@@ -180,8 +180,8 @@ public class PartyManager : NetworkBehaviour
 			party.AddNewMember(character);
 			if (RuntimeSessionManager.CompareLocalCharacter(character))
 			{
-				RuntimeSessionManager.LocalParty = null;
-				partyUI.OnExitedParty(playerWhoRequested);
+				RuntimeSessionManager.LocalParty = party;
+				partyUI.OnEnteredParty(playerWhoRequested);
 				Debug.Log("[PartyManager] [Local] Local Player has abandoned the party");
 			}
 
