@@ -39,6 +39,7 @@ public class PartyUI : MonoBehaviour
 		createPartyButton.onClick.AddListener(OnClickCreateParty);
 		abandonPartyButton.onClick.AddListener(OnClickAbandonParty);
 		createPartyButton.interactable = true;
+		abandonPartyButton.interactable = true;
 		Debug.Log("[PartyUI] Enabled");
 	}
 
@@ -49,7 +50,7 @@ public class PartyUI : MonoBehaviour
 		createPartyButton.onClick.RemoveListener(OnClickCreateParty);
 		abandonPartyButton.onClick.RemoveListener(OnClickAbandonParty);
 		createPartyButton.interactable = false;
-
+		abandonPartyButton.interactable = false;
 		Debug.Log("[PartyUI] Disabled");
 	}
 
@@ -102,6 +103,7 @@ public class PartyUI : MonoBehaviour
 		ExitCreate();
 		RefreshPartyMembers();
 		playerPartyWindow.SetActive(true);
+		abandonPartyButton.interactable = true;
 	}
 	private void ExitParty()
 	{
@@ -110,8 +112,9 @@ public class PartyUI : MonoBehaviour
 
 	private void EnterCreate()
 	{
-		GameManager.Instance?.PartyUI.RefreshPartyList();
+		RefreshPartyList();
 		createPartyWindow.SetActive(true);
+		createPartyButton.interactable = true;
 	}
 	private void ExitCreate()
 	{
