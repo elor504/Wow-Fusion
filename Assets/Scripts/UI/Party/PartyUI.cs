@@ -22,7 +22,7 @@ public class PartyUI : MonoBehaviour
 	[SerializeField] private Button createPartyButton;
 
 	[Header("Player party References")]
-	[SerializeField] private GameObject playerPartyWindow;
+	[SerializeField] private GameObject PartyMembersWindow;
 	[SerializeField] private List<PartyMemberInfo> partyMembersInfoUI;
 	[SerializeField] private Button abandonPartyButton;
 	[Header("Party Search References")]
@@ -109,16 +109,17 @@ public class PartyUI : MonoBehaviour
 	{
 		ExitCreate();
 		RefreshPartyMembers();
-		playerPartyWindow.SetActive(true);
+		PartyMembersWindow.SetActive(true);
 		abandonPartyButton.interactable = true;
 	}
 	private void ExitParty()
 	{
-		playerPartyWindow.SetActive(false);
+		PartyMembersWindow.SetActive(false);
 	}
 
 	private void EnterCreate()
 	{
+		ExitParty();
 		RefreshPartyList();
 		createPartyWindow.SetActive(true);
 		createPartyButton.interactable = true;
@@ -164,7 +165,7 @@ public class PartyUI : MonoBehaviour
 	}
 
 	#region Party Search
-
+		
 	private void CloseAllEmptyPartyButtons()
 	{
 		foreach (var partyInfo in partyInfoButtons)
@@ -231,8 +232,11 @@ public class PartyUI : MonoBehaviour
 	}
 	public void RemovePartyInfo(string partyLeader)
 	{
-		int index = partyInfoButtons.FindIndex(x => x.PartyName == partyLeader);
-		partyInfoButtons[index].CloseButton();
+		var button = partyInfoButtons.Find(x => x.PartyName == partyLeader);
+		if (button)
+		{
+			button.CloseButton();
+		}
 		CloseAllEmptyPartyButtons();
 	}
 	public void ClosePartyInfo(string partyLeader)

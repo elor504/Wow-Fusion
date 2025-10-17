@@ -244,8 +244,8 @@ public class Party
 	{
 		//Send to everyone that they left the party
 		GameManager.Instance.PartyUI.RemovePartyInfo(LeaderName);
-		LeaderName = string.Empty;
 		GameManager.Instance.PartyManager.RemoveParty(this);
+		LeaderName = string.Empty;
 	}
 	public void AddNewMember(PlayerCharacter member)
 	{

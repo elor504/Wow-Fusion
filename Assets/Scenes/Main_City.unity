@@ -2300,7 +2300,7 @@ MonoBehaviour:
   partyWindow: {fileID: 898129218}
   createPartyWindow: {fileID: 692555520}
   createPartyButton: {fileID: 36441875}
-  playerPartyWindow: {fileID: 2027551063}
+  PartyMembersWindow: {fileID: 2027551063}
   partyMembersInfoUI:
   - {fileID: 4602539024539924649}
   - {fileID: 1376357361}
