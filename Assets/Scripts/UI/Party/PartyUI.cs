@@ -185,7 +185,7 @@ public class PartyUI : MonoBehaviour
 	}
 	public void RefreshPartyList()
 	{
-		if (RuntimeSessionManager.GetMyRunner().IsServer)
+		if (!GameManager.Instance)
 			return;
 		CloseAllPartyButtons();
 
