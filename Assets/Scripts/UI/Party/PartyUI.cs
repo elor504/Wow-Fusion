@@ -107,6 +107,7 @@ public class PartyUI : MonoBehaviour
 
 	private void EnterParty()
 	{
+
 		ExitCreate();
 		RefreshPartyMembers();
 		playerPartyWindow.SetActive(true);
@@ -184,6 +185,8 @@ public class PartyUI : MonoBehaviour
 	}
 	public void RefreshPartyList()
 	{
+		if (RuntimeSessionManager.GetMyRunner().IsServer)
+			return;
 		CloseAllPartyButtons();
 
 		var partyList = GameManager.Instance.PartyManager.GetPartyList;
