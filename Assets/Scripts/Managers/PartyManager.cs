@@ -48,8 +48,8 @@ public class PartyManager : NetworkBehaviour
 		}
 	}
 
-	[Rpc(RpcSources.StateAuthority,RpcTargets.All)]
-	private void RPC_GetPartyDataFromServer([RpcTarget] PlayerRef target,string[] partyMembersName)
+	[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+	private void RPC_GetPartyDataFromServer([RpcTarget] PlayerRef target, string[] partyMembersName)
 	{
 		Debug.Log("[PartyManager] [Client] Requested from the server to update the party list");
 		OrganizePartyByMemberNames(partyMembersName);
@@ -61,9 +61,9 @@ public class PartyManager : NetworkBehaviour
 		party.UpdateParty(partyMembersName);
 		AddParty(party);
 		var memberList = partyMembersName.ToList();
-		if(memberList.Contains(RuntimeSessionManager.LocalCharacter.CharacterName))
+		if (memberList.Contains(RuntimeSessionManager.LocalCharacter.CharacterName))
 		{
-			RuntimeSessionManager.LocalParty = party; 
+			RuntimeSessionManager.LocalParty = party;
 		}
 	}
 
@@ -166,14 +166,46 @@ public class PartyManager : NetworkBehaviour
 		Party partyToJoin = GetPartyByLeaderName(partyName);
 		partyToJoin.JoinRequests.Add(playerWhoRequested);
 
-		////ui update
-		////UIManager.PartyUI.OnReceivedRequest(playerWhoRequested);
-		//if (RuntimeSessionManager.CompareLocalPlayerRef(playerWhoRequested))
-		//{
-		//	RuntimeSessionManager.LocalParty = partyToJoin;
-		//}
+		//For now accept the invite
+		RPC_AcceptedPartyInvitation(playerWhoRequested, partyName);
+	}
 
-		//partyUI.OnEnteredParty(playerWhoRequested);
+
+	[Rpc(RpcSources.All, RpcTargets.All)]
+	private void RPC_AcceptedPartyInvitation(PlayerRef playerWhoRequested, string partyLeaderName)
+	{
+		Party party = GetPartyByLeaderName(partyLeaderName);
+		if (RuntimeSessionManager.CharactersList.TryGetCharacterByPlayerRef(playerWhoRequested, out var character))
+		{
+			party.AddNewMember(character);
+			if (RuntimeSessionManager.CompareLocalCharacter(character))
+			{
+				RuntimeSessionManager.LocalParty = null;
+				partyUI.OnExitedParty(playerWhoRequested);
+				Debug.Log("[PartyManager] [Local] Local Player has abandoned the party");
+			}
+
+		}
+	}
+
+
+	#endregion
+
+	#region Test join and leave
+	[Rpc(RpcSources.All, RpcTargets.All)]
+	private void RPC_OnJoinedParty([RpcTarget] PlayerRef playerWhoJoined, string partyName)
+	{
+		Party party = GetPartyByLeaderName(partyName);
+		RuntimeSessionManager.LocalParty = party;
+		partyUI.OnEnteredParty(playerWhoJoined);
+
+	}
+	[Rpc(RpcSources.All, RpcTargets.All)]
+	private void RPC_OnLeftParty([RpcTarget] PlayerRef playerWhoJoined, string partyName)
+	{
+		RuntimeSessionManager.LocalParty = null;
+		partyUI.OnExitedParty(playerWhoJoined);
+
 	}
 	#endregion
 
@@ -225,6 +257,7 @@ public class PartyManager : NetworkBehaviour
 	{
 		partyList.Remove(party);
 	}
+
 }
 [Serializable]
 public class Party
