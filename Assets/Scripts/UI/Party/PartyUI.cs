@@ -36,6 +36,8 @@ public class PartyUI : MonoBehaviour
 
 	private void OnEnable()
 	{
+		if (RuntimeSessionManager.GetMyRunner().IsServer)
+			return;
 		createPartyButton.onClick.AddListener(OnClickCreateParty);
 		abandonPartyButton.onClick.AddListener(OnClickAbandonParty);
 		createPartyButton.interactable = true;
@@ -47,6 +49,9 @@ public class PartyUI : MonoBehaviour
 
 	private void OnDisable()
 	{
+		if (RuntimeSessionManager.GetMyRunner().IsServer)
+			return;
+
 		createPartyButton.onClick.RemoveListener(OnClickCreateParty);
 		abandonPartyButton.onClick.RemoveListener(OnClickAbandonParty);
 		createPartyButton.interactable = false;
@@ -57,6 +62,8 @@ public class PartyUI : MonoBehaviour
 	private void Awake()
 	{
 		CloseWindow();
+		if (RuntimeSessionManager.GetMyRunner().IsServer)
+			return;
 		CloseAllEmptyPartyButtons();
 		ExitParty();
 		ExitCreate();
