@@ -232,7 +232,7 @@ public class PartyUI : MonoBehaviour
 	public void RemovePartyInfo(string partyLeader)
 	{
 		int index = partyInfoButtons.FindIndex(x => x.PartyName == partyLeader);
-		partyInfoButtons.RemoveAt(index);
+		partyInfoButtons[index].CloseButton();
 		CloseAllEmptyPartyButtons();
 	}
 	public void ClosePartyInfo(string partyLeader)
