@@ -107,7 +107,6 @@ public class PartyUI : MonoBehaviour
 
 	private void EnterParty()
 	{
-
 		ExitCreate();
 		RefreshPartyMembers();
 		playerPartyWindow.SetActive(true);
@@ -211,7 +210,18 @@ public class PartyUI : MonoBehaviour
 		if (existedButton)
 		{
 			existedButton.UpdateInfo(partyLeader, amount);
+			existedButton.OpenButton();
 			return;
+		}
+
+		foreach (var button in partyInfoButtons)
+		{
+			if(button.IsEmptyButton())
+			{
+				button.UpdateInfo(partyLeader, amount);
+				button.OpenButton();
+				return;
+			}
 		}
 
 		PartyInfoButton newParty = Instantiate(partyInfoButtonPF, partyInfoContent);

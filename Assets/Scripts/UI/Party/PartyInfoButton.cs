@@ -36,11 +36,13 @@ public class PartyInfoButton : MonoBehaviour
 	public void CloseButton()
 	{
 		_partyName = string.Empty;
-		gameObject.SetActive(false);
 		partyButton.onClick.RemoveListener(OnClickButton);
 		partyButton.interactable = false;
+		gameObject.SetActive(false);
+		Debug.Log("[PartyInfoButton] Close button");
 	}
 
+	public bool IsEmptyButton() => string.IsNullOrEmpty(_partyName);
 
 	private void OnClickedRequestToJoinParty()
 	{
